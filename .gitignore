@@ -1,0 +1,40 @@
+# Arquivos e pastas do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configurações do VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# Arquivos e pastas do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+.env
+
+# Arquivos do Jupyter Notebook
+.ipynb_checkpoints/
+
+# Arquivos de dados e resultados
+data/
+resultados/
+output/
+*.csv
+*.xlsx
+*.pkl
+*.hdf5
+# Adicione aqui outros formatos de arquivos de dados grandes
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.temp
+
+# Dependências e pacotes (exemplo para Node.js, caso utilize)
+node_modules/
