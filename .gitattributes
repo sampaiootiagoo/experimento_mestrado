@@ -1,0 +1,12 @@
+# Define o comportamento padrão para todos os arquivos de texto.
+# O Git tentará adivinhar se é texto ou binário.
+* text=auto eol=lf
+
+# Força arquivos conhecidamente de texto a usar sempre LF (padrão Unix),
+# que é a prática mais comum e recomendada para consistência.
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.ipynb text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
