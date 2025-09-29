@@ -1,1 +1,28 @@
+# --- Arquivo de Dependências do Projeto ---
+#
+# Para instalar todas as bibliotecas listadas neste arquivo,
+# execute o seguinte comando no seu terminal:
+# pip install -r requirements.txt
+# -----------------------------------------------------------
+
+# Biblioteca para interagir com modelos de linguagem locais via Ollama
+ollama==0.2.1
+
+# Biblioteca do Hugging Face para carregar datasets.
+# Versão fixada para garantir compatibilidade com scripts de datasets antigos.
 datasets==2.15.0
+
+# Biblioteca principal para modelagem de tópicos, incluindo o LDA
+gensim==4.3.2
+
+# Natural Language Toolkit, usada para pré-processamento de texto (tokenização, stopwords, etc.)
+nltk==3.8.1
+
+# Biblioteca fundamental para manipulação e análise de dados em Python
+pandas==2.2.2
+
+# Biblioteca essencial para Machine Learning em Python (útil para métricas e outras análises)
+scikit-learn==1.5.0
+
+# Para trabalhar com Jupyter Notebooks, que é o formato do seu arquivo principal
+notebook==7.2.0
