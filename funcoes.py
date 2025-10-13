@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Esqueleto de código para o experimento de mestrado comparando
-geração de tópicos com LLM (Llama) vs. LDA.
+Esqueleto de código para o experimento de mestrado com RAG para geração e refinamento de tópicos.
 """
 
 # --- Importações de Bibliotecas ---
@@ -16,33 +15,21 @@ from ollama import Client
 # Para carregar o dataset
 from datasets import load_dataset
 
-# Para o modelo LDA
+# Para embeddings e vector store
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
+
+# Para o pré-processamento de texto (mantido caso precise de alguma utilidade do gensim)
 import gensim
-from gensim.corpora import Dictionary
-from gensim.models import LdaMulticore
-
-# Para o pré-processamento de texto
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-
-# --- Configurações Iniciais ---
-# Baixando recursos necessários do NLTK (executar apenas na primeira vez)
-try:
-    stopwords.words('english')
-except LookupError:
-    print("Baixando recursos do NLTK (stopwords, punkt, wordnet)...")
-    nltk.download('stopwords')
-    nltk.download('punkt')
-    nltk.download('wordnet')
 
 # --- Constantes de Configuração ---
-OLLAMA_HOST = "'http://164.41.75.221:11434'"  # Mude para o link correto do seu host Ollama
-LLM_MODEL = "llama4" # Recomendo usar llama3 que é mais recente que o 4 (que não existe oficialmente)
+OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
+LLM_MODEL = "llama4" # Modelo LLM a ser usado no experimento, conforme solicitado
 DATASET_NAME = "cardiffnlp/tweet_topic_single"
+EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
 NUM_RANDOM_SAMPLES_FOR_LLM = 5  # Quantidade de documentos para gerar tópicos com o LLM
-NUM_TOPICS_LDA = 10  # Número de tópicos que o LDA deve encontrar
+TOP_K_SIMILAR = 3 # Número de documentos similares a serem recuperados para o contexto
 
 # --- Definição das Classes ---
 
@@ -54,7 +41,7 @@ class AnalisadorLLM:
         """
         Inicializa o cliente Ollama.
         :param host: URL do host onde o Ollama está rodando.
-        :param model: Nome do modelo a ser utilizado (ex: 'llama3').
+        :param model: Nome do modelo a ser utilizado (ex: 'llama4').
         """
         print(f"Inicializando cliente LLM para o host '{host}' e modelo '{model}'...")
         self.client = Client(host=host)
@@ -73,14 +60,31 @@ class AnalisadorLLM:
         """
         return prompt.strip()
 
+    def _criar_prompt_atualizacao_topico(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
+        """Helper para criar o prompt de refinamento de tópico com base em contexto."""
+        contexto_str = "\n\n".join([f"Documento similar {i+1}:\n\"{doc}\"" for i, doc in enumerate(documentos_contexto)])
+        
+        prompt = f"""
+        Você está refinando a classificação de tópicos.
+        O tópico inicial proposto foi: "{topico_inicial}".
+
+        Abaixo estão alguns documentos semanticamente similares.
+        Analise este contexto adicional para confirmar ou refinar o tópico inicial.
+        O tópico refinado deve ser mais preciso. Mantenha-o conciso (uma a três palavras).
+
+        Contexto dos documentos similares:
+        {contexto_str}
+
+        Com base neste contexto, qual é o tópico refinado ou confirmado? Responda apenas com o tópico.
+
+        Tópico Refinado:
+        """
+        return prompt.strip()
+
+
     def gerar_topico_para_documento(self, texto_documento: str) -> str:
         """
         Envia um documento para o LLM e retorna o tópico gerado.
-        
-        Este método combina o envio do prompt e o tratamento da resposta.
-        
-        :param texto_documento: O texto do documento a ser analisado.
-        :return: Uma string contendo o tópico identificado pelo LLM.
         """
         prompt = self._criar_prompt_geracao_topico(texto_documento)
         
@@ -92,103 +96,64 @@ class AnalisadorLLM:
                     {"role": "user", "content": prompt},
                 ]
             )
-            # Extrai o conteúdo da resposta e remove espaços em branco extras
             topico = response['message']['content'].strip()
-            print(f"LLM respondeu com o tópico: '{topico}'")
+            print(f"LLM respondeu com o tópico inicial: '{topico}'")
             return topico
         except Exception as e:
             print(f"Erro ao contatar o LLM: {e}")
             return "ERRO_LLM"
 
+    def atualizar_topico_com_contexto(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
+        """Envia o tópico inicial e um contexto de documentos similares para o LLM refinar o tópico."""
+        prompt = self._criar_prompt_atualizacao_topico(topico_inicial, documentos_contexto)
+        try:
+            print(f"Enviando contexto para refinar o tópico '{topico_inicial}'...")
+            response = self.client.chat(
+                model=self.model,
+                messages=[
+                    {"role": "user", "content": prompt},
+                ]
+            )
+            topico_atualizado = response['message']['content'].strip()
+            print(f"LLM refinou para o tópico: '{topico_atualizado}'")
+            return topico_atualizado
+        except Exception as e:
+            print(f"Erro ao contatar o LLM para refinamento: {e}")
+            return "ERRO_REFINAMENTO_LLM"
 
-class ProcessadorDeTexto:
+class VectorStore:
     """
-    Classe para realizar o pré-processamento e limpeza de textos para análise.
+    Classe para gerenciar a criação de embeddings e a busca por similaridade com FAISS.
     """
-    def __init__(self, lingua: str = 'english'):
-        """
-        Inicializa o processador, carregando stopwords e o lematizador.
-        """
-        self.stop_words = set(stopwords.words(lingua))
-        self.lemmatizer = WordNetLemmatizer()
+    def __init__(self, model_name: str):
+        print(f"Carregando modelo de embedding '{model_name}'...")
+        self.model = SentenceTransformer(model_name)
+        self.index = None
+        self.dimension = self.model.get_sentence_embedding_dimension()
 
-    def limpar_e_tokenizar(self, texto: str) -> List[str]:
-        """
-        Aplica um pipeline de limpeza completo no texto, necessário para o LDA.
-        - Converte para minúsculas
-        - Remove pontuação e números
-        - Tokeniza (divide em palavras)
-        - Remove stopwords
-        - Lematiza as palavras
-        
-        :param texto: Texto original.
-        :return: Lista de palavras (tokens) limpas.
-        """
-        # 1. Minúsculas e remoção de caracteres não-alfabéticos
-        texto = re.sub(r'[^a-zA-Z\s]', '', texto, re.I|re.A)
-        texto = texto.lower()
-        
-        # 2. Tokenização
-        tokens = word_tokenize(texto)
-        
-        # 3. Remove stopwords e lematiza
-        tokens_limpos = [
-            self.lemmatizer.lemmatize(token)
-            for token in tokens
-            if token not in self.stop_words and len(token) > 2
-        ]
-        
-        return tokens_limpos
+    def create_embeddings(self, texts: List[str], show_progress: bool = True) -> np.ndarray:
+        """Gera embeddings para uma lista de textos."""
+        print(f"Gerando embeddings para {len(texts)} textos...")
+        embeddings = self.model.encode(texts, convert_to_tensor=False, show_progress_bar=show_progress)
+        return np.array(embeddings).astype('float32')
 
+    def build_index(self, embeddings: np.ndarray):
+        """Constrói um índice FAISS a partir dos embeddings."""
+        print(f"Construindo índice FAISS para {len(embeddings)} vetores de dimensão {self.dimension}...")
+        self.index = faiss.IndexFlatL2(self.dimension)
+        self.index.add(embeddings)
+        print("Índice construído com sucesso.")
 
-class ModeloLDA:
-    """
-    Classe para treinar e analisar um modelo Latent Dirichlet Allocation (LDA).
-    """
-    def __init__(self, num_topicos: int):
-        """
-        :param num_topicos: O número de tópicos a serem extraídos dos documentos.
-        """
-        self.num_topicos = num_topicos
-        self.modelo_lda = None
-        self.dicionario = None
-        self.corpus = None
-
-    def treinar(self, documentos: List[List[str]]):
-        """
-        Treina o modelo LDA com base nos documentos pré-processados.
+    def search(self, query_embedding: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
+        """Busca os k vizinhos mais próximos de um embedding de consulta."""
+        if self.index is None:
+            raise RuntimeError("O índice não foi construído. Chame build_index() primeiro.")
         
-        :param documentos: Uma lista de documentos, onde cada documento é uma lista de tokens.
-        """
-        print(f"\nTreinando modelo LDA com {self.num_topicos} tópicos...")
-        
-        # Cria o dicionário e o corpus (formato Bag-of-Words)
-        self.dicionario = Dictionary(documentos)
-        self.corpus = [self.dicionario.doc2bow(doc) for doc in documentos]
-        
-        # Treina o modelo
-        # Usando LdaMulticore para aproveitar múltiplos processadores
-        self.modelo_lda = LdaMulticore(
-            corpus=self.corpus,
-            id2word=self.dicionario,
-            num_topics=self.num_topicos,
-            random_state=100,
-            chunksize=100,
-            passes=10,
-            workers=os.cpu_count() - 1 # Usa todos os cores exceto um
-        )
-        print("Treinamento do LDA concluído.")
-
-    def exibir_topicos(self):
-        """Exibe as palavras mais importantes para cada tópico encontrado."""
-        if not self.modelo_lda:
-            print("O modelo LDA ainda não foi treinado.")
-            return
+        if query_embedding.ndim == 1:
+            query_embedding = np.expand_dims(query_embedding, axis=0)
             
-        print("\nTópicos encontrados pelo LDA:")
-        topicos = self.modelo_lda.print_topics(num_words=5)
-        for i, topico in enumerate(topicos):
-            print(f"Tópico {i}: {topico[1]}")
+        distances, indices = self.index.search(query_embedding, k)
+        return distances, indices
 
 
 # --- Função Principal de Execução do Experimento ---
@@ -199,39 +164,50 @@ def main():
     # 1. Carregamento do Dataset
     print(f"Carregando dataset '{DATASET_NAME}'...")
     dataset = load_dataset(DATASET_NAME, split='train_all')
-    # Convertendo para uma lista de textos para facilitar a manipulação
     documentos = dataset['text']
     print(f"{len(documentos)} documentos carregados.")
 
-    # 2. Análise com LLM (em uma amostra)
-    print("\n--- INICIANDO ANÁLISE COM LLM ---")
-    amostra_indices = gensim.utils.simple_preprocess # Usando uma função para pegar índices aleatórios
+    # 2. Inicialização dos componentes
+    analisador_llm = AnalisadorLLM(host=OLLAMA_HOST, model=LLM_MODEL)
+    vector_store = VectorStore(model_name=EMBEDDING_MODEL_NAME)
+    
+    # 3. Construção do Vector Store da base completa
+    corpus_embeddings = vector_store.create_embeddings(documentos, show_progress=True)
+    vector_store.build_index(corpus_embeddings)
+    
+    # 4. Análise com LLM e RAG (em uma amostra)
+    print(f"\n--- INICIANDO PROCESSO DE RAG PARA {NUM_RANDOM_SAMPLES_FOR_LLM} AMOSTRAS ---")
     amostra_docs = dataset.shuffle(seed=42).select(range(NUM_RANDOM_SAMPLES_FOR_LLM))
     
-    analisador_llm = AnalisadorLLM(host=OLLAMA_HOST, model=LLM_MODEL)
-    
-    # Dicionário para guardar o resultado do LLM (útil para o RAG depois)
-    resultados_llm = {}
-    for doc in amostra_docs:
-        texto = doc['text']
-        topico_gerado = analisador_llm.gerar_topico_para_documento(texto)
-        resultados_llm[texto] = topico_gerado
+    for i, doc in enumerate(amostra_docs):
+        print(f"\n{'='*20} Processando Amostra {i+1}/{NUM_RANDOM_SAMPLES_FOR_LLM} {'='*20}")
+        texto_original = doc['text']
+        
+        # Etapa 1: Gerar tópico inicial para o documento da amostra.
+        topico_inicial = analisador_llm.gerar_topico_para_documento(texto_original)
+        if "ERRO" in topico_inicial:
+            continue
+            
+        # Etapa 2: Combinar tópico e documento para criar uma consulta rica para a busca.
+        query_text = f"Tópico: {topico_inicial}. Documento: {texto_original}"
+        query_embedding = vector_store.create_embeddings([query_text], show_progress=False)
+        
+        # Etapa 3: Buscar os documentos mais similares na base completa.
+        print(f"Buscando {TOP_K_SIMILAR} documentos similares para a consulta...")
+        _, similar_indices = vector_store.search(query_embedding, k=TOP_K_SIMILAR)
+        
+        # Recupera os textos dos documentos encontrados para usar como contexto.
+        documentos_contexto = [documentos[idx] for idx in similar_indices[0]]
+        
+        # Etapa 4: Pedir ao LLM para atualizar o tópico usando o contexto recuperado.
+        topico_atualizado = analisador_llm.atualizar_topico_com_contexto(topico_inicial, documentos_contexto)
 
-    # Aqui você usaria 'resultados_llm' (tópico + documento) para a etapa do RAG
-    print("\nEtapa do LLM concluída. Os resultados estão prontos para o RAG.")
-    # Exemplo: print(resultados_llm)
-
-    # 3. Análise com LDA (na base completa)
-    print("\n--- INICIANDO ANÁLISE COM LDA ---")
-    processador = ProcessadorDeTexto()
-    
-    # Processa todos os documentos para o LDA
-    documentos_processados = [processador.limpar_e_tokenizar(doc) for doc in documentos]
-    
-    # Treina e exibe os tópicos do LDA
-    lda = ModeloLDA(num_topicos=NUM_TOPICS_LDA)
-    lda.treinar(documentos_processados)
-    lda.exibir_topicos()
+        # Exibir resultados consolidados para esta amostra
+        print("\n--- RESULTADO DA AMOSTRA ---")
+        print(f"Documento Original: '{texto_original[:250]}...'")
+        print(f"Tópico Inicial Gerado: {topico_inicial}")
+        print(f"Tópico Refinado com RAG: {topico_atualizado}")
+        print(f"{'='*58}")
 
     print("\n--- EXPERIMENTO CONCLUÍDO ---")
 
