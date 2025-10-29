@@ -70,7 +70,7 @@ class AnalisadorLLM:
 
         Abaixo estão alguns documentos semanticamente similares.
         Analise este contexto adicional para confirmar ou refinar o tópico inicial.
-        O tópico refinado deve ser mais preciso. Mantenha-o conciso (uma a três palavras).
+        O tópico refinado deve ser mais preciso. Mantenha-o conciso (uma ou duas palavras).
 
         Contexto dos documentos similares:
         {contexto_str}
