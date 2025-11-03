@@ -38,3 +38,15 @@ output/
 
 # Dependências e pacotes (exemplo para Node.js, caso utilize)
 node_modules/
+
+# Instaladores e arquivos grandes
+Anaconda3-2025.06-0-Linux-x86_64.sh
+*.sh
+
+# Ambientes virtuais
+venv/
+.venv/
+anaconda3/
+
+# Caches do Python
+__pycache__/
