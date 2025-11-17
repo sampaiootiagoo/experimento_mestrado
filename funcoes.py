@@ -20,6 +20,15 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 
+# Para resultados em CSV e cálculo de métricas
+import pandas as pd
+import nltk
+from nltk.corpus import stopwords
+from gensim.models import CoherenceModel
+from gensim.corpora import Dictionary
+from gensim.utils import simple_preprocess
+from collections import Counter, defaultdict
+
 # Para o pré-processamento de texto (mantido caso precise de alguma utilidade do gensim)
 import gensim
 
@@ -154,6 +163,96 @@ class VectorStore:
             
         distances, indices = self.index.search(query_embedding, k)
         return distances, indices
+    
+# --- Funções de Avaliação de Tópicos ---
+
+def preprocess_text(text: str, stop_words: set) -> List[str]:
+    """
+    Tokeniza, remove stopwords, pontuação e palavras curtas.
+    """
+    # simple_preprocess faz a tokenização e passa para minúsculo
+    return [word for word in simple_preprocess(text) if word not in stop_words and len(word) > 2]
+
+def extract_top_n_words(topic_docs: Dict[str, List[str]], stop_words: set, top_n: int = 10) -> Dict[str, List[str]]:
+    """
+    Extrai as N palavras mais frequentes para cada tópico (grupo de documentos).
+    Isso transforma as classificações do LLM (ex: "Sports") em um tópico 
+    tradicional (ex: ["game", "team", "play", ...]).
+    """
+    print("Extraindo top N palavras para cada tópico gerado...")
+    topics_with_words = {}
+    for topic, docs in topic_docs.items():
+        if not docs:
+            continue
+        
+        # Juntar todos os documentos do tópico e processar
+        full_text = " ".join(docs)
+        tokens = preprocess_text(full_text, stop_words)
+        
+        # Contar as palavras mais comuns
+        word_counts = Counter(tokens)
+        top_words = [word for word, _ in word_counts.most_common(top_n)]
+        topics_with_words[topic] = top_words
+    
+    print(f"Top palavras extraídas: {topics_with_words}")
+    return topics_with_words
+
+def calculate_topic_coherence(topics_with_words: Dict[str, List[str]], documents: List[str], stop_words: set, coherence_type: str = 'c_v') -> float:
+    """
+    Calcula a coerência (ex: C_v) para um conjunto de tópicos e documentos.
+    'documents' deve ser a lista de textos usados para construir os tópicos.
+    """
+    print(f"Calculando Topic Coherence ({coherence_type})...")
+    
+    # 1. Processar os documentos de referência
+    processed_docs = [preprocess_text(doc, stop_words) for doc in documents]
+    
+    # 2. Criar dicionário Gensim
+    dictionary = Dictionary(processed_docs)
+    
+    # 3. Formatar os tópicos (lista de listas de palavras)
+    topics_list = list(topics_with_words.values())
+    
+    # 4. Calcular coerência
+    if not topics_list or not dictionary or not processed_docs:
+        print("Não foi possível calcular a coerência (tópicos, dicionário ou documentos vazios).")
+        return 0.0
+
+    try:
+        coherence_model = CoherenceModel(
+            topics=topics_list,
+            texts=processed_docs,
+            dictionary=dictionary,
+            coherence=coherence_type
+        )
+        
+        coherence = coherence_model.get_coherence()
+        print(f"Coerência calculada: {coherence}")
+        return coherence
+    except Exception as e:
+        print(f"Erro ao calcular coerência: {e}")
+        return 0.0
+
+def calculate_topic_diversity(topics_with_words: Dict[str, List[str]]) -> float:
+    """
+    Calcula a diversidade (proporção de palavras únicas) entre as top N palavras
+    de todos os tópicos.
+    """
+    print("Calculando Topic Diversity...")
+    if not topics_with_words:
+        return 0.0
+
+    all_words = []
+    for words in topics_with_words.values():
+        all_words.extend(words)
+    
+    if not all_words:
+        return 0.0
+    
+    unique_words = set(all_words)
+    diversity = len(unique_words) / len(all_words)
+    print(f"Diversidade calculada: {diversity}")
+    return diversity
 
 
 # --- Função Principal de Execução do Experimento ---
@@ -167,6 +266,15 @@ def main():
     documentos = dataset['text']
     print(f"{len(documentos)} documentos carregados.")
 
+    # (NOVO) Download de recursos NLTK (stopwords)
+    print("Baixando stopwords do NLTK...")
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+    stop_words = set(stopwords.words('english'))
+    # (FIM DO NOVO)
+
     # 2. Inicialização dos componentes
     analisador_llm = AnalisadorLLM(host=OLLAMA_HOST, model=LLM_MODEL)
     vector_store = VectorStore(model_name=EMBEDDING_MODEL_NAME)
@@ -178,6 +286,8 @@ def main():
     # 4. Análise com LLM e RAG (em uma amostra)
     print(f"\n--- INICIANDO PROCESSO DE RAG PARA {NUM_RANDOM_SAMPLES_FOR_LLM} AMOSTRAS ---")
     amostra_docs = dataset.shuffle(seed=42).select(range(NUM_RANDOM_SAMPLES_FOR_LLM))
+
+    resultados_finais = [] # (NOVO) Lista para salvar os resultados
     
     for i, doc in enumerate(amostra_docs):
         print(f"\n{'='*20} Processando Amostra {i+1}/{NUM_RANDOM_SAMPLES_FOR_LLM} {'='*20}")
@@ -209,8 +319,71 @@ def main():
         print(f"Tópico Refinado com RAG: {topico_atualizado}")
         print(f"{'='*58}")
 
-    print("\n--- EXPERIMENTO CONCLUÍDO ---")
+        # (NOVO) Salvar resultados na lista
+        resultados_finais.append({
+            "documento": texto_original,
+            "classificacao_1": topico_inicial,
+            "classificacao_2": topico_atualizado
+        })
+        # (FIM DO NOVO)
 
+    print("\n--- CALCULANDO MÉTRICAS GLOBAIS E SALVANDO CSV ---")
+
+    if not resultados_finais:
+        print("Nenhum resultado foi processado. Encerrando.")
+        return
+
+    # 1. Agrupar documentos por tópico (usando a classificação 2, refinada)
+    topic_docs_map = defaultdict(list)
+    documentos_processados = []
+    
+    for res in resultados_finais:
+        # Ignora erros do LLM na análise
+        if "ERRO" not in res["classificacao_2"]:
+            topic_docs_map[res["classificacao_2"]].append(res["documento"])
+            documentos_processados.append(res["documento"])
+
+    global_coherence = 0.0
+    global_diversity = 0.0
+
+    if not topic_docs_map:
+        print("Não há tópicos válidos para calcular métricas (ex: todos foram ERRO).")
+    else:
+        # 2. Extrair top 10 palavras para cada tópico
+        topics_with_words = extract_top_n_words(topic_docs_map, stop_words, top_n=10)
+
+        # 3. Calcular Coerência (C_v)
+        # Usamos os documentos que foram efetivamente agrupados como corpus de referência
+        global_coherence = calculate_topic_coherence(
+            topics_with_words, 
+            documentos_processados, 
+            stop_words, 
+            coherence_type='c_v'
+        )
+
+        # 4. Calcular Diversidade
+        global_diversity = calculate_topic_diversity(topics_with_words)
+
+    # 5. Criar DataFrame e adicionar métricas globais
+    df = pd.DataFrame(resultados_finais)
+    df['topic_coherence'] = global_coherence
+    df['topic_diversity'] = global_diversity
+
+    # 6. Formatar colunas conforme solicitado e salvar
+    df = df.rename(columns={
+        'classificacao_1': 'classificação 1',
+        'classificacao_2': 'classificação 2'
+    })
+    
+    # Selecionar e ordenar as colunas
+    colunas_finais = ['documento', 'classificação 1', 'classificação 2', 'topic_coherence', 'topic_diversity']
+    df = df[colunas_finais]
+    
+    output_filename = "llm_topic_results.csv"
+    df.to_csv(output_filename, index=False, encoding='utf-8-sig')
+    
+    print(f"\nResultados salvos com sucesso em '{output_filename}'")
+    print("--- EXPERIMENTO CONCLUÍDO ---")
 
 if __name__ == "__main__":
     main()
