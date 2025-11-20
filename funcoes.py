@@ -33,8 +33,9 @@ from collections import Counter, defaultdict
 import gensim
 
 # --- Constantes de Configuração ---
-OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
-LLM_MODEL = "llama4" # Modelo LLM a ser usado no experimento, conforme solicitado
+#OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
+OLLAMA_HOST = "http://164.41.76.30:13508"  # Host Ollama, conforme fornecido
+LLM_MODEL = "llama3.1" # Modelo LLM a ser usado no experimento, conforme solicitado
 DATASET_NAME = "cardiffnlp/tweet_topic_single"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
 NUM_RANDOM_SAMPLES_FOR_LLM = 5  # Quantidade de documentos para gerar tópicos com o LLM
