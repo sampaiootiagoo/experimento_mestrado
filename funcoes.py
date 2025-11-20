@@ -34,11 +34,11 @@ import gensim
 
 # --- Constantes de Configuração ---
 #OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
-OLLAMA_HOST = "http://164.41.76.30:13508"  # Host Ollama, conforme fornecido
+OLLAMA_HOST = '127.0.0.1:11434'  # Host Ollama, conforme fornecido
 LLM_MODEL = "llama3.1" # Modelo LLM a ser usado no experimento, conforme solicitado
 DATASET_NAME = "cardiffnlp/tweet_topic_single"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
-NUM_RANDOM_SAMPLES_FOR_LLM = 5  # Quantidade de documentos para gerar tópicos com o LLM
+NUM_RANDOM_SAMPLES_FOR_LLM = 500  # Quantidade de documentos para gerar tópicos com o LLM
 TOP_K_SIMILAR = 3 # Número de documentos similares a serem recuperados para o contexto
 
 # --- Definição das Classes ---
@@ -62,7 +62,8 @@ class AnalisadorLLM:
         prompt = f"""
         Analise o seguinte documento e gere um único tópico principal que o descreva.
         O tópico deve ser uma ou duas palavras, como "Business", "Technology", "Health", "Sports" ou "Politics".
-        Responda apenas com o tópico e nada mais.
+        Responda apenas com o tópico e nada mais. Use o mesmo nome para tópicos com sinônimos, por exemplo: 
+        Observações com as classificações Famosos e Celebridades não devem ser diferentes, e sim só uma como "Celebridades" por exemplo.
 
         Documento: "{texto_documento}"
 
@@ -80,7 +81,8 @@ class AnalisadorLLM:
 
         Abaixo estão alguns documentos semanticamente similares.
         Analise este contexto adicional para confirmar ou refinar o tópico inicial.
-        O tópico refinado deve ser mais preciso. Mantenha-o conciso (uma ou duas palavras).
+        Mantenha o mesmo padrão de tópicos da primeira classificação e não os deixe mais precisos,
+        essa etapa serve para confirmar o tópico ou escolher outro.
 
         Contexto dos documentos similares:
         {contexto_str}
