@@ -40,7 +40,7 @@ DATASET_NAME = "cardiffnlp/tweet_topic_single"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
 NUM_RANDOM_SAMPLES_FOR_LLM = 500  # Quantidade de documentos para gerar tópicos com o LLM
 TOP_K_SIMILAR = 3 # Número de documentos similares a serem recuperados para o contexto
-
+LISTA_TOPICOS_FIXA = "Política, Tecnologia, Esportes, Saúde, Finanças/Economia, Negócios, Celebridades, Ciência/Pesquisa, Meio Ambiente, Cultura/Artes, Viagem, Educação, Crimes, Moda/Beleza, Culinária, Acidentes/Desastres, Transporte/Trânsito, Religião/Fé, Militar/Defesa, Outro"
 # --- Definição das Classes ---
 
 class AnalisadorLLM:
@@ -59,11 +59,18 @@ class AnalisadorLLM:
 
     def _criar_prompt_geracao_topico(self, texto_documento: str) -> str:
         """Helper para criar o prompt formatado para o LLM."""
+# MUDANÇA CRÍTICA: Definir a lista de escolhas e exigir o formato PT-BR.
         prompt = f"""
-        Analise o seguinte documento e gere um único tópico principal que o descreva.
-        O tópico deve ser uma ou duas palavras, como "Business", "Technology", "Health", "Sports" ou "Politics".
-        Responda apenas com o tópico e nada mais. Use o mesmo nome para tópicos com sinônimos, por exemplo: 
-        Observações com as classificações Famosos e Celebridades não devem ser diferentes, e sim só uma como "Celebridades" por exemplo.
+        Você é um classificador de tópicos rigoroso.
+        Analise o seguinte documento e atribua a ele um único tópico principal.
+
+        REGRAS DE CLASSIFICAÇÃO:
+        1. A resposta deve ser EXATAMENTE UMA palavra (exceção: nomes compostos como "Meio Ambiente").
+        2. A resposta DEVE ser escolhida ÚNICA E EXCLUSIVAMENTE de uma das categorias na LISTA FIXA abaixo.
+        3. Use SEMPRE o idioma português (Português-BR).
+        4. Se o tópico não se encaixar em nenhuma categoria específica, use "Outro".
+
+        LISTA FIXA DE CATEGORIAS: {LISTA_TOPICOS_FIXA}
 
         Documento: "{texto_documento}"
 
@@ -76,18 +83,25 @@ class AnalisadorLLM:
         contexto_str = "\n\n".join([f"Documento similar {i+1}:\n\"{doc}\"" for i, doc in enumerate(documentos_contexto)])
         
         prompt = f"""
-        Você está refinando a classificação de tópicos.
+        Você está na etapa de refinamento de classificação.
         O tópico inicial proposto foi: "{topico_inicial}".
 
-        Abaixo estão alguns documentos semanticamente similares.
-        Analise este contexto adicional para confirmar ou refinar o tópico inicial.
-        Mantenha o mesmo padrão de tópicos da primeira classificação e não os deixe mais precisos,
-        essa etapa serve para confirmar o tópico ou escolher outro.
+        Abaixo estão documentos semanticamente similares.
+        Analise este contexto adicional e o tópico inicial.
+        O seu objetivo é confirmar se o tópico inicial é o mais adequado ou trocá-lo por um mais apropriado, 
+        baseando-se no consenso semântico do contexto.
+
+        REGRAS DE CLASSIFICAÇÃO (As mesmas da Etapa 1):
+        1. A resposta deve ser EXATAMENTE UMA palavra (exceção: nomes compostos).
+        2. A resposta DEVE ser escolhida ÚNICA E EXCLUSIVAMENTE da LISTA FIXA.
+        3. O novo tópico (ou o tópico confirmado) deve ser CONSISTENTE (use o mesmo termo em Português-BR, ex: sempre "Celebridades", nunca "Famosos" ou "Celebrities").
+
+        LISTA FIXA DE CATEGORIAS: {LISTA_TOPICOS_FIXA}
 
         Contexto dos documentos similares:
         {contexto_str}
 
-        Com base neste contexto, qual é o tópico refinado ou confirmado? Responda apenas com o tópico.
+        Com base neste contexto, qual é o tópico mais coerente e padronizado? Responda apenas com o tópico.
 
         Tópico Refinado:
         """
