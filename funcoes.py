@@ -40,7 +40,7 @@ DATASET_NAME = "cardiffnlp/tweet_topic_single"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
 NUM_RANDOM_SAMPLES_FOR_LLM = 500  # Quantidade de documentos para gerar tópicos com o LLM
 TOP_K_SIMILAR = 3 # Número de documentos similares a serem recuperados para o contexto
-LISTA_TOPICOS_FIXA = "Política, Tecnologia, Esportes, Saúde, Finanças/Economia, Negócios, Celebridades, Ciência/Pesquisa, Meio Ambiente, Cultura/Artes, Viagem, Educação, Crimes, Moda/Beleza, Culinária, Acidentes/Desastres, Transporte/Trânsito, Religião/Fé, Militar/Defesa, Outro"
+LISTA_TOPICOS_EXEMPLO = "Mídia, Economia, Esportes"
 # --- Definição das Classes ---
 
 class AnalisadorLLM:
@@ -59,52 +59,103 @@ class AnalisadorLLM:
 
     def _criar_prompt_geracao_topico(self, texto_documento: str) -> str:
         """Helper para criar o prompt formatado para o LLM."""
-# MUDANÇA CRÍTICA: Definir a lista de escolhas e exigir o formato PT-BR.
+# TESTANDO: NÃO DEFININDO LISTA FIXA E FAZENDO EM INGLÊS
+
         prompt = f"""
-        Você é um classificador de tópicos rigoroso.
-        Analise o seguinte documento e atribua a ele um único tópico principal.
+        You will receive a document and a set of top-level topics from a topic hierarchy. Your task is to identify the **SINGLE MOST** generalizable top-level topic mentioned in the document.
 
-        REGRAS DE CLASSIFICAÇÃO:
-        1. A resposta deve ser EXATAMENTE UMA palavra (exceção: nomes compostos como "Meio Ambiente").
-        2. A resposta DEVE ser escolhida ÚNICA E EXCLUSIVAMENTE de uma das categorias na LISTA FIXA abaixo.
-        3. Use SEMPRE o idioma português (Português-BR).
-        4. Se o tópico não se encaixar em nenhuma categoria específica, use "Outro".
+        The output must be a single, short topic label that can act as a top-level topic in the hierarchy.
 
-        LISTA FIXA DE CATEGORIAS: {LISTA_TOPICOS_FIXA}
+        [Examples]
 
-        Documento: "{texto_documento}"
+        Example 1: Document about agricultural policies
+        Document:
+        Saving Essential American Sailors Act or SEAS Act - Amends the Moving Ahead for Progress in the 21st Century Act (MAP-21)
+        to repeal the Act’s repeal of the agricultural export requirements that: (1) 25 of the gross tonnage of certain agricultural
+        commodities or their products exported each fiscal year be transported on U.S. commercial vessels...
+        Your response:
+        Agriculture
 
-        Tópico:
+        Example 2: Document about duties suspension
+        Document:
+        Amends the Harmonized Tariff Schedule of the United States to suspend temporarily the duty on mixtures containing Fluopyram.
+        Your response:
+        Trade
+
+        [Instructions]
+
+        1. **Identify the main, most generalizable topic** in the document. The topic must be broad enough to accommodate future subtopics.
+        2. **Your output must be the topic label ONLY**. Do not include the level indicator ([1]), a description, or any explanatory text.
+        3. If the document contains **NO identifiable top-level topic**, return "None".
+        4. If multiple topics are found, choose the single most encompassing one.
+
+        Document to classify:
+        "{texto_documento}"
+
+        Respond ONLY with the topic label or "None". Do not output anything else (no code, no descriptions, no introductory phrases).
+
+        Topic Label:
         """
+
         return prompt.strip()
 
     def _criar_prompt_atualizacao_topico(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
         """Helper para criar o prompt de refinamento de tópico com base em contexto."""
         contexto_str = "\n\n".join([f"Documento similar {i+1}:\n\"{doc}\"" for i, doc in enumerate(documentos_contexto)])
-        
+
         prompt = f"""
-        Você está na etapa de refinamento de classificação.
-        O tópico inicial proposto foi: "{topico_inicial}".
+        You are currently in the topic classification refinement stage.
+        The initial proposed topic for a document was: "{topico_inicial}".
 
-        Abaixo estão documentos semanticamente similares.
-        Analise este contexto adicional e o tópico inicial.
-        O seu objetivo é confirmar se o tópico inicial é o mais adequado ou trocá-lo por um mais apropriado, 
-        baseando-se no consenso semântico do contexto.
+        Below are semantically similar documents retrieved from the vector store.
+        Analyze this additional context and the initial topic.
+        Your objective is to **reclassify** the document by choosing the most appropriate topic label based on the semantic consensus of the provided context.
 
-        REGRAS DE CLASSIFICAÇÃO (As mesmas da Etapa 1):
-        1. A resposta deve ser EXATAMENTE UMA palavra (exceção: nomes compostos).
-        2. A resposta DEVE ser escolhida ÚNICA E EXCLUSIVAMENTE da LISTA FIXA.
-        3. O novo tópico (ou o tópico confirmado) deve ser CONSISTENTE (use o mesmo termo em Português-BR, ex: sempre "Celebridades", nunca "Famosos" ou "Celebrities").
-
-        LISTA FIXA DE CATEGORIAS: {LISTA_TOPICOS_FIXA}
-
-        Contexto dos documentos similares:
+        Context from similar documents (Vector Store):
         {contexto_str}
 
-        Com base neste contexto, qual é o tópico mais coerente e padronizado? Responda apenas com o tópico.
+        [Rules for Reclassification]
 
-        Tópico Refinado:
+        1. The output must be **EXACTLY ONE** refined topic label.
+        2. The refined topic must be a single term or a short compound name (e.g., "Employment Taxes," not a sentence).
+        3. The refined topic label should be the most **consistent** and **appropriate** term to categorize the document based on the semantic consensus of the context.
+        4. If the initial proposed topic is the most appropriate and consistent label based on the context, you must reaffirm it as the refined topic.
+        5. Do not include any descriptions, prefixes, or suffixes (e.g., do not output "[1] Technology:..." or "Tópico Refinado:").
+
+        [Examples]
+
+        Example 1: Initial Topic Refinement based on Context
+        Initial Proposed Topic: "Immigration"
+        Context from similar documents:
+        - Document A: discusses new visa policies and requirements for highly skilled workers.
+        - Document B: describes the legal process for obtaining permanent residency.
+        - Document C: compares different country's asylum seeking processes.
+        Refined Topic:
+        Immigration
+
+        Example 2: Initial Topic Rejection and Reclassification
+        Initial Proposed Topic: "Entertainment"
+        Context from similar documents:
+        - Document A: details the latest box office numbers for summer action movies.
+        - Document B: provides a review of a new television series airing on a streaming platform.
+        - Document C: reports on the annual awards ceremony for a film industry.
+        Refined Topic:
+        Celebrities
+
+        Example 3: Reclassification to a more specific topic
+        Initial Proposed Topic: "Technology"
+        Context from similar documents:
+        - Document A: Explains the function and components of a new 5G network standard.
+        - Document B: Discusses regulations related to wireless service providers and consumer rights in internet access.
+        - Document C: Mentions government policies regarding the rollout of fiber optic infrastructure.
+        Refined Topic:
+        Telecommunications
+
+        With this context, what is the most consistent and appropriate topic for the document? Respond only with the refined topic label.
+
+        Refined Topic:
         """
+
         return prompt.strip()
 
 
