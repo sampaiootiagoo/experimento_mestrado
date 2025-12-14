@@ -35,19 +35,21 @@ from scipy.optimize import linear_sum_assignment # Necessário para o HMP
 import gensim
 
 # Importa a classe TopicManager do arquivo topic_manager.py
+# (O TopicManager precisa de 're' e 'collections.defaultdict' que já estão acima)
 from topic_manager import TopicManager 
 
 
-
 # --- Constantes de Configuração ---
-#OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
+# OLLAMA_HOST = "http://164.41.75.221:11434"  # Host Ollama, conforme fornecido
 OLLAMA_HOST = '127.0.0.1:11434'  # Host Ollama, conforme fornecido
 LLM_MODEL = "llama3.1" # Modelo LLM a ser usado no experimento, conforme solicitado
 DATASET_NAME = "cardiffnlp/tweet_topic_single"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # Modelo de embedding eficiente para a tarefa
 NUM_RANDOM_SAMPLES_FOR_LLM = 1000  # Quantidade de documentos para gerar tópicos com o LLM
 TOP_K_SIMILAR = 3 # Número de documentos similares a serem recuperados para o contexto
-topicos_existentes_str = "Agriculture, Trade"
+# topicos_existentes_str: REMOVIDA. Agora a lista é dinâmica e passada como argumento.
+
+
 # --- Definição das Classes ---
 
 class AnalisadorLLM:
@@ -64,8 +66,27 @@ class AnalisadorLLM:
         self.client = Client(host=host)
         self.model = model
 
-    def _criar_prompt_geracao_topico(self, texto_documento: str) -> str:
-        """Helper para criar o prompt formatado para o LLM."""
+    def _chamar_llm(self, prompt: str) -> str:
+        """
+        Função auxiliar para abstrair a chamada real ao LLM.
+        """
+        try:
+            response = self.client.chat(
+                model=self.model,
+                messages=[
+                    {"role": "user", "content": prompt},
+                ]
+            )
+            return response['message']['content'].strip()
+        except Exception as e:
+            print(f"Erro ao contatar o LLM: {e}")
+            return "ERRO_LLM"
+
+
+    def _criar_prompt_geracao_topico(self, texto_documento: str, topicos_historicos_str: str) -> str:
+        """
+        Helper para criar o prompt formatado para a Geração/Assimilação Incremental de Tópicos (Etapa 1).
+        """
 
         prompt = f"""
         You will receive a document and a list of previously identified top-level topics. Your task is to identify the **SINGLE MOST** generalizable top-level topic mentioned in the document.
@@ -73,7 +94,7 @@ class AnalisadorLLM:
 		The output must be a single, short topic label that can act as a top-level topic.
 
 		[CURRENT TOPIC LIST (HISTORY)]
-		{topicos_existentes_str}
+		{topicos_historicos_str}
 
 		[Examples]
 
@@ -115,12 +136,12 @@ class AnalisadorLLM:
         O LLM deve retornar APENAS o rótulo do tópico ou 'None'.
         """
         prompt = self._criar_prompt_geracao_topico(texto_documento, topicos_str)
-        # Substitua self._chamar_llm pela sua lógica real de chamada
-        resposta = self._chamar_llm(prompt) 
+        print(f"\nEnviando documento para o LLM:\n'{texto_documento[:100]}...'")
         
+        topico = self._chamar_llm(prompt) 
+        
+        print(f"LLM respondeu com o tópico inicial: '{topico}'")
         # Limpeza da resposta para garantir apenas o rótulo
-        topico = resposta.strip()
-        # Aqui você adicionaria uma lógica de limpeza mais robusta, se necessário
         return topico
 
     def consolidar_topicos(self, lista_de_topicos_formatada: str) -> str:
@@ -129,24 +150,19 @@ class AnalisadorLLM:
         O LLM deve retornar a string de modificação ou 'None'.
         """
         prompt = self._criar_prompt_consolidacao_topicos(lista_de_topicos_formatada)
-        # Substitua self._chamar_llm pela sua lógica real de chamada
-        resposta = self._chamar_llm(prompt)
         
         # O retorno é a string bruta que o TopicManager irá parsear
-        return resposta.strip()
+        return self._chamar_llm(prompt)
     
-def _criar_prompt_consolidacao_topicos(lista_de_topicos_formatada: str) -> str:
-    """
-    Cria o prompt para a etapa de consolidação (fusão de duplicados) dos tópicos.
-    
-    Args:
-        lista_de_topicos_formatada: Uma string contendo os tópicos já gerados,
-                                    cada um em uma linha, no formato hierárquico.
-    
-    Returns:
-        O prompt a ser enviado ao LLM.
-    """
-    prompt = f"""
+    def _criar_prompt_consolidacao_topicos(self, lista_de_topicos_formatada: str) -> str:
+        """
+        Cria o prompt para a etapa de consolidação (fusão de duplicados) dos tópicos.
+        (Corrigido para usar o formato complexo de saída)
+        -   An updated description that encompasses the meaning of the merged topics.
+        -   Example: [1] Employment Taxes: Mentions taxation report and requirement for employer ([1] Employer Taxes, [1] Employment Tax Reporting)
+
+        """
+        prompt = f"""
         You will receive a list of top-level topics that have been generated incrementally. Your task is to perform **topic consolidation** by merging topics that are **semantically equivalent, paraphrases, or near duplicates** of one another.
 
         This process aims to reduce redundancy and ensure a consistent set of top-level categories.
@@ -157,9 +173,7 @@ def _criar_prompt_consolidacao_topicos(lista_de_topicos_formatada: str) -> str:
         2.  **OUTPUT FORMAT:** When merging, the output must be a single line containing:
             -   A level indicator (e.g., "[1]").
             -   The new, consolidated label (must be the most appropriate and generalizable term).
-            -   An updated description that encompasses the meaning of the merged topics.
             -   The original topics merged, listed in parentheses (e.g., ([1] Original Topic A, [1] Original Topic B)).
-            -   Example: [1] Employment Taxes: Mentions taxation report and requirement for employer ([1] Employer Taxes, [1] Employment Tax Reporting)
         3.  **NO MERGE:** If no topics require merging, return the string **"None"**.
         4.  **CONCISENESS:** Output ONLY the merged line(s) or the word "None". Do not output introductory text, rules, or the full topic list again.
 
@@ -174,7 +188,7 @@ def _criar_prompt_consolidacao_topicos(lista_de_topicos_formatada: str) -> str:
 
         Example 2: Merging more general concepts
         Topic List:
-        [2] Mathematics
+        [2] Statistics
         [2] Digital Literacy
         [2] Telecommunications
         Your response:
@@ -186,10 +200,22 @@ def _criar_prompt_consolidacao_topicos(lista_de_topicos_formatada: str) -> str:
         Output the modification or "None" where appropriate.
         Your response:
         """
-    return prompt
+        return prompt.strip()
 
-    def _criar_prompt_atualizacao_topico(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
-        """Helper para criar o prompt de refinamento de tópico com base em contexto."""
+    def actualizar_topico_com_contexto(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
+        """Envia o tópico inicial e um contexto de documentos similares para o LLM refinar o tópico."""
+        prompt = self._criar_prompt_actualizacao_topico(topico_inicial, documentos_contexto)
+        try:
+            print(f"Enviando contexto para refinar o tópico '{topico_inicial}'...")
+            topico_actualizado = self._chamar_llm(prompt)
+            print(f"LLM refinou para o tópico: '{topico_actualizado}'")
+            return topico_actualizado
+        except Exception as e:
+            print(f"Erro ao contatar o LLM para refinamento: {e}")
+            return "ERRO_REFINAMENTO_LLM"
+    
+    def _criar_prompt_actualizacao_topico(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
+        """Helper para criar o prompt de refinamento de tópico com base em contexto (Etapa 2)."""
         contexto_str = "\n\n".join([f"Documento similar {i+1}:\n\"{doc}\"" for i, doc in enumerate(documentos_contexto)])
 
         prompt = f"""
@@ -241,49 +267,10 @@ def _criar_prompt_consolidacao_topicos(lista_de_topicos_formatada: str) -> str:
 
 	    Based on the context, what is the single most consistent and appropriate topic for the document?
 
-	    **[FINAL RESPONSE MUST BE THE TOPIC LABEL ONLY]**        """
+	    **[FINAL RESPONSE MUST BE THE TOPIC LABEL ONLY]** """
 
         return prompt.strip()
 
-
-    def gerar_topico_para_documento(self, texto_documento: str) -> str:
-        """
-        Envia um documento para o LLM e retorna o tópico gerado.
-        """
-        prompt = self._criar_prompt_geracao_topico(texto_documento)
-        
-        try:
-            print(f"\nEnviando documento para o LLM:\n'{texto_documento[:100]}...'")
-            response = self.client.chat(
-                model=self.model,
-                messages=[
-                    {"role": "user", "content": prompt},
-                ]
-            )
-            topico = response['message']['content'].strip()
-            print(f"LLM respondeu com o tópico inicial: '{topico}'")
-            return topico
-        except Exception as e:
-            print(f"Erro ao contatar o LLM: {e}")
-            return "ERRO_LLM"
-
-    def atualizar_topico_com_contexto(self, topico_inicial: str, documentos_contexto: List[str]) -> str:
-        """Envia o tópico inicial e um contexto de documentos similares para o LLM refinar o tópico."""
-        prompt = self._criar_prompt_atualizacao_topico(topico_inicial, documentos_contexto)
-        try:
-            print(f"Enviando contexto para refinar o tópico '{topico_inicial}'...")
-            response = self.client.chat(
-                model=self.model,
-                messages=[
-                    {"role": "user", "content": prompt},
-                ]
-            )
-            topico_atualizado = response['message']['content'].strip()
-            print(f"LLM refinou para o tópico: '{topico_atualizado}'")
-            return topico_atualizado
-        except Exception as e:
-            print(f"Erro ao contatar o LLM para refinamento: {e}")
-            return "ERRO_REFINAMENTO_LLM"
 
 class VectorStore:
     """
@@ -319,9 +306,10 @@ class VectorStore:
         distances, indices = self.index.search(query_embedding, k)
         return distances, indices
     
-# --- Funções de Avaliação de Tópicos ---
+# --- Funções de Avaliação de Tópicos (Mantidas mas não usadas nas métricas finais) ---
 
 def preprocess_text(text: str, stop_words: set) -> List[str]:
+    # ... (código existente) ...
     """
     Tokeniza, remove stopwords, pontuação e palavras curtas.
     """
@@ -329,6 +317,7 @@ def preprocess_text(text: str, stop_words: set) -> List[str]:
     return [word for word in simple_preprocess(text) if word not in stop_words and len(word) > 2]
 
 def extract_top_n_words(topic_docs: Dict[str, List[str]], stop_words: set, top_n: int = 10) -> Dict[str, List[str]]:
+    # ... (código existente) ...
     """
     Extrai as N palavras mais frequentes para cada tópico (grupo de documentos).
     Isso transforma as classificações do LLM (ex: "Sports") em um tópico 
@@ -353,6 +342,7 @@ def extract_top_n_words(topic_docs: Dict[str, List[str]], stop_words: set, top_n
     return topics_with_words
 
 def calculate_topic_coherence(topics_with_words: Dict[str, List[str]], documents: List[str], stop_words: set, coherence_type: str = 'c_v') -> float:
+    # ... (código existente) ...
     """
     Calcula a coerência (ex: C_v) para um conjunto de tópicos e documentos.
     'documents' deve ser a lista de textos usados para construir os tópicos.
@@ -389,6 +379,7 @@ def calculate_topic_coherence(topics_with_words: Dict[str, List[str]], documents
         return 0.0
 
 def calculate_topic_diversity(topics_with_words: Dict[str, List[str]]) -> float:
+    # ... (código existente) ...
     """
     Calcula a diversidade (proporção de palavras únicas) entre as top N palavras
     de todos os tópicos.
@@ -408,6 +399,35 @@ def calculate_topic_diversity(topics_with_words: Dict[str, List[str]]) -> float:
     diversity = len(unique_words) / len(all_words)
     print(f"Diversidade calculada: {diversity}")
     return diversity
+
+
+# --- Funções de Métricas de Agrupamento ---
+
+def purity_score(y_true, y_pred):
+    """Calcula a Purity Score."""
+    # Mapeamento dos rótulos (cruzamento entre GT e Preditos)
+    contingency_matrix = pd.crosstab(y_true, y_pred)
+    
+    # Encontra o maior valor em cada coluna (máxima concordância por cluster predito)
+    purity = np.sum(np.amax(contingency_matrix.values, axis=0)) / np.sum(contingency_matrix.values)
+    return purity
+
+def inverse_purity_score(y_true, y_pred):
+    """Calcula a Inverse Purity (também chamada de Homogeneidade em algumas definições)."""
+    # É a Purity Score calculada com os rótulos trocados
+    return purity_score(y_pred, y_true)
+
+def calculate_harmonic_mean_purity(y_true, y_pred):
+    """Calcula o Harmonic Mean Purity (HMP) a partir da Purity e Inverse Purity."""
+    purity = purity_score(y_true, y_pred)
+    inverse_purity = inverse_purity_score(y_true, y_pred)
+
+    if purity + inverse_purity == 0:
+        return 0.0
+    
+    # HMP = 2 * (Purity * Inverse Purity) / (Purity + Inverse Purity)
+    hmp = 2 * purity * inverse_purity / (purity + inverse_purity)
+    return hmp
 
 
 # --- Função Principal de Execução do Experimento ---
@@ -459,7 +479,11 @@ def main():
         
         # Etapa 1: Gerar/Assimilar tópico inicial (Classificação Incremental)
         topicos_historicos_str = topic_manager.get_topicos_str_para_geracao()
+        # O método de prompt AGORA usa topicos_historicos_str
         topico_inicial = analisador_llm.gerar_topico_incremental(texto_original, topicos_historicos_str)
+        
+        # Limpeza básica do tópico inicial
+        topico_inicial = topico_inicial.split('\n')[0].strip()
         
         if "ERRO" in topico_inicial or topico_inicial == "None":
             topico_atualizado = topico_inicial 
@@ -467,7 +491,6 @@ def main():
             
         else:
             # Adiciona o tópico (ou confirma se já existe) na lista de tópicos únicos
-            # O TopicManager apenas armazena o rótulo
             topic_manager.add_topic(topico_inicial) 
             
             # Etapa 2, 3 e 4: RAG e Refinamento
@@ -479,7 +502,7 @@ def main():
             
             documentos_contexto = [documentos[idx] for idx in similar_indices[0]]
             
-            topico_atualizado = analisador_llm.atualizar_topico_com_contexto(topico_inicial, documentos_contexto)
+            topico_atualizado = analisador_llm.actualizar_topico_com_contexto(topico_inicial, documentos_contexto)
 
             # Exibir resultados consolidados para esta amostra
             print("\n--- RESULTADO DA AMOSTRA ---")
@@ -493,7 +516,7 @@ def main():
             "documento": texto_original,
             "classificacao_1": topico_inicial,
             "classificacao_2": topico_atualizado,
-            # (Adicione 'ground_truth_topic' aqui se estiver disponível)
+            "ground_truth_topic": doc.get('label', 'N/A') # Adicionando o ground truth (se o dataset tiver a coluna 'label')
         })
     
     # FIM DO LOOP DE CLASSIFICAÇÃO
@@ -501,10 +524,9 @@ def main():
     # 5. NOVA ETAPA: CONSOLIDAÇÃO DE TÓPICOS EM LOTE (Uma única vez)
     print(f"\n\n*** EXECUTANDO CONSOLIDAÇÃO DE TÓPICOS em {len(topic_manager.topicos_unicos)} rótulos únicos... ***")
     
-    # O mapeamento conterá {Tópico Antigo: Tópico Novo} para todos os rótulos.
     mapeamento_consolidado = topic_manager.consolidar_topicos()
     
-    print(f"Tópicos após consolidação: {list(topic_manager.topicos_unicos)}")
+    print(f"Tópicos únicos após consolidação: {list(topic_manager.topicos_unicos)}")
     
     # 6. APLICAR MAPEAMENTO AOS RESULTADOS FINAIS
     print("\nAPLICANDO mapeamento de consolidação aos resultados...")
@@ -517,121 +539,82 @@ def main():
              # Mantém o tópico se ele não foi modificado (e.g., "None" ou "ERRO")
              res["classificacao_2_final"] = topico_refinado 
 
-    # 7. CÁLCULO DE MÉTRICAS E SALVAMENTO (Seu código original modificado)
-    # ... (Seu código de cálculo de métricas (HMP, NMI, ARI) e salvamento de CSV, 
-    # usando "classificacao_2_final" para as métricas) ...
-    # Lembre-se de adaptar a coluna 'classificacao_2' para 'classificacao_2_final' no seu cálculo final.
-
-# ----------------------------------------------------------------------
-# NOVAS FUNÇÕES DE MÉTRICAS: Harmonic Mean Purity (HMP)
-# ----------------------------------------------------------------------
-
-# 1. Harmonic Mean Purity (HMP) - Necessita de uma função de Purity e de Inverse Purity
-def purity_score(y_true, y_pred):
-    """Calcula a Purity Score."""
-    # Mapeamento dos rótulos (cruzamento entre GT e Preditos)
-    contingency_matrix = pd.crosstab(y_true, y_pred)
+    # 7. CÁLCULO DE MÉTRICAS E SALVAMENTO 
     
-    # Encontra o maior valor em cada coluna (máxima concordância por cluster predito)
-    purity = np.sum(np.amax(contingency_matrix.values, axis=0)) / np.sum(contingency_matrix.values)
-    return purity
+    print("\n--- CALCULANDO MÉTRICAS GLOBAIS E SALVANDO CSV ---")
 
-def inverse_purity_score(y_true, y_pred):
-    """Calcula a Inverse Purity (também chamada de Homogeneidade em algumas definições)."""
-    # É a Purity Score calculada com os rótulos trocados
-    return purity_score(y_pred, y_true)
+    if not resultados_finais:
+        print("Nenhum resultado foi processado. Encerrando.")
+        return
 
-def calculate_harmonic_mean_purity(y_true, y_pred):
-    """Calcula o Harmonic Mean Purity (HMP) a partir da Purity e Inverse Purity."""
-    purity = purity_score(y_true, y_pred)
-    inverse_purity = inverse_purity_score(y_true, y_pred)
+    # 1. Agrupar rótulos (Ground Truth e Preditos) para documentos válidos
+    y_true = []
+    y_pred = []
+    documentos_validos = []
 
-    if purity + inverse_purity == 0:
-        return 0.0
-    
-    # HMP = 2 * (Purity * Inverse Purity) / (Purity + Inverse Purity)
-    hmp = 2 * purity * inverse_purity / (purity + inverse_purity)
-    return hmp
+    for res in resultados_finais:
+        # Usa a coluna final após a consolidação
+        if "ERRO" not in res["classificacao_2_final"] and res["ground_truth_topic"] != 'N/A':
+            y_true.append(res["ground_truth_topic"])
+            y_pred.append(res["classificacao_2_final"]) # **CORRIGIDO: USANDO classificacao_2_final**
+            documentos_validos.append(res)
+        elif res["ground_truth_topic"] == 'N/A':
+            print("AVISO: Chave 'ground_truth_topic' não encontrada em um ou mais resultados. Ignorando para métricas.")
 
-# ----------------------------------------------------------------------
-# CÓDIGO PRINCIPAL MODIFICADO
-# ----------------------------------------------------------------------
+    global_hmp = 0.0
+    global_nmi = 0.0
+    global_ari = 0.0
 
-print("\n--- CALCULANDO MÉTRICAS GLOBAIS E SALVANDO CSV ---")
-
-if not resultados_finais:
-    print("Nenhum resultado foi processado. Encerrando.")
-    # Adicionar o 'return' se esta seção for uma função, como no código original.
-    # return 
-
-# 1. Agrupar rótulos (Ground Truth e Preditos) para documentos válidos
-y_true = []
-y_pred = []
-documentos_validos = []
-
-for res in resultados_finais:
-    # Ignora erros do LLM na análise e verifica se o Ground Truth existe
-    if "ERRO" not in res["classificacao_2"] and "ground_truth_topic" in res:
-        y_true.append(res["ground_truth_topic"]) # MUDAR AQUI O NOME DA COLUNA DO "GABARITO" CASO SEJA OUTRO
-        y_pred.append(res["classificacao_2"])
-        documentos_validos.append(res)
-    elif "ground_truth_topic" not in res:
-        print("AVISO: Chave 'ground_truth_topic' não encontrada em um ou mais resultados.")
-
-global_hmp = 0.0
-global_nmi = 0.0
-global_ari = 0.0
-
-if not y_true:
-    print("Não há documentos válidos (sem erro ou sem ground truth) para calcular métricas de agrupamento.")
-else:
-    # As métricas de agrupamento (HMP, NMI, ARI) comparam y_true e y_pred.
-    
-    # 2. Calcular Harmonic Mean Purity (HMP)
-    global_hmp = calculate_harmonic_mean_purity(y_true, y_pred)
-    # 
-
-    # 3. Calcular Normalized Mutual Information (NMI)
-    global_nmi = normalized_mutual_info_score(y_true, y_pred)
-    # 
-
-    # 4. Calcular Adjusted Rand Index (ARI)
-    global_ari = adjusted_rand_score(y_true, y_pred)
-    # 
+    if not y_true:
+        print("Não há documentos válidos (sem erro ou sem ground truth) para calcular métricas de agrupamento.")
+    else:
+        # 2. Calcular Harmonic Mean Purity (HMP)
+        global_hmp = calculate_harmonic_mean_purity(y_true, y_pred)
+        
+        # 3. Calcular Normalized Mutual Information (NMI)
+        global_nmi = normalized_mutual_info_score(y_true, y_pred)
+        
+        # 4. Calcular Adjusted Rand Index (ARI)
+        global_ari = adjusted_rand_score(y_true, y_pred)
+        
+        print(f"\nResultados das Métricas:")
+        print(f" - Harmonic Mean Purity (HMP): {global_hmp:.4f}")
+        print(f" - Normalized Mutual Information (NMI): {global_nmi:.4f}")
+        print(f" - Adjusted Rand Index (ARI): {global_ari:.4f}")
 
 
-# 5. Criar DataFrame e adicionar métricas globais
-# Criamos o DataFrame a partir apenas dos resultados válidos para evitar linhas incompletas
-df = pd.DataFrame(documentos_validos) 
+    # 5. Criar DataFrame e adicionar métricas globais
+    # Usamos resultados_finais pois queremos todas as colunas (incluindo as de erro)
+    df = pd.DataFrame(resultados_finais) 
 
-# Adicionar as métricas globais ao DataFrame completo (se houver dados válidos)
-if not df.empty:
-    df['harmonic_mean_purity'] = global_hmp
-    df['normalized_mutual_information'] = global_nmi
-    df['adjusted_rand_index'] = global_ari
-    
-    # 6. Formatar colunas conforme solicitado e salvar
-    df = df.rename(columns={
-        'classificacao_1': 'classificação 1',
-        'classificacao_2': 'classificação 2'
-        # Você pode adicionar o rename para o ground truth aqui se quiser:
-        # 'ground_truth_topic': 'ground truth' 
-    })
-    
-    # Selecionar e ordenar as colunas
-    colunas_finais = ['documento', 'classificação 1', 'classificação 2', 
-                      'harmonic_mean_purity', 'normalized_mutual_information', 'adjusted_rand_index']
-    
-    # Adicionando 'ground_truth_topic' (ou 'ground truth') se estiver presente
-    if 'ground_truth_topic' in df.columns:
-         colunas_finais.insert(1, 'ground_truth_topic')
+    # Adicionar as métricas globais ao DataFrame completo (se houver dados válidos)
+    if not df.empty and y_true:
+        df['harmonic_mean_purity'] = global_hmp
+        df['normalized_mutual_information'] = global_nmi
+        df['adjusted_rand_index'] = global_ari
+        
+        # 6. Formatar colunas conforme solicitado e salvar
+        df = df.rename(columns={
+            'classificacao_1': 'classificação 1 (Incremental Bruto)',
+            'classificacao_2': 'classificação 2 (Refinada Bruta)',
+            'classificacao_2_final': 'classificação 2 (Refinada e Consolidada)', # Coluna usada para métricas
+            'ground_truth_topic': 'Ground Truth'
+        })
+        
+        # Selecionar e ordenar as colunas
+        colunas_finais = ['documento', 'Ground Truth', 'classificação 1 (Incremental Bruto)', 
+                          'classificação 2 (Refinada e Consolidada)', 'harmonic_mean_purity', 
+                          'normalized_mutual_information', 'adjusted_rand_index']
+        
+        df = df.reindex(columns=colunas_finais)    
+        output_filename = "llm_topic_results.csv"
+        df.to_csv(output_filename, index=False, encoding='utf-8-sig')
+        
+        print(f"\nResultados salvos com sucesso em '{output_filename}'")
+        print("--- EXPERIMENTO CONCLUÍDO ---")
+    elif df.empty:
+        print("\nDataFrame de resultados vazio. Nada a salvar.")
 
-    df = df.reindex(columns=colunas_finais)    
-    output_filename = "llm_topic_results.csv"
-    df.to_csv(output_filename, index=False, encoding='utf-8-sig')
-    
-    print(f"\nResultados salvos com sucesso em '{output_filename}'")
-    print("--- EXPERIMENTO CONCLUÍDO ---")
 
 if __name__ == "__main__":
     main()
