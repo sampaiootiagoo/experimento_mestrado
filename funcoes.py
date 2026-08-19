@@ -506,7 +506,7 @@ def main():
 
             # Exibir resultados consolidados para esta amostra
             print("\n--- RESULTADO DA AMOSTRA ---")
-            print(f"Documento Original: '{texto_original[:250]}...'")
+            #print(f"Documento Original: '{texto_original[:250]}...'")
             print(f"Tópico Inicial Gerado: {topico_inicial}")
             print(f"Tópico Refinado com RAG: {topico_atualizado}")
             print(f"{'='*58}")
