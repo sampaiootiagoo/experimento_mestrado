@@ -3,6 +3,8 @@ import json
 import re
 import sys
 import time
+import contextlib
+import logging
 from datetime import datetime
 import pandas as pd
 from datasets import load_dataset
@@ -12,12 +14,76 @@ from sklearn.metrics.cluster import contingency_matrix
 from ollama import Client
 
 # ==============================================================================
+# CONTROLE DE SAÍDA
+# ==============================================================================
+@contextlib.contextmanager
+def silenciar_saida_detalhada():
+    """
+    Silencia temporariamente:
+
+    - prints das bibliotecas;
+    - barras de progresso do tqdm;
+    - mensagens em stderr;
+    - logs INFO e WARNING do Sentence Transformers;
+    - logs INFO e WARNING do Transformers;
+    - logs internos do TopicGPT.
+
+    Ao final, todas as configurações são restauradas.
+    """
+
+    loggers_silenciados = [
+        "sentence_transformers",
+        "sentence_transformers.SentenceTransformer",
+        "transformers",
+        "topicgpt_python",
+        "httpx",
+        "httpcore",
+        "openai",
+    ]
+
+    estados_anteriores = {}
+
+    for nome_logger in loggers_silenciados:
+        logger = logging.getLogger(nome_logger)
+
+        estados_anteriores[nome_logger] = {
+            "level": logger.level,
+            "disabled": logger.disabled,
+            "propagate": logger.propagate,
+        }
+
+        logger.setLevel(logging.CRITICAL + 1)
+        logger.disabled = True
+        logger.propagate = False
+
+    # Alguns registros podem estar sendo enviados diretamente ao root logger.
+    root_logger = logging.getLogger()
+    nivel_root_anterior = root_logger.level
+    root_logger.setLevel(logging.CRITICAL + 1)
+
+    try:
+        with open(os.devnull, "w", encoding="utf-8") as destino_nulo:
+            with contextlib.redirect_stdout(destino_nulo), \
+                 contextlib.redirect_stderr(destino_nulo):
+                yield
+
+    finally:
+        # Restaura o logger raiz.
+        root_logger.setLevel(nivel_root_anterior)
+
+        # Restaura individualmente os loggers alterados.
+        for nome_logger, estado in estados_anteriores.items():
+            logger = logging.getLogger(nome_logger)
+            logger.setLevel(estado["level"])
+            logger.disabled = estado["disabled"]
+            logger.propagate = estado["propagate"]
+
+# ==============================================================================
 # CONFIGURAÇÕES GERAIS DO EXPERIMENTO
 # ==============================================================================
 
 # 🛑 IMPORTANTE: Mude para False quando for rodar o experimento oficial na madrugada!
-MODO_TESTE = False 
-
+MODO_TESTE = False
 # Parâmetros oficiais do artigo TopicGPT para salvar no Log
 HIPERPARAMETROS = {
     "max_tokens": 300,
@@ -108,54 +174,88 @@ class PipelineMestrado:
         self.model_name = model_name
 
     def _extrair_topicos_limpos(self, topic_file):
-        """Transforma o output sujo da Fase 2 no formato de TEXTO estrito que a Fase 3 exige."""
-        clean_file = topic_file.replace('.json', '_limpo.txt')
+        """Cria o TXT de tópicos no formato aceito pela fase 3."""
+        if not os.path.exists(topic_file):
+            raise FileNotFoundError(f"Arquivo de tópicos não encontrado: '{topic_file}'")
+        if os.path.getsize(topic_file) == 0:
+            raise ValueError(f"O arquivo de tópicos está vazio: '{topic_file}'")
+
+        clean_file = topic_file.replace(".json", "_limpo.txt")
         topicos_globais = {}
         regex_topico = re.compile(r"\[(\d+)\]\s*([^:]+):\s*(.*)")
 
-        try:
-            with open(topic_file, 'r', encoding='utf-8') as f:
-                for linha in f:
-                    if not linha.strip(): continue
-                    try:
-                        dado = json.loads(linha)
-                        resposta = dado.get("refined_responses", dado.get("responses", ""))
-                        if not resposta: continue
-                        
-                        for linha_resp in resposta.split("\n"):
-                            match = regex_topico.search(linha_resp)
-                            if match:
-                                lvl, nome, desc = match.group(1).strip(), match.group(2).strip(), match.group(3).strip()
-                                chave = f"[{lvl}] {nome}"
-                                if chave not in topicos_globais:
-                                    topicos_globais[chave] = {"lvl": lvl, "nome": nome, "desc": desc}
-                    except json.JSONDecodeError: continue
-            
-            if not topicos_globais:
-                topicos_globais["[1] Tópico Indefinido"] = {"lvl": "1", "nome": "Tópico Indefinido", "desc": "Erro"}
+        with open(topic_file, "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                if not linha.strip():
+                    continue
+                try:
+                    dado = json.loads(linha)
+                except json.JSONDecodeError:
+                    continue
 
-            with open(clean_file, 'w', encoding='utf-8') as f:
-                for info in topicos_globais.values():
-                    f.write(f"[{info['lvl']}] {info['nome']}: {info['desc']}\n")
-            return clean_file, len(topicos_globais)
-        except Exception as e:
-            return topic_file, 0
+                resposta = dado.get("refined_responses", dado.get("responses", ""))
+                if isinstance(resposta, list):
+                    resposta = "\n".join(str(item) for item in resposta)
+                if not isinstance(resposta, str) or not resposta.strip():
+                    continue
+
+                for linha_resposta in resposta.splitlines():
+                    match = regex_topico.search(linha_resposta)
+                    if not match:
+                        continue
+                    nivel = match.group(1).strip()
+                    nome = re.sub(r"\s*\(\d+\)\s*$", "", match.group(2)).strip()
+                    descricao = match.group(3).strip() or "Descrição não informada"
+                    if nome:
+                        chave = f"[{nivel}] {nome}"
+                        topicos_globais.setdefault(
+                            chave,
+                            {"lvl": nivel, "nome": nome, "desc": descricao}
+                        )
+
+        if not topicos_globais:
+            raise ValueError(
+                f"Nenhum tópico válido foi extraído de '{topic_file}'. "
+                "Verifique 'refined_responses' e 'responses' da fase 2."
+            )
+
+        with open(clean_file, "w", encoding="utf-8") as arquivo:
+            for info in topicos_globais.values():
+                arquivo.write(f"[{info['lvl']}] {info['nome']} (Count: 0): {info['desc']}\n")
+
+        if os.path.getsize(clean_file) == 0:
+            raise ValueError(f"O arquivo limpo foi criado vazio: '{clean_file}'")
+
+        # Valida exatamente o padrão exigido por TopicTree.from_topic_list.
+        padrao_topicgpt = re.compile(
+            r"^\[(\d+)\] (.+) \(Count: (\d+)\)\s?:(.*)$"
+        )
+        with open(clean_file, "r", encoding="utf-8") as arquivo:
+            for numero_linha, linha in enumerate(arquivo, start=1):
+                conteudo = linha.strip()
+                if conteudo and not padrao_topicgpt.match(conteudo):
+                    raise ValueError(
+                        f"Linha {numero_linha} incompatível com TopicGPT: {conteudo!r}"
+                    )
+
+        return clean_file, len(topicos_globais)
 
     def gerar_topicos(self, data_file, prompt_file, seed_file, out_file, topic_file):
         from topicgpt_python import generate_topic_lvl1
         print(" -> Iniciando Fase 1: Geração de Tópicos...")
         inicio = time.time()
         
-        generate_topic_lvl1(
-            api=self.api,
-            model=self.model_name,
-            data=data_file, 
-            prompt_file=prompt_file,
-            seed_file=seed_file,
-            out_file=out_file,
-            topic_file=topic_file,
-            verbose=False  # Silenciado
-        )
+        with silenciar_saida_detalhada():
+            generate_topic_lvl1(
+                api=self.api,
+                model=self.model_name,
+                data=data_file, 
+                prompt_file=prompt_file,
+                seed_file=seed_file,
+                out_file=out_file,
+                topic_file=topic_file,
+                verbose=False  # Silenciado
+            )
         
         tempo = time.time() - inicio
         # Conta tópicos gerados para o log
@@ -167,98 +267,98 @@ class PipelineMestrado:
         print(f"    [✔] Concluído em {tempo:.2f}s | Tópicos encontrados: {qtd_topicos}")
         return qtd_topicos
 
-    def refinar_topicos(self, prompt_file, generation_file, topic_file, out_file, updated_file, mapping_file):
-        from topicgpt_python import refine_topics
+    def refinar_topicos(
+        self,
+        prompt_file,
+        generation_file,
+        topic_file,
+        out_file,
+        updated_file,
+        mapping_file
+    ):
+
         print(" -> Iniciando Fase 2: Refinamento de Tópicos...")
         inicio = time.time()
-        
-        refine_topics(
-            api=self.api,
-            model=self.model_name,
-            prompt_file=prompt_file,
-            generation_file=generation_file,
-            topic_file=topic_file,
-            out_file=out_file,
-            updated_file=updated_file,
-            verbose=False,
-            remove=True,
-            mapping_file=mapping_file
-        )
-        
+
+        with silenciar_saida_detalhada():
+            from topicgpt_python import refine_topics
+
+            refine_topics(
+                api=self.api,
+                model=self.model_name,
+                prompt_file=prompt_file,
+                generation_file=generation_file,
+                topic_file=topic_file,
+                out_file=out_file,
+                updated_file=updated_file,
+                verbose=False,
+                remove=True,
+                mapping_file=mapping_file
+            )
+
         _, qtd_refinados = self._extrair_topicos_limpos(updated_file)
+
         tempo = time.time() - inicio
-        print(f"    [✔] Concluído em {tempo:.2f}s | Tópicos finais consolidados: {qtd_refinados}")
+
+        print(
+            f"    [✔] Concluído em {tempo:.2f}s | "
+            f"Tópicos finais consolidados: {qtd_refinados}"
+        )
+
         return qtd_refinados
 
     def atribuir_topicos(self, data_file, prompt_file, out_file, topic_file):
-        from topicgpt_python import assign_topics
-        import topicgpt_python.utils as utils
-        
-        topic_file_pronto, _ = self._extrair_topicos_limpos(topic_file)
         print(" -> Iniciando Fase 3: Atribuição de Tópicos...")
         inicio = time.time()
-        
-        # --- MONKEYPATCH SILENCIOSO ---
-        _orig_compile, _orig_match, _orig_search = re.compile, re.match, re.search
-        def _custom_parser(string):
-            if not isinstance(string, str) or not string.strip().startswith('['): return None
-            m = _orig_search(r'\[(\d+)\]\s*([^:]+):\s*(.*)', string.strip())
-            if not m: return None
-            lvl, name, desc = m.group(1), m.group(2).strip(), m.group(3).strip()
-            name = _orig_search(r'^(.*?)(?:\s*\(\d+\))?$', name).group(1).strip() if _orig_search(r'^(.*?)(?:\s*\(\d+\))?$', name) else name
-            class DummyMatch:
-                def group(self, i=0):
-                    if i == 1: return lvl
-                    if i == 2: return name
-                    if i == 3: return "0"
-                    if i >= 4: return desc
-                    return string
-                def groups(self): return (lvl, name, "0", desc)
-            return DummyMatch()
-            
-        class PatchedPattern:
-            def __init__(self, pat): self.pat = pat
-            def match(self, s, *a, **k): return _custom_parser(s) or self.pat.match(s, *a, **k)
-            def search(self, s, *a, **k): return _custom_parser(s) or self.pat.search(s, *a, **k)
-            def finditer(self, *a, **k): return self.pat.finditer(*a, **k)
-            def findall(self, *a, **k): return self.pat.findall(*a, **k)
-            def sub(self, *a, **k): return self.pat.sub(*a, **k)
-            def subn(self, *a, **k): return self.pat.subn(*a, **k)
-            def split(self, *a, **k): return self.pat.split(*a, **k)
-            def __getattr__(self, attr): return getattr(self.pat, attr)
 
-        def _p_comp(p, f=0): return PatchedPattern(_orig_compile(p, f))
-        def _p_match(p, s, f=0): return _custom_parser(s) or _orig_match(p, s, f)
-        def _p_search(p, s, f=0): return _custom_parser(s) or _orig_search(p, s, f)
+        for descricao, caminho in {
+            "dataset de atribuição": data_file,
+            "prompt de atribuição": prompt_file,
+            "arquivo de tópicos refinados": topic_file,
+        }.items():
+            if not os.path.exists(caminho):
+                raise FileNotFoundError(f"O {descricao} não foi encontrado: '{caminho}'")
+            if os.path.getsize(caminho) == 0:
+                raise ValueError(f"O {descricao} está vazio: '{caminho}'")
 
-        re.compile, re.match, re.search = _p_comp, _p_match, _p_search
-        o_match, o_search, o_comp = getattr(utils, 'match', None), getattr(utils, 'search', None), getattr(utils, 'compile', None)
-        if o_match: utils.match = _p_match
-        if o_search: utils.search = _p_search
-        if o_comp: utils.compile = _p_comp
-        _patched_globals = {k: getattr(utils, k) for k in dir(utils) if type(getattr(utils, k)) == type(_orig_compile(''))}
-        for k, v in _patched_globals.items(): setattr(utils, k, PatchedPattern(v))
-        # -----------------------------
-        
+        topic_file_pronto, quantidade_topicos = self._extrair_topicos_limpos(topic_file)
+
+        if os.path.exists(out_file):
+            os.remove(out_file)
+
         try:
-            assign_topics(
-                api=self.api,
-                model=self.model_name,
-                data=data_file, 
-                prompt_file=prompt_file,
-                out_file=out_file,
-                topic_file=topic_file_pronto,
-                verbose=False # Silenciado
-            )
-            tempo = time.time() - inicio
-            print(f"    [✔] Concluído em {tempo:.2f}s")
-        finally:
-            re.compile, re.match, re.search = _orig_compile, _orig_match, _orig_search
-            if o_match: utils.match = o_match
-            if o_search: utils.search = o_search
-            if o_comp: utils.compile = o_comp
-            for k, v in _patched_globals.items(): setattr(utils, k, v)
+            with silenciar_saida_detalhada():
+                from topicgpt_python import assign_topics
+                assign_topics(
+                    api=self.api,
+                    model=self.model_name,
+                    data=data_file,
+                    prompt_file=prompt_file,
+                    out_file=out_file,
+                    topic_file=topic_file_pronto,
+                    verbose=False
+                )
+        except Exception as erro:
+            raise RuntimeError(
+                "A fase 3 falhou durante a atribuição de tópicos.\n"
+                f"Dataset: {data_file}\n"
+                f"Prompt: {prompt_file}\n"
+                f"Tópicos originais: {topic_file}\n"
+                f"Tópicos limpos: {topic_file_pronto}\n"
+                f"Quantidade de tópicos: {quantidade_topicos}\n"
+                f"Erro original: {type(erro).__name__}: {erro}"
+            ) from erro
 
+        if not os.path.exists(out_file):
+            raise FileNotFoundError(f"A fase 3 não criou a saída: '{out_file}'")
+        if os.path.getsize(out_file) == 0:
+            raise ValueError(f"A fase 3 criou uma saída vazia: '{out_file}'")
+
+        tempo = time.time() - inicio
+        print(
+            f"    [✔] Concluído em {tempo:.2f}s | "
+            f"Tópicos disponíveis: {quantidade_topicos} | Saída: {out_file}"
+        )
 
 class AvaliadorMetricas:
     @staticmethod
@@ -303,7 +403,7 @@ class AvaliadorMetricas:
             print(" -> Aviso: Ground-Truth não detectado (Dataset tipo WIKI). Calculando apenas estatísticas.")
             return {
                 "NMI": None, "ARI": None, "HMP": None, "Purity": None, "Inverse_Purity": None,
-                "Amostras_Validadas": len(y_true), "Topicos_Criados": len(set(y_pred)), "Topicos_Groud_Truth": 0
+                "Amostras_Validadas": len(y_true), "Topicos_Criados": len(set(y_pred)), "Topicos_Ground_Truth": 0
             }
 
         nmi = normalized_mutual_info_score(y_true, y_pred)
