@@ -1,0 +1,54 @@
+[
+    {
+        "dataset": "BILLS",
+        "timestamp": "2026-09-18 05:42:01",
+        "modo_teste": false,
+        "amostra_geracao": 1000,
+        "amostra_atribuicao": 15242,
+        "parametros_llm": {
+            "max_tokens": 300,
+            "temperature": 0.0,
+            "top_p": 0.0,
+            "auto_correction_limit": 10,
+            "min_doc_frequency_bills": 10,
+            "min_doc_frequency_wiki": 5,
+            "max_words_per_doc": 250
+        },
+        "metricas": {
+            "NMI": 0.4840208828021054,
+            "ARI": 0.3699149182536339,
+            "HMP": 0.5454722895827044,
+            "Purity": 0.6634299960635087,
+            "Inverse_Purity": 0.4631281983991602,
+            "Amostras_Validadas": 15242,
+            "Topicos_Criados": 275,
+            "Topicos_Ground_Truth": 21
+        }
+    },
+    {
+        "dataset": "WIKITEXT",
+        "timestamp": "2026-09-18 17:42:33",
+        "modo_teste": false,
+        "amostra_geracao": 1100,
+        "amostra_atribuicao": 8024,
+        "parametros_llm": {
+            "max_tokens": 300,
+            "temperature": 0.0,
+            "top_p": 0.0,
+            "auto_correction_limit": 10,
+            "min_doc_frequency_bills": 10,
+            "min_doc_frequency_wiki": 5,
+            "max_words_per_doc": 250
+        },
+        "metricas": {
+            "NMI": null,
+            "ARI": null,
+            "HMP": null,
+            "Purity": null,
+            "Inverse_Purity": null,
+            "Amostras_Validadas": 8024,
+            "Topicos_Criados": 669,
+            "Topicos_Ground_Truth": 0
+        }
+    }
+]
