@@ -6,8 +6,8 @@ import time
 import contextlib
 import logging
 from datetime import datetime
+from pathlib import Path
 import pandas as pd
-from datasets import load_dataset
 import numpy as np
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
 from sklearn.metrics.cluster import contingency_matrix
@@ -105,290 +105,554 @@ class ConfiguradorOllama:
         print(f"Ambiente configurado! topicgpt_python apontará para: {base_url}")
 
 class PreparadorDatasets:
-    """ Baixa, processa, fatia e salva os datasets no formato JSONL esperado pelo TopicGPT """
-    
+    """Baixa e prepara os quatro arquivos oficiais usados no experimento."""
+
+    LINKS_GOOGLE_DRIVE = {
+        "bills_test": {
+            "id": "1sVy7P4XO31brrfmr08jF1SsUP3GMGYTN",
+            "nome": "bills_test.metadata.jsonl",
+        },
+        "bills_train": {
+            "id": "1FqctpGokqejEasqJvkDTK1ucM3ZrRZHL",
+            "nome": "bills_train.metadata.jsonl",
+        },
+        "wiki_test": {
+            "id": "1yVgiwXedLrtP-AD4FtcymtAL2rXr2Fqs",
+            "nome": "wiki_test.metadata.jsonl",
+        },
+        "wiki_train": {
+            "id": "1yJ1ErbDKRifTcliaqF3rl5srvhQl13FC",
+            "nome": "wiki_train.metadata.jsonl",
+        },
+    }
+
     @staticmethod
     def _truncate_text(texto):
-        # Truncate para garantir que caia na janela de contexto do Llama/Gemma
-        if not isinstance(texto, str): return ""
+        if not isinstance(texto, str):
+            return ""
         palavras = texto.split()
         return " ".join(palavras[:HIPERPARAMETROS["max_words_per_doc"]])
 
     @staticmethod
-    def preparar_bills():
-        print("\n[BILLS] Baixando e processando dataset Congressional Bills...")
-        dataset = load_dataset("zli12321/Bills")
-        df_train = dataset['train'].to_pandas()
-        
-        # Mapeamento e Truncate
-        df_train['text'] = df_train['summary'].apply(PreparadorDatasets._truncate_text)
-        df_train['label_name'] = df_train['topic']
-        
-        n_gen = 10 if MODO_TESTE else 1000
-        n_ass = 10 if MODO_TESTE else 15242
-        
-        # Amostragem (Garantindo que Atribuição não pegue docs da Geração)
-        df_gen = df_train.sample(n=n_gen, random_state=42)
-        df_ass = df_train.drop(df_gen.index).sample(n=n_ass, random_state=42)
-        
-        os.makedirs("datasets/experimento", exist_ok=True)
-        path_gen = "datasets/experimento/bills_gen.jsonl"
-        path_ass = "datasets/experimento/bills_ass.jsonl"
-        
-        df_gen[['text', 'label_name']].to_json(path_gen, orient='records', lines=True, force_ascii=False)
-        df_ass[['text', 'label_name']].to_json(path_ass, orient='records', lines=True, force_ascii=False)
-        
-        print(f"[BILLS] Prontos! Geração: {len(df_gen)} | Atribuição: {len(df_ass)}")
-        return path_gen, path_ass, len(df_gen), len(df_ass)
+    def _baixar_arquivo_drive(chave):
+        try:
+            import gdown
+        except ImportError as erro:
+            raise ImportError(
+                "Instale o gdown no ambiente atual com: %pip install -U gdown"
+            ) from erro
+
+        info = PreparadorDatasets.LINKS_GOOGLE_DRIVE[chave]
+        pasta = Path("datasets/topicgpt_oficial")
+        pasta.mkdir(parents=True, exist_ok=True)
+        destino = pasta / info["nome"]
+
+        if destino.exists() and destino.stat().st_size > 0:
+            print(
+                f"[DOWNLOAD] Reutilizando {destino} "
+                f"({destino.stat().st_size / 1024**2:.1f} MB)."
+            )
+            return destino
+
+        temporario = destino.with_suffix(destino.suffix + ".part")
+        temporario.unlink(missing_ok=True)
+        url = f"https://drive.google.com/uc?id={info['id']}"
+        print(f"[DOWNLOAD] Baixando {info['nome']}...")
+
+        resultado = gdown.download(
+            url=url,
+            output=str(temporario),
+            quiet=False,
+            #fuzzy=True,
+            use_cookies=False,
+        )
+        if not resultado or not temporario.exists() or temporario.stat().st_size == 0:
+            temporario.unlink(missing_ok=True)
+            raise RuntimeError(f"Falha no download de {info['nome']}.")
+
+        temporario.replace(destino)
+        print(
+            f"[DOWNLOAD] Concluído: {destino} "
+            f"({destino.stat().st_size / 1024**2:.1f} MB)."
+        )
+        return destino
 
     @staticmethod
-    def preparar_wiki():
-        """
-        Baixa a base Wiki oficial disponibilizada pelo projeto TopicGPT,
-        preserva o ground truth e cria as amostras de geração e atribuição.
+    def _achatar_registro(registro, prefixo=""):
+        saida = {}
+        for chave, valor in registro.items():
+            nome = f"{prefixo}.{chave}" if prefixo else str(chave)
+            if isinstance(valor, dict):
+                saida.update(PreparadorDatasets._achatar_registro(valor, nome))
+            else:
+                saida[nome] = valor
+        return saida
 
-        Fonte oficial:
-        https://drive.google.com/drive/folders/1rCTR5ZQQ7bZQoewFA8eqV6glP6zhY31e
-        """
-        from pathlib import Path
+    @staticmethod
+    def _selecionar_coluna(colunas, candidatos):
+        mapa = {str(c).lower(): c for c in colunas}
+        for candidato in candidatos:
+            if candidato.lower() in mapa:
+                return mapa[candidato.lower()]
+        for candidato in candidatos:
+            sufixo = "." + candidato.lower()
+            encontrados = [original for baixo, original in mapa.items() if baixo.endswith(sufixo)]
+            if encontrados:
+                return encontrados[0]
+        return None
 
-        print("\n[WIKI] Obtendo a base Wiki oficial do TopicGPT com labels...")
+    @staticmethod
+    def _ler_jsonl_com_labels(caminho, dataset_nome):
+        registros = []
+        colunas_texto = [
+            "text", "summary", "document", "content", "article", "body"
+        ]
+        # Prioriza o nível alto, usado na avaliação principal do TopicGPT.
+        colunas_label = [
+            "label_high", "high_level_label", "high_label", "level_1_label",
+            "label_level_1", "topic", "label_name", "label", "category"
+        ]
 
-        pasta_download = Path("datasets/topicgpt_oficial")
-        pasta_download.mkdir(parents=True, exist_ok=True)
-        marcador = pasta_download / ".download_concluido"
-
-        if not marcador.exists():
-            try:
-                import gdown
-            except ImportError as erro:
-                raise ImportError(
-                    "A rotina da Wiki requer o pacote gdown. Instale uma vez com: "
-                    "%pip install -U gdown"
-                ) from erro
-
-            url_pasta = (
-                "https://drive.google.com/drive/folders/"
-                "1rCTR5ZQQ7bZQoewFA8eqV6glP6zhY31e?usp=sharing"
-            )
-            arquivos_baixados = gdown.download_folder(
-                url=url_pasta,
-                output=str(pasta_download),
-                quiet=False,
-                use_cookies=False,
-            )
-            if not arquivos_baixados:
-                raise RuntimeError(
-                    "Nenhum arquivo foi baixado da pasta oficial do TopicGPT. "
-                    "Verifique o acesso da VM à internet e ao Google Drive."
-                )
-            marcador.write_text("ok", encoding="utf-8")
-        else:
-            print("[WIKI] Download oficial já existe. Reutilizando arquivos locais.")
-
-        candidatos = sorted(
-            p for p in pasta_download.rglob("*")
-            if p.is_file()
-            and p.suffix.lower() in {".json", ".jsonl"}
-            and "wiki" in p.name.lower()
-        )
-        if not candidatos:
-            raise FileNotFoundError(
-                "O download terminou, mas nenhum JSON/JSONL da Wiki foi localizado "
-                f"em '{pasta_download}'."
-            )
-
-        frames_validos = []
-        relatorio = []
-        for caminho in candidatos:
-            try:
-                try:
-                    df = pd.read_json(caminho, lines=True)
-                except ValueError:
-                    df = pd.read_json(caminho)
-            except Exception as erro:
-                relatorio.append(f"{caminho}: leitura falhou ({erro})")
-                continue
-
-            col_texto = next(
-                (c for c in ["text", "document", "content"] if c in df.columns),
-                None,
-            )
-            col_label = next(
-                (
-                    c for c in [
-                        "label_name", "label", "high_level_label",
-                        "label_high", "topic", "category"
-                    ]
-                    if c in df.columns
-                ),
-                None,
-            )
-            relatorio.append(
-                f"{caminho}: linhas={len(df)}, texto={col_texto}, label={col_label}"
-            )
-            if col_texto and col_label:
-                parte = df[[col_texto, col_label]].copy()
-                parte.columns = ["text", "label_name"]
-                frames_validos.append(parte)
-
-        if not frames_validos:
-            raise ValueError(
-                "Nenhum arquivo Wiki baixado contém simultaneamente texto e label.\n"
-                + "\n".join(relatorio)
-            )
-
-        df_wiki = pd.concat(frames_validos, ignore_index=True)
-        df_wiki["text"] = df_wiki["text"].astype(str).str.strip()
-        df_wiki["label_name"] = df_wiki["label_name"].apply(
-            lambda valor: valor[0] if isinstance(valor, (list, tuple)) and valor else valor
-        )
-        df_wiki["label_name"] = df_wiki["label_name"].astype(str).str.strip()
-        df_wiki = df_wiki[
-            df_wiki["text"].ne("")
-            & df_wiki["label_name"].ne("")
-            & ~df_wiki["label_name"].str.lower().isin({"nan", "none", "n/a"})
-        ].copy()
-        df_wiki = df_wiki.drop_duplicates(subset=["text"]).reset_index(drop=True)
-        df_wiki["text"] = df_wiki["text"].apply(PreparadorDatasets._truncate_text)
-
-        qtd_labels = df_wiki["label_name"].nunique()
-        if qtd_labels <= 1:
-            raise ValueError(
-                f"A base Wiki localizada possui somente {qtd_labels} label distinta. "
-                "O ground truth não foi carregado corretamente."
-            )
-
-        n_gen = 10 if MODO_TESTE else 1100
-        n_ass = 10 if MODO_TESTE else 8024
-        necessario = n_gen + n_ass
-        if len(df_wiki) < necessario:
-            raise ValueError(
-                f"A base Wiki possui {len(df_wiki)} documentos válidos, mas são "
-                f"necessários {necessario} ({n_gen} + {n_ass})."
-            )
-
-        df_gen = df_wiki.sample(n=n_gen, random_state=42)
-        df_ass = df_wiki.drop(df_gen.index).sample(n=n_ass, random_state=42)
-
-        os.makedirs("datasets/experimento", exist_ok=True)
-        path_gen = "datasets/experimento/wiki_gen.jsonl"
-        path_ass = "datasets/experimento/wiki_ass.jsonl"
-        df_gen[["text", "label_name"]].to_json(
-            path_gen, orient="records", lines=True, force_ascii=False
-        )
-        df_ass[["text", "label_name"]].to_json(
-            path_ass, orient="records", lines=True, force_ascii=False
-        )
-
-        print(
-            f"[WIKI] Base correta pronta! Documentos válidos: {len(df_wiki)} | "
-            f"Labels: {qtd_labels} | Geração: {len(df_gen)} | "
-            f"Atribuição: {len(df_ass)}"
-        )
-        print("[WIKI] Arquivos oficiais identificados:")
-        for item in relatorio:
-            print(f"  - {item}")
-
-        return path_gen, path_ass, len(df_gen), len(df_ass)
-
-class PipelineMestrado:
-    def __init__(self, model_name="gemma2:9b"):
-        self.api = "openai" 
-        self.model_name = model_name
-
-    def _extrair_topicos_limpos(self, topic_file):
-        """Cria o TXT de tópicos no formato aceito pela fase 3."""
-        if not os.path.exists(topic_file):
-            raise FileNotFoundError(f"Arquivo de tópicos não encontrado: '{topic_file}'")
-        if os.path.getsize(topic_file) == 0:
-            raise ValueError(f"O arquivo de tópicos está vazio: '{topic_file}'")
-
-        clean_file = topic_file.replace(".json", "_limpo.txt")
-        topicos_globais = {}
-        regex_topico = re.compile(r"\[(\d+)\]\s*([^:]+):\s*(.*)")
-
-        with open(topic_file, "r", encoding="utf-8") as arquivo:
-            for linha in arquivo:
+        with open(caminho, "r", encoding="utf-8") as arquivo:
+            for numero_linha, linha in enumerate(arquivo, start=1):
                 if not linha.strip():
                     continue
                 try:
-                    dado = json.loads(linha)
-                except json.JSONDecodeError:
-                    continue
+                    bruto = json.loads(linha)
+                except json.JSONDecodeError as erro:
+                    raise ValueError(
+                        f"JSON inválido em {caminho}, linha {numero_linha}: {erro}"
+                    ) from erro
 
-                resposta = dado.get("refined_responses", dado.get("responses", ""))
-                if isinstance(resposta, list):
-                    resposta = "\n".join(str(item) for item in resposta)
-                if not isinstance(resposta, str) or not resposta.strip():
-                    continue
+                plano = PreparadorDatasets._achatar_registro(bruto)
+                coluna_texto = PreparadorDatasets._selecionar_coluna(
+                    plano.keys(), colunas_texto
+                )
+                coluna_label = PreparadorDatasets._selecionar_coluna(
+                    plano.keys(), colunas_label
+                )
 
-                for linha_resposta in resposta.splitlines():
-                    match = regex_topico.search(linha_resposta)
-                    if not match:
-                        continue
-                    nivel = match.group(1).strip()
-                    nome = re.sub(r"\s*\(\d+\)\s*$", "", match.group(2)).strip()
-                    descricao = match.group(3).strip() or "Descrição não informada"
-                    if nome:
-                        chave = f"[{nivel}] {nome}"
-                        topicos_globais.setdefault(
-                            chave,
-                            {"lvl": nivel, "nome": nome, "desc": descricao}
+                if coluna_texto is None or coluna_label is None:
+                    if numero_linha == 1:
+                        raise ValueError(
+                            f"Não foi possível identificar texto e label em {caminho}. "
+                            f"Campos encontrados: {sorted(plano.keys())}"
                         )
+                    continue
 
-        if not topicos_globais:
+                texto = PreparadorDatasets._truncate_text(plano[coluna_texto])
+                label = plano[coluna_label]
+                if isinstance(label, (list, tuple)):
+                    label = label[0] if label else None
+                label = "" if label is None else str(label).strip()
+
+                if texto and label and label.lower() not in {"n/a", "na", "nan", "none", "null"}:
+                    registros.append({"text": texto, "label_name": label})
+
+        df = pd.DataFrame(registros).drop_duplicates(subset=["text"]).reset_index(drop=True)
+        if df.empty:
+            raise ValueError(f"Nenhum registro válido foi lido de {caminho}.")
+        qtd_labels = df["label_name"].nunique(dropna=True)
+        if qtd_labels <= 1:
             raise ValueError(
-                f"Nenhum tópico válido foi extraído de '{topic_file}'. "
-                "Verifique 'refined_responses' e 'responses' da fase 2."
+                f"{dataset_nome}: somente {qtd_labels} label distinta em {caminho}."
+            )
+        print(
+            f"[{dataset_nome}] {caminho.name}: {len(df)} documentos válidos | "
+            f"{qtd_labels} labels."
+        )
+        return df
+
+    @staticmethod
+    def _preparar_dataset(
+    prefixo,
+    nome_exibicao,
+    n_gen,
+    n_ass,
+    ):
+        """
+        Baixa e lê as bases de treino e teste, une as observações,
+    remove duplicidades e cria amostras independentes para:
+
+        1. geração de tópicos;
+    2. atribuição de tópicos.
+
+        Uma observação selecionada para geração nunca será utilizada
+        na atribuição.
+        """
+
+        caminho_train = (
+            PreparadorDatasets._baixar_arquivo_drive(
+                f"{prefixo}_train"
+            )
+        )
+
+        caminho_test = (
+            PreparadorDatasets._baixar_arquivo_drive(
+                f"{prefixo}_test"
+            )
+        )
+
+        df_train = (
+            PreparadorDatasets._ler_jsonl_com_labels(
+                caminho_train,
+                nome_exibicao,
+            )
+        )
+
+        df_test = (
+            PreparadorDatasets._ler_jsonl_com_labels(
+                caminho_test,
+                nome_exibicao,
+            )
+        )
+
+        quantidade_train = len(df_train)
+        quantidade_test = len(df_test)
+
+        print(
+            f"[{nome_exibicao}] Registros antes da união | "
+            f"Train: {quantidade_train} | "
+            f"Test: {quantidade_test}"
+        )
+
+        # Acrescenta a origem somente para fins de rastreabilidade.
+        df_train = df_train.copy()
+        df_test = df_test.copy()
+
+        df_train["origem"] = "train"
+        df_test["origem"] = "test"
+
+        # Une treino e teste em uma única base.
+        df_total = pd.concat(
+            [
+                df_train,
+                df_test,
+            ],
+            ignore_index=True,
+        )
+
+        quantidade_antes_deduplicacao = len(df_total)
+
+        # Remove documentos repetidos entre treino e teste.
+        # A deduplicação considera o conteúdo textual do documento.
+        df_total = (
+            df_total
+            .drop_duplicates(
+                subset=["text"],
+                keep="first",
+            )
+            .reset_index(drop=True)
+        )
+
+        quantidade_duplicados = (
+            quantidade_antes_deduplicacao
+            - len(df_total)
+        )
+
+        print(
+            f"[{nome_exibicao}] Base total após a união: "
+            f"{len(df_total)} documentos únicos"
+        )
+
+        print(
+            f"[{nome_exibicao}] Duplicidades removidas: "
+            f"{quantidade_duplicados}"
+        )
+
+        quantidade_labels = (
+            df_total["label_name"]
+            .nunique(dropna=True)
+        )
+
+        if quantidade_labels <= 1:
+            raise ValueError(
+                f"{nome_exibicao}: a base total possui somente "
+                f"{quantidade_labels} label distinta."
             )
 
-        with open(clean_file, "w", encoding="utf-8") as arquivo:
-            for info in topicos_globais.values():
-                arquivo.write(f"[{info['lvl']}] {info['nome']} (Count: 0): {info['desc']}\n")
-
-        if os.path.getsize(clean_file) == 0:
-            raise ValueError(f"O arquivo limpo foi criado vazio: '{clean_file}'")
-
-        # Valida exatamente o padrão exigido por TopicTree.from_topic_list.
-        padrao_topicgpt = re.compile(
-            r"^\[(\d+)\] (.+) \(Count: (\d+)\)\s?:(.*)$"
+        print(
+            f"[{nome_exibicao}] Labels distintos: "
+            f"{quantidade_labels}"
         )
-        with open(clean_file, "r", encoding="utf-8") as arquivo:
+
+        # No modo de teste, utiliza somente 10 observações
+        # em cada etapa.
+        n_gen_real = (
+            10
+            if MODO_TESTE
+            else n_gen
+        )
+
+        n_ass_real = (
+            10
+            if MODO_TESTE
+            else n_ass
+        )
+
+        quantidade_necessaria = (
+            n_gen_real
+            + n_ass_real
+        )
+
+        if len(df_total) < quantidade_necessaria:
+            raise ValueError(
+                f"{nome_exibicao}: a base unificada possui "
+                f"{len(df_total)} documentos únicos, mas são "
+                f"necessários pelo menos {quantidade_necessaria}: "
+                f"{n_gen_real} para geração e "
+                f"{n_ass_real} para atribuição."
+            )
+
+        # Embaralha toda a base uma única vez.
+        # O random_state garante reprodutibilidade.
+        df_total = (
+            df_total
+            .sample(
+                frac=1,
+                random_state=42,
+            )
+            .reset_index(drop=True)
+        )
+
+        # Seleciona os primeiros registros para geração.
+        df_gen = (
+            df_total
+            .iloc[:n_gen_real]
+            .copy()
+            .reset_index(drop=True)
+        )
+
+        # Seleciona os registros seguintes para atribuição.
+        # Como os intervalos não se sobrepõem, nenhum documento
+        # de geração será utilizado na atribuição.
+        inicio_atribuicao = n_gen_real
+
+        fim_atribuicao = (
+            n_gen_real
+            + n_ass_real
+        )
+
+        df_ass = (
+            df_total
+            .iloc[
+                inicio_atribuicao:
+                fim_atribuicao
+            ]
+            .copy()
+            .reset_index(drop=True)
+        )
+
+        # Validação adicional para garantir que não existe
+        # sobreposição textual entre as duas amostras.
+        textos_geracao = set(
+            df_gen["text"]
+        )
+
+        textos_atribuicao = set(
+            df_ass["text"]
+        )
+
+        documentos_sobrepostos = (
+            textos_geracao
+            .intersection(textos_atribuicao)
+        )
+
+        if documentos_sobrepostos:
+            raise RuntimeError(
+                f"{nome_exibicao}: foram encontrados "
+                f"{len(documentos_sobrepostos)} documentos presentes "
+                f"simultaneamente na geração e na atribuição."
+            )
+
+        # Valida novamente os labels nas duas amostras.
+        labels_geracao = (
+            df_gen["label_name"]
+            .nunique(dropna=True)
+        )
+
+        labels_atribuicao = (
+            df_ass["label_name"]
+            .nunique(dropna=True)
+        )
+
+        if labels_geracao <= 1:
+            raise ValueError(
+                f"{nome_exibicao}: a amostra de geração possui "
+                f"somente {labels_geracao} label distinta."
+            )
+
+        if labels_atribuicao <= 1:
+            raise ValueError(
+                f"{nome_exibicao}: a amostra de atribuição possui "
+                f"somente {labels_atribuicao} label distinta."
+            )
+
+        pasta = Path(
+            "datasets/experimento"
+        )
+
+        pasta.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        path_gen = (
+            pasta
+            / f"{prefixo}_gen.jsonl"
+        )
+
+        path_ass = (
+            pasta
+            / f"{prefixo}_ass.jsonl"
+        )
+
+        # A coluna origem é usada apenas nas validações internas.
+        # Os arquivos do experimento mantêm somente o formato
+        # esperado pelo pipeline.
+        df_gen[
+            [
+                "text",
+                "label_name",
+            ]
+        ].to_json(
+            path_gen,
+            orient="records",
+            lines=True,
+            force_ascii=False,
+        )
+
+        df_ass[
+            [
+                "text",
+                "label_name",
+            ]
+        ].to_json(
+            path_ass,
+            orient="records",
+            lines=True,
+            force_ascii=False,
+        )
+
+        print(
+            f"[{nome_exibicao}] Preparação concluída!"
+        )
+
+        print(
+            f"[{nome_exibicao}] Geração: "
+            f"{len(df_gen)} documentos | "
+            f"{labels_geracao} labels"
+        )
+
+        print(
+            f"[{nome_exibicao}] Atribuição: "
+            f"{len(df_ass)} documentos | "
+            f"{labels_atribuicao} labels"
+        )
+
+        print(
+            f"[{nome_exibicao}] Sobreposição entre as amostras: "
+            f"{len(documentos_sobrepostos)}"
+        )
+
+        print(
+            f"[{nome_exibicao}] Arquivo de geração: "
+            f"{path_gen}"
+        )
+
+        print(
+            f"[{nome_exibicao}] Arquivo de atribuição: "
+            f"{path_ass}"
+        )
+
+        return (
+            str(path_gen),
+            str(path_ass),
+            len(df_gen),
+            len(df_ass),
+        )
+
+    @staticmethod
+    def preparar_bills():
+        return PreparadorDatasets._preparar_dataset(
+            prefixo="bills", nome_exibicao="BILLS", n_gen=1000, n_ass=15242
+        )
+
+    @staticmethod
+    def preparar_wiki():
+        return PreparadorDatasets._preparar_dataset(
+            prefixo="wiki", nome_exibicao="WIKI", n_gen=1100, n_ass=8024
+        )
+
+class PipelineMestrado:
+    def __init__(self, model_name="gemma2:9b"):
+        self.api = "openai"
+        self.model_name = model_name
+
+    @staticmethod
+    def _ler_topicos_de_txt(caminho):
+        padrao = re.compile(
+            r"^\[(\d+)\]\s+(.+?)(?:\s+\(Count:\s*\d+\))?\s*:\s*(.*)$"
+        )
+        topicos = {}
+        with open(caminho, "r", encoding="utf-8") as arquivo:
             for numero_linha, linha in enumerate(arquivo, start=1):
                 conteudo = linha.strip()
-                if conteudo and not padrao_topicgpt.match(conteudo):
-                    raise ValueError(
-                        f"Linha {numero_linha} incompatível com TopicGPT: {conteudo!r}"
-                    )
+                if not conteudo:
+                    continue
+                match = padrao.match(conteudo)
+                if not match:
+                    continue
+                nivel, nome, descricao = match.groups()
+                chave = f"[{nivel}] {nome.strip()}"
+                topicos[chave] = {
+                    "lvl": nivel,
+                    "nome": nome.strip(),
+                    "desc": descricao.strip() or "Descrição não informada",
+                }
+        return topicos
 
-        return clean_file, len(topicos_globais)
+    def _salvar_topicos_para_atribuicao(self, arquivo_topicos, arquivo_saida):
+        if not os.path.exists(arquivo_topicos) or os.path.getsize(arquivo_topicos) == 0:
+            raise FileNotFoundError(
+                f"Arquivo de tópicos ausente ou vazio: '{arquivo_topicos}'"
+            )
+
+        topicos = self._ler_topicos_de_txt(arquivo_topicos)
+        if not topicos:
+            raise ValueError(
+                f"Nenhum tópico válido foi encontrado em '{arquivo_topicos}'."
+            )
+
+        linhas = [
+            f"[{info['lvl']}] {info['nome']} (Count: 0): {info['desc']}"
+            for info in topicos.values()
+        ]
+        with open(arquivo_saida, "w", encoding="utf-8") as arquivo:
+            arquivo.write("\n".join(linhas))
+        return arquivo_saida, len(topicos)
 
     def gerar_topicos(self, data_file, prompt_file, seed_file, out_file, topic_file):
         from topicgpt_python import generate_topic_lvl1
         print(" -> Iniciando Fase 1: Geração de Tópicos...")
         inicio = time.time()
-        
         with silenciar_saida_detalhada():
             generate_topic_lvl1(
                 api=self.api,
                 model=self.model_name,
-                data=data_file, 
+                data=data_file,
                 prompt_file=prompt_file,
                 seed_file=seed_file,
                 out_file=out_file,
                 topic_file=topic_file,
-                verbose=False  # Silenciado
+                verbose=False,
             )
-        
+        qtd_topicos = len(self._ler_topicos_de_txt(topic_file))
         tempo = time.time() - inicio
-        # Conta tópicos gerados para o log
-        try:
-            with open(topic_file, 'r', encoding='utf-8') as f:
-                qtd_topicos = len(f.readlines())
-        except: qtd_topicos = 0
-        
-        print(f"    [✔] Concluído em {tempo:.2f}s | Tópicos encontrados: {qtd_topicos}")
+        print(
+            f"    [✔] Concluído em {tempo:.2f}s | "
+            f"Tópicos únicos encontrados: {qtd_topicos}"
+        )
         return qtd_topicos
 
     def refinar_topicos(
@@ -398,15 +662,14 @@ class PipelineMestrado:
         topic_file,
         out_file,
         updated_file,
-        mapping_file
+        mapping_file,
     ):
-
         print(" -> Iniciando Fase 2: Refinamento de Tópicos...")
         inicio = time.time()
+        qtd_antes = len(self._ler_topicos_de_txt(topic_file))
 
         with silenciar_saida_detalhada():
             from topicgpt_python import refine_topics
-
             refine_topics(
                 api=self.api,
                 model=self.model_name,
@@ -417,24 +680,33 @@ class PipelineMestrado:
                 updated_file=updated_file,
                 verbose=False,
                 remove=True,
-                mapping_file=mapping_file
+                mapping_file=mapping_file,
             )
 
-        _, qtd_refinados = self._extrair_topicos_limpos(updated_file)
+        # O TopicGPT atualiza topic_file com a hierarquia final. updated_file é o
+        # JSONL de geração atualizado e não deve ser contado como lista de tópicos.
+        arquivo_limpo = updated_file.replace(".json", "_limpo.txt")
+        arquivo_limpo, qtd_depois = self._salvar_topicos_para_atribuicao(
+            topic_file, arquivo_limpo
+        )
+        if qtd_depois > qtd_antes:
+            raise RuntimeError(
+                "O refinamento aumentou a quantidade de tópicos "
+                f"({qtd_antes} -> {qtd_depois}). Verifique o prompt e a saída "
+                f"'{out_file}'."
+            )
 
         tempo = time.time() - inicio
-
         print(
             f"    [✔] Concluído em {tempo:.2f}s | "
-            f"Tópicos finais consolidados: {qtd_refinados}"
+            f"Tópicos: {qtd_antes} -> {qtd_depois} | "
+            f"Lista refinada salva em: {arquivo_limpo}"
         )
-
-        return qtd_refinados
+        return qtd_depois
 
     def atribuir_topicos(self, data_file, prompt_file, out_file, topic_file):
         print(" -> Iniciando Fase 3: Atribuição de Tópicos...")
         inicio = time.time()
-
         for descricao, caminho in {
             "dataset de atribuição": data_file,
             "prompt de atribuição": prompt_file,
@@ -445,11 +717,18 @@ class PipelineMestrado:
             if os.path.getsize(caminho) == 0:
                 raise ValueError(f"O {descricao} está vazio: '{caminho}'")
 
-        topic_file_pronto, quantidade_topicos = self._extrair_topicos_limpos(topic_file)
+        # Se já for o TXT refinado, usa diretamente. Caso contrário, converte.
+        if topic_file.endswith(".txt"):
+            topic_file_pronto = topic_file
+            quantidade_topicos = len(self._ler_topicos_de_txt(topic_file))
+        else:
+            topic_file_pronto = topic_file.replace(".json", "_limpo.txt")
+            topic_file_pronto, quantidade_topicos = self._salvar_topicos_para_atribuicao(
+                topic_file, topic_file_pronto
+            )
 
         if os.path.exists(out_file):
             os.remove(out_file)
-
         try:
             with silenciar_saida_detalhada():
                 from topicgpt_python import assign_topics
@@ -460,24 +739,20 @@ class PipelineMestrado:
                     prompt_file=prompt_file,
                     out_file=out_file,
                     topic_file=topic_file_pronto,
-                    verbose=False
+                    verbose=False,
                 )
         except Exception as erro:
             raise RuntimeError(
                 "A fase 3 falhou durante a atribuição de tópicos.\n"
                 f"Dataset: {data_file}\n"
                 f"Prompt: {prompt_file}\n"
-                f"Tópicos originais: {topic_file}\n"
-                f"Tópicos limpos: {topic_file_pronto}\n"
-                f"Quantidade de tópicos: {quantidade_topicos}\n"
+                f"Tópicos: {topic_file_pronto}\n"
+                f"Quantidade: {quantidade_topicos}\n"
                 f"Erro original: {type(erro).__name__}: {erro}"
             ) from erro
 
-        if not os.path.exists(out_file):
-            raise FileNotFoundError(f"A fase 3 não criou a saída: '{out_file}'")
-        if os.path.getsize(out_file) == 0:
-            raise ValueError(f"A fase 3 criou uma saída vazia: '{out_file}'")
-
+        if not os.path.exists(out_file) or os.path.getsize(out_file) == 0:
+            raise ValueError(f"A fase 3 não criou uma saída válida: '{out_file}'")
         tempo = time.time() - inicio
         print(
             f"    [✔] Concluído em {tempo:.2f}s | "
@@ -583,20 +858,20 @@ if __name__ == "__main__":
     
     qtd_gen_bills = pipeline.gerar_topicos(file_bills_gen, "prompts/generation_1.txt", "prompts/seed_1.md", "resultados/b_geracao.json", "resultados/b_topicos.json")
     qtd_ref_bills = pipeline.refinar_topicos("prompts/refinement.txt", "resultados/b_geracao.json", "resultados/b_topicos.json", "resultados/b_refinamento.json", "resultados/b_top_refinados.json", "resultados/b_map.json")
-    pipeline.atribuir_topicos(file_bills_ass, "prompts/assignment.txt", "resultados/b_atribuida.json", "resultados/b_top_refinados.json")
+    pipeline.atribuir_topicos(file_bills_ass, "prompts/assignment.txt", "resultados/b_atribuida.json", "resultados/b_top_refinados_limpo.txt")
     
     metricas_bills = AvaliadorMetricas.avaliar_resultados("resultados/b_atribuida.json", "BILLS")
     registrar_log("BILLS", metricas_bills, n_gen_b, n_ass_b)
 
     # 2. PROCESSAR WIKITEXT
-    print("\n" + "="*50 + "\nDATASET 2: WIKITEXT-103\n" + "="*50)
+    print("\n" + "="*50 + "\nDATASET 2: WIKI\n" + "="*50)
     file_wiki_gen, file_wiki_ass, n_gen_w, n_ass_w = PreparadorDatasets.preparar_wiki()
     
     qtd_gen_wiki = pipeline.gerar_topicos(file_wiki_gen, "prompts/generation_1.txt", "prompts/seed_1.md", "resultados/w_geracao.json", "resultados/w_topicos.json")
     qtd_ref_wiki = pipeline.refinar_topicos("prompts/refinement.txt", "resultados/w_geracao.json", "resultados/w_topicos.json", "resultados/w_refinamento.json", "resultados/w_top_refinados.json", "resultados/w_map.json")
-    pipeline.atribuir_topicos(file_wiki_ass, "prompts/assignment.txt", "resultados/w_atribuida.json", "resultados/w_top_refinados.json")
+    pipeline.atribuir_topicos(file_wiki_ass, "prompts/assignment.txt", "resultados/w_atribuida.json", "resultados/w_top_refinados_limpo.txt")
     
-    metricas_wiki = AvaliadorMetricas.avaliar_resultados("resultados/w_atribuida.json", "WIKITEXT")
-    registrar_log("WIKITEXT", metricas_wiki, n_gen_w, n_ass_w)
+    metricas_wiki = AvaliadorMetricas.avaliar_resultados("resultados/w_atribuida.json", "WIKI")
+    registrar_log("WIKI", metricas_wiki, n_gen_w, n_ass_w)
     
     print("\n🎉 === EXPERIMENTO FINALIZADO COM SUCESSO! === 🎉")
