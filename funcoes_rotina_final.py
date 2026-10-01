@@ -666,10 +666,21 @@ class PipelineMestrado:
     ):
         print(" -> Iniciando Fase 2: Refinamento de Tópicos...")
         inicio = time.time()
-        qtd_antes = len(self._ler_topicos_de_txt(topic_file))
-
+    
+        # Conta os tópicos originais da fase de geração.
+        qtd_antes = len(
+            self._ler_topicos_de_txt(topic_file)
+        )
+    
+        if qtd_antes == 0:
+            raise ValueError(
+                f"Nenhum tópico válido foi encontrado no arquivo "
+                f"original: '{topic_file}'"
+            )
+    
         with silenciar_saida_detalhada():
             from topicgpt_python import refine_topics
+    
             refine_topics(
                 api=self.api,
                 model=self.model_name,
@@ -682,26 +693,91 @@ class PipelineMestrado:
                 remove=True,
                 mapping_file=mapping_file,
             )
-
-        # O TopicGPT atualiza topic_file com a hierarquia final. updated_file é o
-        # JSONL de geração atualizado e não deve ser contado como lista de tópicos.
-        arquivo_limpo = updated_file.replace(".json", "_limpo.txt")
-        arquivo_limpo, qtd_depois = self._salvar_topicos_para_atribuicao(
-            topic_file, arquivo_limpo
+    
+        # O TopicGPT salva a árvore final refinada em out_file.
+        if not os.path.exists(out_file):
+            raise FileNotFoundError(
+                f"O refinamento não criou o arquivo esperado: "
+                f"'{out_file}'"
+            )
+    
+        if os.path.getsize(out_file) == 0:
+            raise ValueError(
+                f"O arquivo refinado foi criado vazio: "
+                f"'{out_file}'"
+            )
+    
+        # Mantém os nomes esperados pela rotina:
+        # b_top_refinados_limpo.txt ou w_top_refinados_limpo.txt.
+        arquivo_limpo = updated_file.replace(
+            ".json",
+            "_limpo.txt",
         )
+    
+        # A lista limpa deve ser criada a partir de out_file,
+        # que contém a árvore refinada, e não de topic_file.
+        arquivo_limpo, qtd_depois = (
+            self._salvar_topicos_para_atribuicao(
+                out_file,
+                arquivo_limpo,
+            )
+        )
+    
         if qtd_depois > qtd_antes:
             raise RuntimeError(
                 "O refinamento aumentou a quantidade de tópicos "
-                f"({qtd_antes} -> {qtd_depois}). Verifique o prompt e a saída "
+                f"({qtd_antes} -> {qtd_depois}). "
+                "Isso não é esperado. Verifique a saída em "
                 f"'{out_file}'."
             )
-
+    
+        quantidade_fundida_ou_removida = (
+            qtd_antes - qtd_depois
+        )
+    
+        quantidade_mapeamentos = 0
+    
+        if os.path.exists(mapping_file):
+            try:
+                with open(
+                    mapping_file,
+                    "r",
+                    encoding="utf-8",
+                ) as arquivo:
+                    mapeamentos = json.load(arquivo)
+    
+                quantidade_mapeamentos = sum(
+                    1
+                    for topico_original, topico_novo
+                    in mapeamentos.items()
+                    if topico_original != topico_novo
+                )
+    
+            except (
+                json.JSONDecodeError,
+                OSError,
+                AttributeError,
+            ):
+                quantidade_mapeamentos = 0
+    
         tempo = time.time() - inicio
+    
         print(
             f"    [✔] Concluído em {tempo:.2f}s | "
             f"Tópicos: {qtd_antes} -> {qtd_depois} | "
-            f"Lista refinada salva em: {arquivo_limpo}"
+            f"Redução: {quantidade_fundida_ou_removida} | "
+            f"Mapeamentos alterados: {quantidade_mapeamentos}"
         )
+    
+        print(
+            f"    [✔] Árvore refinada original: {out_file}"
+        )
+    
+        print(
+            f"    [✔] Lista refinada para atribuição: "
+            f"{arquivo_limpo}"
+        )
+    
         return qtd_depois
 
     def atribuir_topicos(self, data_file, prompt_file, out_file, topic_file):
