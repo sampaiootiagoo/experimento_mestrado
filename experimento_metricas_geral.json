@@ -41,13 +41,16 @@
             "max_words_per_doc": 250
         },
         "metricas": {
-            "NMI": 0.7041733979147943,
-            "ARI": 0.5070229354806662,
-            "HMP": 0.6681171768942938,
-            "Purity": 0.6869391824526421,
-            "Inverse_Purity": 0.6502991026919243,
-            "Amostras_Validadas": 8024,
-            "Topicos_Criados": 421,
-            "Topicos_Ground_Truth": 45}
-    }
-]
+            "metricas": {
+            "NMI": 0.562258498315154,
+            "ARI": 0.330985921885316,
+            "HMP": 0.5502359790200504,
+            "Purity": 0.46825903691403753,
+            "Inverse_Purity": 0.6670072806233236,
+            "Amostras_Validadas": 7829,
+            "Topicos_Disponiveis": 23,
+            "Topicos_Utilizados": 23,
+            "Topicos_Ground_Truth": 45 }
+            }
+        }
+    ]

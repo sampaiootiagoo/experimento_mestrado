@@ -838,61 +838,410 @@ class PipelineMestrado:
 class AvaliadorMetricas:
     @staticmethod
     def calcular_purity(y_true, y_pred):
-        matriz = contingency_matrix(y_true, y_pred)
-        return np.sum(np.amax(matriz, axis=0)) / np.sum(matriz)
+        matriz = contingency_matrix(
+            y_true,
+            y_pred,
+        )
+
+        return (
+            np.sum(np.amax(matriz, axis=0))
+            / np.sum(matriz)
+        )
 
     @staticmethod
     def calcular_inverse_purity(y_true, y_pred):
-        matriz = contingency_matrix(y_true, y_pred)
-        return np.sum(np.amax(matriz, axis=1)) / np.sum(matriz)
+        matriz = contingency_matrix(
+            y_true,
+            y_pred,
+        )
+
+        return (
+            np.sum(np.amax(matriz, axis=1))
+            / np.sum(matriz)
+        )
 
     @staticmethod
-    def avaliar_resultados(caminho_arquivo_json, dataset_name):
+    def _normalizar_topico(texto):
+        texto = str(texto).strip().lower()
+
+        texto = re.sub(
+            r"\s+",
+            " ",
+            texto,
+        )
+
+        texto = texto.strip(
+            " \t\r\n:;,.\"'`()[]"
+        )
+
+        return texto
+
+    @staticmethod
+    def _carregar_topicos_validos(topic_file):
+        if not os.path.exists(topic_file):
+            raise FileNotFoundError(
+                f"Arquivo de tópicos não encontrado: "
+                f"'{topic_file}'"
+            )
+
+        topicos_validos = {}
+
+        padrao = re.compile(
+            r"^\[\d+\]\s+"
+            r"(.+?)"
+            r"(?:\s+\(Count:\s*\d+\))?"
+            r"\s*:"
+        )
+
+        with open(
+            topic_file,
+            "r",
+            encoding="utf-8",
+        ) as arquivo:
+            for linha in arquivo:
+                conteudo = linha.strip()
+
+                if not conteudo:
+                    continue
+
+                match = padrao.match(conteudo)
+
+                if not match:
+                    continue
+
+                nome_original = (
+                    match.group(1).strip()
+                )
+
+                nome_normalizado = (
+                    AvaliadorMetricas
+                    ._normalizar_topico(
+                        nome_original
+                    )
+                )
+
+                topicos_validos[
+                    nome_normalizado
+                ] = nome_original
+
+        if not topicos_validos:
+            raise ValueError(
+                f"Nenhum tópico válido foi encontrado em "
+                f"'{topic_file}'."
+            )
+
+        return topicos_validos
+
+    @staticmethod
+    def _extrair_topico_valido(
+        resposta,
+        topicos_validos,
+    ):
+        if not isinstance(resposta, str):
+            return None
+
+        padrao_topico = re.compile(
+            r"\[\d+\]\s*"
+            r"([^:\n]+)"
+        )
+
+        candidatos = padrao_topico.findall(
+            resposta
+        )
+
+        for candidato in candidatos:
+            candidato = re.sub(
+                r"\s+\(Count:\s*\d+\)\s*$",
+                "",
+                candidato,
+                flags=re.IGNORECASE,
+            )
+
+            candidato_normalizado = (
+                AvaliadorMetricas
+                ._normalizar_topico(
+                    candidato
+                )
+            )
+
+            if (
+                candidato_normalizado
+                in topicos_validos
+            ):
+                return candidato_normalizado
+
+        resposta_normalizada = (
+            AvaliadorMetricas
+            ._normalizar_topico(
+                resposta
+            )
+        )
+
+        topicos_ordenados = sorted(
+            topicos_validos.keys(),
+            key=len,
+            reverse=True,
+        )
+
+        for topico in topicos_ordenados:
+            padrao_nome = (
+                r"(?<!\w)"
+                + re.escape(topico)
+                + r"(?!\w)"
+            )
+
+            if re.search(
+                padrao_nome,
+                resposta_normalizada,
+            ):
+                return topico
+
+        return None
+
+    @staticmethod
+    def avaliar_resultados(
+        caminho_arquivo_json,
+        dataset_name,
+        topic_file=None,
+    ):
+        if topic_file is None:
+            if dataset_name.upper() == "WIKI":
+                topic_file = (
+                    "resultados/"
+                    "w_top_refinados_limpo.txt"
+                )
+
+            elif dataset_name.upper() == "BILLS":
+                topic_file = (
+                    "resultados/"
+                    "b_top_refinados_limpo.txt"
+                )
+
+            else:
+                raise ValueError(
+                    "Informe topic_file para datasets "
+                    "diferentes de WIKI e BILLS."
+                )
+
+        topicos_validos = (
+            AvaliadorMetricas
+            ._carregar_topicos_validos(
+                topic_file
+            )
+        )
+
         y_true = []
         y_pred = []
-        labels_originais_set = set()
 
-        with open(caminho_arquivo_json, 'r', encoding='utf-8') as f:
-            try: dados = json.load(f)
+        labels_originais_set = set()
+        topicos_preditos_set = set()
+
+        respostas_sem_topico_valido = 0
+        respostas_sem_conteudo = 0
+
+        with open(
+            caminho_arquivo_json,
+            "r",
+            encoding="utf-8",
+        ) as arquivo:
+            try:
+                dados = json.load(arquivo)
+
             except json.JSONDecodeError:
-                f.seek(0)
-                dados = [json.loads(linha) for linha in f]
+                arquivo.seek(0)
+
+                dados = [
+                    json.loads(linha)
+                    for linha in arquivo
+                    if linha.strip()
+                ]
 
         for item in dados:
-            verdadeiro = item.get('label_name')
-            predito_bruto = item.get('responses', '') 
-            
-            if verdadeiro is not None and predito_bruto:
-                match = re.search(r"Assignment:\s*\[\d+\]\s*([^:]+)", predito_bruto, re.IGNORECASE)
-                if not match: match = re.search(r"\[\d+\]\s*([^:]+)", predito_bruto)
-                
-                predito_limpo = match.group(1).strip().lower() if match else "indefinido"
-                verdadeiro_limpo = str(verdadeiro).strip().lower()
+            verdadeiro = item.get(
+                "label_name"
+            )
 
-                y_true.append(verdadeiro_limpo)
-                y_pred.append(predito_limpo)
-                labels_originais_set.add(verdadeiro_limpo)
+            resposta = item.get(
+                "responses",
+                "",
+            )
 
-        # Se for Wiki ou base sem labels classificados, NMI/ARI não podem ser calculados.
-        if "N/A".lower() in labels_originais_set or len(labels_originais_set) <= 1:
-            print(" -> Aviso: Ground-Truth não detectado (Dataset tipo WIKI). Calculando apenas estatísticas.")
+            if verdadeiro is None:
+                continue
+
+            if not isinstance(resposta, str):
+                respostas_sem_conteudo += 1
+                continue
+
+            if not resposta.strip():
+                respostas_sem_conteudo += 1
+                continue
+
+            topico_predito = (
+                AvaliadorMetricas
+                ._extrair_topico_valido(
+                    resposta=resposta,
+                    topicos_validos=(
+                        topicos_validos
+                    ),
+                )
+            )
+
+            if topico_predito is None:
+                respostas_sem_topico_valido += 1
+                continue
+
+            verdadeiro_limpo = (
+                AvaliadorMetricas
+                ._normalizar_topico(
+                    verdadeiro
+                )
+            )
+
+            y_true.append(
+                verdadeiro_limpo
+            )
+
+            y_pred.append(
+                topico_predito
+            )
+
+            labels_originais_set.add(
+                verdadeiro_limpo
+            )
+
+            topicos_preditos_set.add(
+                topico_predito
+            )
+
+        if not y_true:
+            raise ValueError(
+                "Nenhuma observação válida foi encontrada "
+                "para o cálculo das métricas."
+            )
+
+        if (
+            "n/a" in labels_originais_set
+            or len(labels_originais_set) <= 1
+        ):
+            print(
+                " -> Aviso: ground truth válido "
+                "não foi detectado."
+            )
+
             return {
-                "NMI": None, "ARI": None, "HMP": None, "Purity": None, "Inverse_Purity": None,
-                "Amostras_Validadas": len(y_true), "Topicos_Criados": len(set(y_pred)), "Topicos_Ground_Truth": 0
+                "NMI": None,
+                "ARI": None,
+                "HMP": None,
+                "Purity": None,
+                "Inverse_Purity": None,
+                "Amostras_Validadas": len(y_true),
+                "Topicos_Disponiveis": len(
+                    topicos_validos
+                ),
+                "Topicos_Utilizados": len(
+                    topicos_preditos_set
+                ),
+                "Topicos_Ground_Truth": 0,
+                "Respostas_Sem_Topico_Valido": (
+                    respostas_sem_topico_valido
+                ),
+                "Respostas_Sem_Conteudo": (
+                    respostas_sem_conteudo
+                ),
             }
 
-        nmi = normalized_mutual_info_score(y_true, y_pred)
-        ari = adjusted_rand_score(y_true, y_pred)
-        purity = AvaliadorMetricas.calcular_purity(y_true, y_pred)
-        inv_purity = AvaliadorMetricas.calcular_inverse_purity(y_true, y_pred)
-        hmp = 0 if (purity + inv_purity) == 0 else 2 * (purity * inv_purity) / (purity + inv_purity)
+        nmi = normalized_mutual_info_score(
+            y_true,
+            y_pred,
+        )
 
-        print(f"\n--- Resultados da Avaliação: {dataset_name} ---")
-        print(f"NMI: {nmi:.4f} | ARI: {ari:.4f} | HMP: {hmp:.4f}")
-        
+        ari = adjusted_rand_score(
+            y_true,
+            y_pred,
+        )
+
+        purity = (
+            AvaliadorMetricas
+            .calcular_purity(
+                y_true,
+                y_pred,
+            )
+        )
+
+        inverse_purity = (
+            AvaliadorMetricas
+            .calcular_inverse_purity(
+                y_true,
+                y_pred,
+            )
+        )
+
+        if (
+            purity + inverse_purity
+        ) == 0:
+            hmp = 0
+
+        else:
+            hmp = (
+                2
+                * purity
+                * inverse_purity
+                / (
+                    purity
+                    + inverse_purity
+                )
+            )
+
+        print(
+            f"\n--- Resultados da Avaliação: "
+            f"{dataset_name} ---"
+        )
+
+        print(
+            f"NMI: {nmi:.4f} | "
+            f"ARI: {ari:.4f} | "
+            f"HMP: {hmp:.4f}"
+        )
+
+        print(
+            f"Tópicos disponíveis: "
+            f"{len(topicos_validos)} | "
+            f"Tópicos efetivamente utilizados: "
+            f"{len(topicos_preditos_set)}"
+        )
+
+        print(
+            f"Amostras validadas: "
+            f"{len(y_true)} | "
+            f"Respostas sem tópico válido: "
+            f"{respostas_sem_topico_valido} | "
+            f"Respostas vazias: "
+            f"{respostas_sem_conteudo}"
+        )
+
         return {
-            "NMI": nmi, "ARI": ari, "HMP": hmp, "Purity": purity, "Inverse_Purity": inv_purity,
-            "Amostras_Validadas": len(y_true), "Topicos_Criados": len(set(y_pred)), "Topicos_Ground_Truth": len(labels_originais_set)
+            "NMI": nmi,
+            "ARI": ari,
+            "HMP": hmp,
+            "Purity": purity,
+            "Inverse_Purity": inverse_purity,
+            "Amostras_Validadas": len(y_true),
+            "Topicos_Disponiveis": len(
+                topicos_validos
+            ),
+            "Topicos_Utilizados": len(
+                topicos_preditos_set
+            ),
+            "Topicos_Ground_Truth": len(
+                labels_originais_set
+            ),
+            "Respostas_Sem_Topico_Valido": (
+                respostas_sem_topico_valido
+            ),
+            "Respostas_Sem_Conteudo": (
+                respostas_sem_conteudo
+            ),
         }
 
 def registrar_log(dataset, metricas, n_gen, n_ass):
