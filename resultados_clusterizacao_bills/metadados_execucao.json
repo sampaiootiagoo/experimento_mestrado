@@ -1,0 +1,48 @@
+{
+  "configuracao": {
+    "random_state": 42,
+    "pasta_saida": "resultados_clusterizacao_bills",
+    "max_features_tfidf": 30000,
+    "min_df_tfidf": 3,
+    "max_df_tfidf": 0.95,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "n_componentes_svd": 100,
+    "usar_qtd_ground_truth_como_k": true,
+    "k_fixo": 20,
+    "algoritmos": [
+      "kmeans",
+      "minibatch_kmeans",
+      "bisecting_kmeans",
+      "birch",
+      "dbscan"
+    ],
+    "dbscan_eps": [
+      0.35,
+      0.45,
+      0.55,
+      0.65,
+      0.75
+    ],
+    "dbscan_min_samples": [
+      5,
+      10
+    ],
+    "amostra_silhouette": 5000,
+    "amostra_visualizacao": 3000,
+    "top_labels_por_cluster": 5,
+    "top_documentos_por_cluster": 3,
+    "max_clusters_heatmap": 40
+  },
+  "documentos_unicos": 41930,
+  "ground_truths_distintos": 21,
+  "k_utilizado": 21,
+  "tempo_representacao_segundos": 8.157850351999514,
+  "bibliotecas": {
+    "numpy": "1.26.2",
+    "pandas": "2.3.3"
+  },
+  "melhor_por_nmi": "dbscan_eps0.35_min10"
+}

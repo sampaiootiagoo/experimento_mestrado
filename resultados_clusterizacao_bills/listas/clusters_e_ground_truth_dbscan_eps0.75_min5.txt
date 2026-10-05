@@ -1,0 +1,290 @@
+ALGORITMO: dbscan_eps0.75_min5
+====================================================================================================
+
+CLUSTER -1 | 1410 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 202 (14.33%)
+  Public Lands: 141 (10.00%)
+  Domestic Commerce: 123 (8.72%)
+  Defense: 105 (7.45%)
+  Law and Crime: 97 (6.88%)
+  Exemplos de documentos:
+    ID=62 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Transfers funds from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated to the Secretary of Health and Human Services (HHS) to be used in FY2010 to provide assistance in reducing AIDS Drug Assistance Program waiting lists and to address other cost containment measures that state AIDS Drug Assistance Programs implement after Ja
+    ID=63 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Requires specified funds to be transferred to the Secretary of Health and Human Services (HHS) from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated, to be obligated during the FY2010 grant period under the AIDS Drug Assistance Program to provide assistance in reducing waiting lists and to address other cost containment meas
+    ID=145 | ground_truth=Health | origem=train
+    Preventing Overprescribing for Pain Act of 2016 This bill requires the Centers for Disease Control and Prevention to issue guidelines for the safe prescribing of opioids for the treatment of acute pain. (Opioids are drugs with effects similar to opium, such as certain pain medications.)
+
+CLUSTER 0 | 40403 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 5150 (12.75%)
+  Government Operations: 3729 (9.23%)
+  Domestic Commerce: 3470 (8.59%)
+  Public Lands: 3371 (8.34%)
+  Defense: 3135 (7.76%)
+  Exemplos de documentos:
+    ID=0 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Price Negotiation Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to require the Secretary of Health and Human Services to negotiate with pharmaceutical manufacturers the prices that may be charged to prescription drug plan sponsors and Medicare Advantage organizations for covered part D drugs for part D eligible individuals enrolled under a prescription drug plan or under a Medicare Advantage prescription drug (MA-PD) plan.
+    ID=1 | ground_truth=Health | origem=train
+    Amends part D (Voluntary Prescription Drug Benefit Program) of title XVIII (Medicare) of the Social Security Act to authorize the Secretary of Health and Human Services to negotiate with drug manufacturers and pharmacies prices charged to prescription drug plan (PDP) sponsors and Medicare Advantage organizations for covered part D drugs provided under Medicare.
+    ID=2 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Enrollment Extension Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to extend the annual enrollment periods of the Medicare and Medicare Advantage prescription drug benefit programs.
+
+CLUSTER 1 | 8 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 5 (62.50%)
+  Civil Rights: 1 (12.50%)
+  Social Welfare: 1 (12.50%)
+  Law and Crime: 1 (12.50%)
+  Exemplos de documentos:
+    ID=1454 | ground_truth=Civil Rights | origem=train
+    Prohibits applying any criminal penalty for refusing or willfully neglecting to answer questions (except with respect to the respondent's name and contact information, the date of the response, and the number of people living or staying at the address) in connection with the American Community Survey conducted by the Secretary of Commerce.
+    ID=18241 | ground_truth=Government Operations | origem=train
+    Requires the Secretary of Commerce, in conducting any survey relating to the Census, to include in instructions for completing any such survey that participation in the survey is optional, except that survey respondents must provide their names, contract information, the date of response, and the number of people living or staying at the same addresses where the respondents reside. Prohibits any person participating in a survey from being fined or otherwise compelled to answer questions in conne
+    ID=26743 | ground_truth=Government Operations | origem=train
+    Census Clarification and Privacy Act - Requires the Secretary of Commerce to include on the front of the questionnaire used in the decennial census and on the American Community Survey a statement that constitutionally, the recipient is only required to provide the number of individuals living in his or her residence and that all other questions are optional. Applies penalties for failing or neglecting to answer census or Survey questions only to an individual who: (1) willfully gives a false an
+
+CLUSTER 2 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 4 (80.00%)
+  Public Lands: 1 (20.00%)
+  Exemplos de documentos:
+    ID=2721 | ground_truth=Public Lands | origem=train
+    Recreational Land Self-Defense Act of 2011 - Prohibits the Secretary of the Army from promulgating or enforcing any regulation that prohibits an individual from possessing a firearm at a water resources development project administered by the Chief of Engineers if: (1) the individual is not otherwise prohibited by law from possessing the firearm, and (2) the possession of the firearm is in compliance with the law of the state in which the project is located.
+    ID=14448 | ground_truth=Law and Crime | origem=train
+    Recreational Lands Self-Defense Act of 2011 - Prohibits the Secretary of the Army from promulgating or enforcing any regulation that prohibits an individual from possessing a firearm at a water resources development project administered by the Chief of Engineers if: (1) the individual is not otherwise prohibited by law from possessing the firearm, and (2) the possession of the firearm is in compliance with the law of the state in which the project is located.
+    ID=40166 | ground_truth=Law and Crime | origem=test
+    Recreational Lands Self-Defense Act of 2013 - Prohibits the Secretary of the Army from promulgating or enforcing any regulation that prohibits an individual from possessing a firearm at a water resources development project administered by the Chief of Engineers if: (1) the individual is not otherwise prohibited by law from possessing the firearm, and (2) the possession of the firearm is in compliance with the law of the state in which the project is located.
+
+CLUSTER 3 | 6 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 3 (50.00%)
+  Domestic Commerce: 3 (50.00%)
+  Exemplos de documentos:
+    ID=3351 | ground_truth=Health | origem=train
+    Commission on Catastrophic Disaster Risk and Insurance Act of 2009 - Establishes the bipartisan Commission on Catastrophic Disaster Risk and Insurance to assess: (1) the condition of the property and casualty insurance and reinsurance markets in the aftermath of Hurricanes Katrina, Rita, and Wilma in 2005, and the four major hurricanes that struck the United States in 2004; (2) the ongoing exposure of the United States to earthquakes, volcanic eruptions, tsunamis, and floods; and (3) recommend a
+    ID=24745 | ground_truth=Domestic Commerce | origem=train
+    Commission on Catastrophic Disaster Risk and Insurance Act of 20011 - Establishes the bipartisan Commission on Catastrophic Disaster Risk and Insurance to assess: (1) the condition of the property and casualty insurance and reinsurance markets in the aftermath of Hurricane Katrina, Rita, and Wilma in 2005, and the four major hurricanes that struck the United States in 2004; (2) the ongoing exposure of the United States to earthquakes, volcanic eruptions, tsunamis, and floods; and (3) recommend a
+    ID=33178 | ground_truth=Domestic Commerce | origem=test
+    Commission on Natural Catastrophe Risk Management and Insurance Act of 2007 - Establishes the Commission on Natural Catastrophe Risk Management and Insurance to report to Congress on the natural catastrophe insurance marketplace, including: (1) the extent to which insurance costs and availability are affected by specified factors; (2) which factors the federal government should address to increase catastrophe insurance availability and competitiveness; and (3) actions the federal government can 
+
+CLUSTER 4 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 4 (80.00%)
+  Law and Crime: 1 (20.00%)
+  Exemplos de documentos:
+    ID=5001 | ground_truth=Defense | origem=train
+    Amends the Servicemembers Civil Relief Act to provide for the protection of child custody arrangements for parents who are members deployed in support of a contingency operation. States that if a motion for change of custody of a child of such a member is filed while the member is so deployed, no court may enter an order modifying or amending a previous child custody judgment, except if there is clear and convincing evidence that it is in the best interest of the child. Prohibits any court from 
+    ID=5087 | ground_truth=Defense | origem=train
+    Amends the Servicemembers Civil Relief Act to provide for the protection of child custody arrangements for parents who are members deployed in support of a contingency operation. States that if a motion for change of custody of a child of such a member is filed while the member is so deployed, no court may enter an order modifying or amending a previous child custody judgment, except if there is clear and convincing evidence that it is in the best interest of the child. Prohibits any court from 
+    ID=5330 | ground_truth=Defense | origem=train
+    Amends the Servicemembers Civil Relief Act to provide for the protection of child custody arrangements for parents who are members deployed in support of a contingency operation. States that if a motion for change of custody of a child of such a member is filed while the member is so deployed, no court may enter an order modifying or amending a previous child custody judgment, except if the court finds that it is in the best interest of the child. Prohibits any court from considering a member's 
+
+CLUSTER 5 | 7 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 5 (71.43%)
+  Government Operations: 2 (28.57%)
+  Exemplos de documentos:
+    ID=6129 | ground_truth=Macroeconomics | origem=train
+    Telecommuters Tax Fairness Act of 2007 - Prohibits a state from imposing an income tax on the compensation of a nonresident individual for any period in which such individual is not physically present in or working in such state or from deeming such nonresident individual to be present in or working in such state on the grounds that: (1) such individual is present at or working at home for convenience; or (2) such individual's work at home fails any convenience of the employer test or any simila
+    ID=6445 | ground_truth=Macroeconomics | origem=train
+    Prohibits a state from imposing a tax on the income earned in the state by nonresidents unless the tax is of substantial equality of treatment for the citizens of the state and the nonresidents so commuting.
+    ID=6544 | ground_truth=Macroeconomics | origem=train
+    Telecommuters Tax Fairness Act of 2009 - Prohibits a state from imposing an income tax on the compensation of a nonresident individual for any period in which such individual is not physically present in or working in such state or from deeming such nonresident individual to be present in or working in such state on the grounds that: (1) such individual is present at or working at home for convenience; or (2) such individual's work at home fails any convenience of the employer test or any simila
+
+CLUSTER 6 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Civil Rights: 3 (60.00%)
+  Macroeconomics: 2 (40.00%)
+  Exemplos de documentos:
+    ID=6528 | ground_truth=Macroeconomics | origem=train
+    Religious Freedom Peace Tax Fund Act of 2009 - Directs the Secretary of the Treasury to establish in the Treasury the Religious Freedom Peace Tax Fund for the deposit of income, gift, and estate taxes paid by or on behalf of taxpayers: (1) who are designated conscientious objectors opposed to participation in war in any form based upon their deeply held moral, ethical, or religious beliefs or training (within the meaning of the Military Selective Service Act); and (2) who have certified their be
+    ID=7020 | ground_truth=Macroeconomics | origem=train
+    Religious Freedom Peace Tax Fund Act of 2013 - Directs the Secretary of the Treasury to establish in the Treasury the Religious Freedom Peace Tax Fund for the deposit of income, gift, and estate taxes paid by or on behalf of taxpayers: (1) who are designated conscientious objectors opposed to participation in war in any form based upon their sincerely held moral, ethical, or religious beliefs or training (within the meaning of the Military Selective Service Act); and (2) who have certified their
+    ID=27038 | ground_truth=Civil Rights | origem=train
+    Religious Freedom Peace Tax Fund Act - Directs the Secretary of the Treasury to establish in the Treasury the Religious Freedom Peace Tax Fund for the deposit of income, gift, and estate taxes paid by or on behalf of taxpayers: (1) who are designated conscientious objectors opposed to participation in war in any form based upon their deeply held moral, ethical, or religious beliefs or training (within the meaning of the Military Selective Service Act); and (2) who have certified their beliefs in
+
+CLUSTER 7 | 6 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 5 (83.33%)
+  Law and Crime: 1 (16.67%)
+  Exemplos de documentos:
+    ID=9327 | ground_truth=Law and Crime | origem=train
+    Innovative Design Protection Act of 2012 - Extends copyright protection to fashion designs. Revises the definition of "useful article" to include an article of apparel (clothing, handbags, purses, wallets, tote bags, belts, and eyeglass frames). Excludes from protection designs embodied in a useful article made public by the designer or owner: (1) more than two years before the date of the application for registration in the case of a vessel hull design, and (2) more than three years before the 
+    ID=40629 | ground_truth=Domestic Commerce | origem=test
+    Design Piracy Prohibition Act - Extends copyright protection to fashion designs. Excludes from such protection fashion designs that are embodied in a useful article that was made public by the designer or owner more than three months before the registration of copyright application. Gives fashion designs copyright protection for three years.Declares that is not infringement to make, have made, import, sell, or distribute any article embodying a design which was created without knowledge or reaso
+    ID=40647 | ground_truth=Domestic Commerce | origem=test
+    Design Piracy Prohibition Act - Extends copyright protection to fashion designs. Excludes from such protection fashion designs that are embodied in a useful article that was made public by the designer or owner more than three months before the registration of copyright application. Gives fashion designs copyright protection for three years.Declares that is not infringement to make, have made, import, sell, or distribute any article embodying a design which was created without knowledge or reaso
+
+CLUSTER 8 | 3 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 2 (66.67%)
+  Environment: 1 (33.33%)
+  Exemplos de documentos:
+    ID=8354 | ground_truth=Transportation | origem=train
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) Sport Fish Restoration and Recreational Boating Safety Act of 2014 - Amends the Federal Aid in Fish Restoration Act to reauthorize through FY2021 the Sport Fish Restoration and Boating Trust Fund. Extends the distributions of appropriations to: (1) the Department of the Interior for coastal wetlands distributions, the Clean Vessel Act of 1992, boating infrastructure,
+    ID=8400 | ground_truth=Transportation | origem=train
+    Sport Fish Restoration and Recreational Boating Safety Act (Sec. 3) This bill amends the Dingell-Johnson Sport Fish Restoration Act to reauthorize the Sport Fish Restoration and Boating Trust Fund through FY2023. The bill revises the formula used to distribute funds from the trust fund. Amounts are set aside through FY2023 for Coast Guard recreational boating safety personnel and activities and the National Recreational Boating Survey. (Sec. 4) The bill amends the Internal Revenue Code to extend
+    ID=9789 | ground_truth=Environment | origem=train
+    Sport Fish Restoration and Recreational Boating Safety Act of 2011 - Amends the Federal Aid in Fish Restoration Act to maintain through FY2017 the existing percentages of annual Sport Fish Restoration and Boating Trust Fund appropriations distributed to: (1) the Secretary of the Interior for coastal wetlands distributions, the Clean Vessel Act, boating infrastructure, and national outreach and communications; and (2) the Secretary of the department in which the Coast Guard is operating for state
+
+CLUSTER 9 | 6 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 5 (83.33%)
+  Public Lands: 1 (16.67%)
+  Exemplos de documentos:
+    ID=11572 | ground_truth=Government Operations | origem=train
+    Requires the Architect of the Capitol to solicit bids and enter into an agreement for the creation of a statue of "The Unknown Slave" and to acquire and permanently display it in Emancipation Hall in the Capitol Visitor Center.
+    ID=24621 | ground_truth=Government Operations | origem=train
+    This bill requires the Joint Committee on the Library to enter into an agreement to obtain a statue of Eli Wiesel. The Joint Committee may authorize the Architect of the Capitol to enter into the agreement as well as related contracts. The Joint Committee shall place the statue in a suitable permanent location in the U.S. Capitol.
+    ID=31197 | ground_truth=Government Operations | origem=test
+    Requires the Joint Committee on the Library to enter into an agreement with the Foundation of Hellenes under which the Foundation shall provide a statue of Constantino Brumidi to be displayed in the Capitol Visitor Center. Authorizes the Committee to delegate such requirement to the Architect of the Capitol (AOC).
+
+CLUSTER 10 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 5 (100.00%)
+  Exemplos de documentos:
+    ID=13929 | ground_truth=Government Operations | origem=train
+    Redistricting Transparency Act of 2010 - Requires states to carry out congressional redistricting in accordance with a process under which members of the public are informed of redistricting proposals via the Internet and have the opportunity to participate in the development of such proposals prior to their adoption. Requires each state redistricting entity to establish and maintain a public Internet site meeting specified requirements. Requires the state redistricting entity to: (1) solicit th
+    ID=14055 | ground_truth=Government Operations | origem=train
+    Redistricting Transparency Act of 2013 - Requires states to carry out congressional redistricting in accordance with a process under which members of the public are informed of redistricting proposals via the Internet and have the opportunity to participate in the development of such proposals prior to their adoption. Requires each state redistricting entity to establish and maintain a public Internet site meeting specified requirements. Requires the state redistricting entity to: (1) solicit th
+    ID=14135 | ground_truth=Government Operations | origem=train
+    Redistricting Transparency Act of 2015 Requires states to carry out congressional redistricting in accordance with a process under which members of the public are informed of redistricting proposals via the Internet and have the opportunity to participate in the development of such proposals prior to their adoption. Requires each state redistricting entity to establish and maintain a public Internet site meeting specified requirements. Requires the state redistricting entity to: (1) solicit the 
+
+CLUSTER 11 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 3 (60.00%)
+  Civil Rights: 2 (40.00%)
+  Exemplos de documentos:
+    ID=18104 | ground_truth=Government Operations | origem=train
+    National Language Act of 2011 - Makes English the official language of the U.S. government. Requires the government to: (1) conduct its official business in English, including publications, income tax forms, and informational materials; and (2) preserve and enhance the role of English as the official language of the United States. Provides that no person has a right, entitlement, or claim to have the government act, communicate, perform, or provide services or materials in any other language, un
+    ID=31251 | ground_truth=Government Operations | origem=test
+    National Language Act of 2009 - Makes English the official language of the U.S. government. Requires the government to: (1) conduct its official business in English, including publications, income tax forms, and informational materials; and (2) preserve and enhance the role of English as the official language of the United States of America. Provides that no person has a right, entitlement, or claim to have the government act, communicate, perform, or provide services or materials in any other l
+    ID=39620 | ground_truth=Government Operations | origem=test
+    National Language Act of 2007 - Makes English the official language of the U.S. government. Requires the government to: (1) conduct its official business in English, including publications, income tax forms, and informational materials; and (2) preserve and enhance the role of English as the official language of the United States of America. Provides that no person has a right, entitlement, or claim to have the government act, communicate, perform, or provide services or materials in any other l
+
+CLUSTER 12 | 6 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 3 (50.00%)
+  Immigration: 1 (16.67%)
+  International Affairs: 1 (16.67%)
+  Health: 1 (16.67%)
+  Exemplos de documentos:
+    ID=7867 | ground_truth=Immigration | origem=train
+    Requires the Secretary of Commerce to include in each questionnaire used for conducting the decennial census of population a question to ascertain U.S. citizenship and immigration status.
+    ID=20679 | ground_truth=International Affairs | origem=train
+    Requires the Secretary of Commerce, beginning with the 2010 decennial census of population, to take measures in tabulating total population by state for purposes of apportionment of Representatives in Congress to ensure that all Americans residing abroad on the census date are accurately counted and properly attributed to their respective states. Requires such measures to include methods: (1) by which administrative records of a nongovernmental organization may be used to enumerate organization 
+    ID=26733 | ground_truth=Government Operations | origem=train
+    Requires the Secretary of Commerce to include in any questionnaire used in a decennial census to determine state populations an option for respondents to indicate Dominican extraction or descent.
+
+CLUSTER 13 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 1 (20.00%)
+  Domestic Commerce: 1 (20.00%)
+  International Affairs: 1 (20.00%)
+  Housing: 1 (20.00%)
+  Public Lands: 1 (20.00%)
+  Exemplos de documentos:
+    ID=5010 | ground_truth=Defense | origem=train
+    SMOCTA Reauthorization Act of 2008 - Authorizes appropriations for FY2009-FY2018 to carry out the Service Members Occupational Conversion and Training Act of 1992.
+    ID=18662 | ground_truth=Domestic Commerce | origem=train
+    FBI Priorities Act of 2008 - Authorizes appropriations for FY2009-FY2013 to fund 1,000 additional Federal Bureau of Investigation (FBI) field agents to investigate financial crimes.
+    ID=20652 | ground_truth=International Affairs | origem=train
+    Peace Corps Reauthorization Act of 2008 - Amends the Peace Corps Act to: (1) authorize appropriations through FY2012; and (2) increase the readjustment allowance for returning Peace Corps volunteers.
+
+CLUSTER 14 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 3 (60.00%)
+  Environment: 1 (20.00%)
+  Domestic Commerce: 1 (20.00%)
+  Exemplos de documentos:
+    ID=25137 | ground_truth=Defense | origem=train
+    Amends the Radiation Exposure Compensation Act to include the county of Mohave, Arizona, among affected areas for purposes of payments to individuals with certain medical conditions who were exposed to fallout emitted during the U.S. government's atmospheric nuclear tests.
+    ID=28693 | ground_truth=Environment | origem=train
+    Mohave County Radiation Compensation Act of 2011 - Amends the Radiation Exposure Compensation Act to include the county of Mohave, Arizona, among affected areas for purposes of payments to individuals with certain medical conditions who were exposed to fallout emitted during the U.S. government's atmospheric nuclear tests.
+    ID=28845 | ground_truth=Defense | origem=train
+    Amends the Radiation Exposure Compensation Act to include the states of Idaho and Montana among affected areas for purposes of payments to individuals with certain medical conditions who were exposed to fallout emitted during the U.S. government's atmospheric nuclear tests.
+
+CLUSTER 15 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 4 (80.00%)
+  Transportation: 1 (20.00%)
+  Exemplos de documentos:
+    ID=28721 | ground_truth=Transportation | origem=train
+    21st Century Civilian Conservation Corps Act - Authorizes the President, in order to relieve widespread unemployment, restore depleted natural resources in the United States, and advance public works programs, to establish a Civilian Conservation Corps to employ unemployed or underemployed U.S. citizens in the construction, maintenance, and carrying on of works of a public nature, such as forestation of U.S. and state lands, prevention of forest fires, floods, and soil erosion, and construction 
+    ID=30305 | ground_truth=Labor | origem=test
+    21st Century Civilian Conservation Corps Act - Authorizes the President, in order to relieve widespread unemployment, restore depleted natural resources in the United States, and advance public works programs, to establish a Civilian Conservation Corps to employ unemployed or underemployed U.S. citizens in the construction, maintenance, and carrying on of works of a public nature, such as forestation of U.S. and state lands, prevention of forest fires, floods, and soil erosion, and construction 
+    ID=30327 | ground_truth=Labor | origem=test
+    21st Century Civilian Conservation Corps Act - Authorizes the President, in order to relieve widespread unemployment, restore depleted natural resources in the United States, and advance public works programs, to establish a Civilian Conservation Corps to employ unemployed or underemployed U.S. citizens in the construction, maintenance, and carrying on of works of a public nature, such as forestation of U.S. and state lands, prevention of forest fires, floods, and soil erosion, and construction 
+
+CLUSTER 16 | 7 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 7 (100.00%)
+  Exemplos de documentos:
+    ID=29761 | ground_truth=Government Operations | origem=test
+    Federal Firefighters Fairness Act of 2008 - Provides that: (1) specified diseases, including heart disease, lung disease, tuberculosis, hepatatis, human immunodeficiency virus, and specified cancers, of federal employees in fire protection activities shall be presumed to be proximately caused by such employment; (2) the disability or death of such an employee due to such a disease shall be presumed to result from personal injury sustained while in the performance of duty; and (3) such presumptio
+    ID=29782 | ground_truth=Government Operations | origem=test
+    Federal Firefighters Fairness Act of 2009 - Provides that: (1) specified diseases, including heart disease, lung disease, tuberculosis, hepatitis, human immunodeficiency virus (HIV), and specified cancers, of federal employees in fire protection activities shall be presumed to be proximately caused by such employment; (2) the disability or death of such an employee due to such a disease shall be presumed to result from personal injury sustained while in the performance of duty; and (3) such pres
+    ID=29860 | ground_truth=Government Operations | origem=test
+    Federal Firefighters Fairness Act of 2009 - Title I: Federal Firefighters Fairness - (Sec. 101) Provides that: (1) specified diseases of federal employees in fire protection activities shall be presumed to be proximately caused by such employment; (2) the disability or death of such an employee due to such a disease shall be presumed to result from personal injury sustained while in the performance of duty; and (3) such presumptions may be rebutted by a preponderance of the evidence. Distinguish
+
+CLUSTER 17 | 4 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 3 (75.00%)
+  Energy: 1 (25.00%)
+  Exemplos de documentos:
+    ID=14806 | ground_truth=Energy | origem=train
+    Non-Foreign Area Retirement Equity Assurance Act of 2008 or the Non-Foreign AREA Act of 2008 - Revises federal employee locality-based comparability payments provisions to include U.S. territories and possessions, including the Commonwealth of Puerto Rico and the Commonwealth of the Northern Mariana Islands, within a pay locality. Sets forth maximum rates of pay for Senior Executive Service (SES) personnel in such areas.Revises the calculation of allowances based on living costs and conditions o
+    ID=29736 | ground_truth=Government Operations | origem=test
+    Non-Foreign Area Retirement Equity Assurance Act of 2008 or the Non-Foreign AREA Act of 2008 - Revises federal employee locality-based comparability payments provisions to include U.S. territories and possessions, including the Commonwealth of Puerto Rico and the Commonwealth of the Northern Mariana Islands, within a pay locality. Revises the calculation of allowances based on living costs and conditions of environment for pay of employees stationed outside the continental United States or in Al
+    ID=29790 | ground_truth=Government Operations | origem=test
+    Non-Foreign Area Retirement Equity Assurance Act of 2009 or the Non-Foreign AREA Act of 2009 - Revises federal employee locality-based comparability payments provisions to include U.S. territories and possessions, including the Commonwealth of Puerto Rico and the Commonwealth of the Northern Mariana Islands, within a pay locality. Sets forth maximum rates of pay for Senior Executive Service (SES) personnel in such areas. Revises the calculation of allowances based on living costs and conditions 
+
+CLUSTER 18 | 9 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 8 (88.89%)
+  Government Operations: 1 (11.11%)
+  Exemplos de documentos:
+    ID=24625 | ground_truth=Government Operations | origem=train
+    Smithsonian American Latino Museum Act This bill establishes a museum to be known as the Smithsonian American Latino Museum in the Smithsonian Institution. The Arts and Industries Building of the Smithsonian Institution, which is located on the National Mall in Washington, DC, including a new underground annex facility, is designated as the location of the museum. The Board of Regents of the Smithsonian Institution may plan and construct the museum and may prepare a plan of action for the museum
+    ID=31654 | ground_truth=Public Lands | origem=test
+    Authorizes the Board of Regents of the Smithsonian Institution to construct a greenhouse facility at its museum support facility in Suitland, Maryland, to maintain its horticultural operations and preserve the orchid collection it holds in trust.Authorizes appropriations.
+    ID=31681 | ground_truth=Public Lands | origem=test
+    Authorizes the Board of Regents of the Smithsonian Institution to construct laboratory space to accommodate the terrestrial research program of the Smithsonian tropical research institute in Gamboa, Panama.
+
+CLUSTER 19 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 3 (60.00%)
+  Macroeconomics: 1 (20.00%)
+  Civil Rights: 1 (20.00%)
+  Exemplos de documentos:
+    ID=32643 | ground_truth=Macroeconomics | origem=test
+    Automobile Dealer Economic Rights Restoration Act of 2009 - Prohibits any automobile manufacturer (manufacturer) in which the federal government has a financial or ownership interest from depriving an automobile dealer (dealer) of its economic rights under a dealer agreement. Requires the manufacturer to assume (or assign to a successor) each agreement in existence before the commencement of a federal bankruptcy case by the manufacturer. Directs any such manufacturer, if a valid dealer agreement
+    ID=37787 | ground_truth=Transportation | origem=test
+    Automobile Dealer Economic Rights Restoration Act of 2009 - Prohibits an automobile manufacturer (manufacturer) in which the federal government has an ownership interest, or which receives loans from the federal government, from depriving an automobile dealer (dealer) of its economic rights. Requires the manufacturer to honor those rights as they existed for Chrysler LLC and General Motors Corporation dealers prior to the commencement of the bankruptcy cases of each corporation, including dealer
+    ID=37788 | ground_truth=Transportation | origem=test
+    Automobile Dealer Economic Rights Restoration Act of 2009 - Prohibits any automobile manufacturer in which the federal government has an economic interest from depriving an automobile dealer of its economic rights as they existed prior to the commencement of a bankruptcy case by the manufacturer, including the dealer's rights to recourse under state law. Requires such manufacturers to restore the franchise agreements with dealers that were in effect prior to the bankruptcy case.
+
+CLUSTER 20 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 3 (60.00%)
+  Domestic Commerce: 2 (40.00%)
+  Exemplos de documentos:
+    ID=20492 | ground_truth=Domestic Commerce | origem=train
+    Hunting, Fishing, and Recreational Shooting Protection Act - Amends the Toxic Substances Control Act (TSCA) to exclude from the definition of "chemical substance" for purposes of such Act: (1) any component of any pistol, revolver, firearm, shell, or cartridge the sale of which is subject to federal excise tax, including shot, bullets and other projectiles, propellants, and primers; and (2) any sport fishing equipment the sale of which is subject to federal excise tax and sport fishing equipment
+    ID=20613 | ground_truth=Domestic Commerce | origem=train
+    Hunting, Fishing, and Recreational Shooting Protection Act This bill exempts components of firearms and ammunition and sport fishing equipment and its components (such as lead sinkers) from regulations on chemical substances under the Toxic Substances Control Act.
+    ID=34274 | ground_truth=Environment | origem=test
+    Compound 1080 and Sodium Cyanide Elimination Act - Amends the Toxic Substances Control Act to prohibit the use, production, sale, importation, or exportation of sodium fluoroacetate (known as Compound 1080). Prohibits the use of sodium cyanide in a predator control device. Subjects a violator of either such prohibition to a fine, imprisonment for not more than two years, or both.
+
+CLUSTER 21 | 5 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 5 (100.00%)
+  Exemplos de documentos:
+    ID=35145 | ground_truth=Government Operations | origem=test
+    William H. Frist Gift of Life Congressional Medal Act of 2007 - Directs the Secretary of the Treasury to design and strike a bronze medal to commemorate organ donors and their families. Requires the Secretary of Health and Human Services to direct the entity holding the Organ Procurement and Transplantation Network to contract to establish an application procedure and determine eligibility. Allows the Secretary of Health and Human Services or the Network contractor to provide duplicates of the m
+    ID=35187 | ground_truth=Government Operations | origem=test
+    Stephanie Tubbs Jones Gift of Life Medal Act of 2008 - Makes any organ donor, or the family of any organ donor, eligible for a Stephanie Tubbs Jones Gift of Life Medal. Requires the Secretary of Health and Human Services to direct the Organ Procurement and Transplantation Network to establish an application procedure, determine eligibility, and arrange for the presentation of medals.Allows only one medal per family. Requires that such medal be presented to the donor or, in the case of a deceased
+    ID=35189 | ground_truth=Government Operations | origem=test
+    Stephanie Tubbs Jones Gift of Life Medal Act of 2008 - Makes any organ donor, or the family of any organ donor, eligible for a Stephanie Tubbs Jones Gift of Life Medal. Requires the Secretary of Health and Human Services to direct the Organ Procurement and Transplantation Network to establish an application procedure, determine eligibility, and arrange for the presentation of medals.Allows only one medal per family. Requires that such medal be presented to the donor or, in the case of a deceased

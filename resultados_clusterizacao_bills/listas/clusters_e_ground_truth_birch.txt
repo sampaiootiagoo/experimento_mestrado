@@ -1,0 +1,317 @@
+ALGORITMO: birch
+====================================================================================================
+
+CLUSTER 0 | 1800 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 1082 (60.11%)
+  Government Operations: 233 (12.94%)
+  Education: 122 (6.78%)
+  Health: 78 (4.33%)
+  Transportation: 65 (3.61%)
+  Exemplos de documentos:
+    ID=102 | ground_truth=Health | origem=train
+    Caring for Military Children with Developmental Disabilities Act of 2014 - Includes in the treatment of military dependents' developmental disabilities under the Department of Defense (DOD) TRICARE program behavioral health treatment, including applied behavior analysis, that is prescribed by a physician or psychologist. Makes such behavioral health treatment available to retired members of the Coast Guard, the Commissioned Corps of the National Oceanic and Atmospheric Administration (NOAA), the
+    ID=103 | ground_truth=Health | origem=train
+    Caring for America's Heroes Act - Eliminates the limit on the number of days each year inpatient mental health services may be provided to military dependents under the Department of Defense (DOD) TRICARE program (a DOD managed care program). Eliminates the need for TRICARE Standard beneficiaries to obtain: (1) a nonavailability statement or preauthorization to receive mental health services from a civilian provider, or (2) a nonavailability statement to receive mental health services in special
+    ID=153 | ground_truth=Education | origem=train
+    Veterans' Equity in Education Act of 2007 - Amends the Higher Education Act of 1965 with respect to calculation of financial assistance for which a student receiving veterans' education benefits may be eligible. Reduces, for the first year a student receives such benefits, the factor in the eligibility formula representing estimated educational financial assistance already received by the student by the amount of military pay deductions for such benefits made by or on behalf of the student while
+
+CLUSTER 1 | 3028 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 1729 (57.10%)
+  Housing: 375 (12.38%)
+  Government Operations: 282 (9.31%)
+  Macroeconomics: 192 (6.34%)
+  Defense: 79 (2.61%)
+  Exemplos de documentos:
+    ID=369 | ground_truth=Education | origem=train
+    Private Student Loan Transparency and Improvement Act of 2007 - Title I: Preventing Unfair and Deceptive Private Educational Lending Practices and Eliminating Conflicts of Interest - (Sec. 101) Amends the Truth in Lending Act to prohibit a private educational lender from: (1) offering or providing any gift to specified educational institutions or their personnel in exchange for any advantage or consideration provided to such lender related to its educational loan activities; or (2) engaging in r
+    ID=386 | ground_truth=Education | origem=train
+    Amends the Emergency Economic Stabilization Act to revise the limitation on the Secretary of the Treasury's authority to purchase troubled assets through the Troubled Assets Relief Program (TARP). Changes the Joint Resolution of Disapproval, regarding authority to purchase troubled assets, to a Joint Resolution of Approval. Prohibits the Secretary, that is, from exercising any authority to make any such purchases with regard to any TARP amount authorized, and unobligated as of November 14, 2008,
+    ID=389 | ground_truth=Education | origem=train
+    Derivatives and Hedge Fund Regulatory Improvement Act of 2008 - Directs the appropriate federal banking agencies, with respect to the entities under their respective jurisdictions that engage in transactions involving unregistered hedge funds or over-the-counter derivatives, to initiate a coordinated rulemaking to: (1) extend to unregistered hedge funds the requirements governing the safety and soundness of the financial system applicable to mutual funds; (2) provide for the regulation of over-t
+
+CLUSTER 2 | 3716 documentos
+----------------------------------------------------------------------------------------------------
+  Foreign Trade: 1790 (48.17%)
+  International Affairs: 828 (22.28%)
+  Defense: 186 (5.01%)
+  Government Operations: 174 (4.68%)
+  Domestic Commerce: 155 (4.17%)
+  Exemplos de documentos:
+    ID=120 | ground_truth=Health | origem=train
+    Fairness to Pet Owners Act of 2015 Directs the Federal Trade Commission to require prescribers of animal drugs to verify prescriptions and provide copies of prescriptions to pet owners, pet owner designees, and pharmacies, without the prescriber demanding payment or establishing other conditions. Applies these requirements to medication for a domesticated household animal that consumers are not allowed to purchase without a prescription. Treats a violation of this Act as an unfair or deceptive a
+    ID=136 | ground_truth=Health | origem=train
+    Fairness to Pet Owners Act of 2015 Directs the Federal Trade Commission to require prescribers of animal drugs to verify prescriptions and provide copies of prescriptions to pet owners, pet owner designees, and pharmacies, without the prescriber demanding payment or establishing other conditions. Treats a violation of this Act as an unfair or deceptive act or practice under the Federal Trade Commission Act.
+    ID=209 | ground_truth=Education | origem=train
+    Pacific Islands Fulbright Scholarship Fund Act of 2007 - Directs the Secretary of State to review and report to Congress on the marginalization of Pacific Island students in the awarding of Fulbright Scholarships. Requires the Secretary to establish an annual one-year program within the J. William Fulbright Educational Exchange program providing scholarships to Pacific Islands students for study in the United States pursuant to the terms of such Exchange program.
+
+CLUSTER 3 | 4068 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 1428 (35.10%)
+  Public Lands: 366 (9.00%)
+  Technology: 357 (8.78%)
+  Macroeconomics: 355 (8.73%)
+  Domestic Commerce: 323 (7.94%)
+  Exemplos de documentos:
+    ID=204 | ground_truth=Education | origem=train
+    Fairness for Disabled Students Act of 2007 - Amends federal housing law to exempt from the prohibition against specified public housing rental assistance ("Section 8 assistance") persons with disabilities who were not receiving such assistance as of November 30, 2005.
+    ID=227 | ground_truth=Education | origem=train
+    University of the District of Columbia Graduate Programs Act - Amends the Higher Education Act to: (1) make the University of the District of Columbia (UDC) David A. Clarke School of Law and other UDC qualified graduate programs eligible for federal grants for postgraduate programs substantially contributing to the legal, medical, dental, veterinary, or other graduate education opportunities in mathematics, engineering, or the physical or natural sciences for black Americans; and (2) authorize a
+    ID=232 | ground_truth=Education | origem=train
+    Sets $19 million as the maximum amount per fiscal year for reimbursement to states and local agencies administering veterans' education benefits.
+
+CLUSTER 4 | 1622 documentos
+----------------------------------------------------------------------------------------------------
+  Immigration: 690 (42.54%)
+  Defense: 282 (17.39%)
+  Transportation: 141 (8.69%)
+  Law and Crime: 99 (6.10%)
+  International Affairs: 91 (5.61%)
+  Exemplos de documentos:
+    ID=158 | ground_truth=Education | origem=train
+    Cybersecurity Education Enhancement Act of 2008 - Directs the Secretary of Homeland Security, acting through the Assistant Secretary of Cybersecurity, to establish a program awarding competitive grants to institutions of higher education (IHEs) and consortia of IHEs for: (1) cybersecurity professional development programs; (2) associate degree programs in cybersecurity; and (3) the purchase of equipment to provide training in cybersecurity for professional development and degree programs. Gives 
+    ID=189 | ground_truth=Education | origem=train
+    College Life Safety and Fire Prevention Act - Directs the Secretary of Homeland Security to establish a demonstration program to award grants to eligible entities for the purpose of contracting with fire alarm companies to install professionally fire alarm detection systems or other fire detection and prevention technologies in student housing, dormitories, and other buildings controlled by such entities.
+    ID=289 | ground_truth=Education | origem=train
+    Amends the Immigration and Nationality Act to include among those aliens not subject to worldwide numerical immigrant limitations persons who have earned a master's or higher degree from a U.S. institution of higher education in science, technology, engineering, or mathematics and who have an employment offer from a U.S. employer in a field related to such degree.
+
+CLUSTER 5 | 2953 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 2053 (69.52%)
+  Environment: 429 (14.53%)
+  Agriculture: 108 (3.66%)
+  Government Operations: 81 (2.74%)
+  Energy: 74 (2.51%)
+  Exemplos de documentos:
+    ID=67 | ground_truth=Health | origem=train
+    Stop Asian Carp Act - Directs the Secretary of the Army, acting through the Chief of Engineers, to study the watersheds of the Illinois, Chicago, and Calumet Rivers, including their tributaries, that drain directly into Lake Michigan to determine the feasibility and best means of implementing the hydrologic separation of the Great Lakes and the Mississippi River Basins to prevent the introduction or establishment of populations of aquatic nuisance species between the Great Lakes and Mississippi 
+    ID=323 | ground_truth=Education | origem=train
+    Public Land Military Pass Act - Makes the National Parks and Federal Recreational Lands Pass, as provided in this Act, available at a discount (subject to the same rate of increase as the regular cost of the Pass) to any veterans and active duty and reserve members of the U.S. Armed Forces determined to be eligible for such a discount. Requires the Secretary of the Interior (with respect to federal land management agencies) and the Secretary of Agriculture (with respect to the Forest Service), a
+    ID=327 | ground_truth=Education | origem=train
+    Abraham Lincoln National Heritage Area Act - Establishes the Abraham Lincoln National Heritage Area in Illinois, which shall include: (1) a core area in central Illinois comprising 42 counties; (2) any sites, buildings, and districts within the core area that are recommended in the management plan; and (3) specified related historic sites, museums, and places, including the Lincoln Tomb State Historic Site, the Lincoln Douglas Debate Museum, and the Abraham Lincoln Presidential Library & Museum.
+
+CLUSTER 6 | 3523 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 2251 (63.89%)
+  Social Welfare: 396 (11.24%)
+  Law and Crime: 203 (5.76%)
+  Domestic Commerce: 175 (4.97%)
+  Civil Rights: 91 (2.58%)
+  Exemplos de documentos:
+    ID=0 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Price Negotiation Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to require the Secretary of Health and Human Services to negotiate with pharmaceutical manufacturers the prices that may be charged to prescription drug plan sponsors and Medicare Advantage organizations for covered part D drugs for part D eligible individuals enrolled under a prescription drug plan or under a Medicare Advantage prescription drug (MA-PD) plan.
+    ID=1 | ground_truth=Health | origem=train
+    Amends part D (Voluntary Prescription Drug Benefit Program) of title XVIII (Medicare) of the Social Security Act to authorize the Secretary of Health and Human Services to negotiate with drug manufacturers and pharmacies prices charged to prescription drug plan (PDP) sponsors and Medicare Advantage organizations for covered part D drugs provided under Medicare.
+    ID=2 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Enrollment Extension Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to extend the annual enrollment periods of the Medicare and Medicare Advantage prescription drug benefit programs.
+
+CLUSTER 7 | 2365 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 873 (36.91%)
+  Energy: 822 (34.76%)
+  Transportation: 209 (8.84%)
+  Government Operations: 140 (5.92%)
+  Public Lands: 98 (4.14%)
+  Exemplos de documentos:
+    ID=375 | ground_truth=Education | origem=train
+    Amends the Outer Continental Shelf Lands Act to authorize the governor of Virginia to petition the Secretary of the Interior for authorization to conduct natural gas exploration and extraction activities in any area that is at least 50 miles beyond the state's coastal zone. Requires the Secretary of the Treasury to deposit into a Clean Energy Fund of 50% of all rentals, royalties, bonus bids, and other sums due and payable to the United States from leases entered into under this Act for natural 
+    ID=573 | ground_truth=Education | origem=train
+    United States Exploration on Idle Tracts Act or USE IT Act - Directs the Secretary of the Interior to issue regulations to establish a specified graduated annual production incentive fee with respect to federal onshore and offshore lands subject to a lease for production of oil or natural gas under which production is not occurring.
+    ID=1425 | ground_truth=Civil Rights | origem=train
+    Farmer's Privacy Act of 2012 - Prohibits the Administrator of the Environmental Protection Agency (EPA), in exercising any authority under the Federal Water Pollution Control Act (commonly known as the Clean Water Act), from conducting aerial surveillance of agricultural land unless the Administrator has: (1) obtained the voluntary written consent of the owner or operator of the land to be surveilled, and (2) obtained from the U.S. District Court for the District of Columbia a certification of r
+
+CLUSTER 8 | 3161 documentos
+----------------------------------------------------------------------------------------------------
+  Education: 1570 (49.67%)
+  Public Lands: 422 (13.35%)
+  Technology: 189 (5.98%)
+  Labor: 170 (5.38%)
+  Environment: 149 (4.71%)
+  Exemplos de documentos:
+    ID=151 | ground_truth=Education | origem=train
+    College Student Relief Act of 2007 - Amends the Higher Education Act of 1965 to phase-in cuts in the interest rate charged undergraduate student borrowers under the Federal Family Education Loan (FFEL) and Direct Loan (DL) programs, thereby reducing such rate from 6.8% in July 2006 to 3.4% in July 2011. Limits FFEL lender insurance to 95% of the unpaid balance of such loans. (Currently, 97% of a FFEL issued after June 2006 is federally-insured.) Provides for graduated reductions in the percentag
+    ID=154 | ground_truth=Education | origem=train
+    Higher Education Science and Technology Competitiveness Act - Amends the Higher Education Act of 1965 to direct the Secretary of Education to award grants to public institutions of higher education to establish and implement statewide articulation agreements that provide a seamless transition for the transfer of students from two-year institutions to four-year institutions through a common core curricula in math, science, engineering, and technology that reflects the workforce needs of private i
+    ID=160 | ground_truth=Education | origem=train
+    Independent Study of Distance Education Act of 2007 - Directs the Secretary of Education to enter into an agreement with the National Academy of Sciences to evaluate the quality of distance education, as compared to campus-based education programs, at institutions of higher education. Requires the study to identify the types of students that derive the most benefit from each program and the types that do not benefit from distance education.
+
+CLUSTER 9 | 844 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 588 (69.67%)
+  Government Operations: 51 (6.04%)
+  Civil Rights: 34 (4.03%)
+  Education: 31 (3.67%)
+  Public Lands: 26 (3.08%)
+  Exemplos de documentos:
+    ID=68 | ground_truth=Health | origem=train
+    Positive Reduction of Incarceration by Maximizing Education Act or PRIME Act - Directs the Attorney General, through the Director of the Office of Juvenile Justice and Delinquency Prevention, to establish national, regional, and local public awareness campaigns focused on promoting the advantages of continued education among youth.
+    ID=156 | ground_truth=Education | origem=train
+    David Shick Honesty in Campus Justice Act - Amends the General Education Provisions Act to require an institution of postsecondary education to disclose to the alleged victim of any crime of violence or a nonforcible sex offense (or to a deceased victim's next of kin) the final results of any disciplinary proceeding conducted by such institution against a student who is the alleged perpetrator. (Current law states that such disclosure is not prohibited.)
+    ID=275 | ground_truth=Education | origem=train
+    Makes emergency appropriations for FY2008 for state and local law enforcement assistance under the Edward Byrne Memorial Justice Assistance Grant program.
+
+CLUSTER 10 | 1456 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 725 (49.79%)
+  Health: 502 (34.48%)
+  Government Operations: 66 (4.53%)
+  Education: 50 (3.43%)
+  Housing: 35 (2.40%)
+  Exemplos de documentos:
+    ID=104 | ground_truth=Health | origem=train
+    Clay Hunt Suicide Prevention for American Veterans Act or the Clay Hunt SAV Act - (Sec. 2) Requires the Secretary of Veterans Affairs (VA) to: (1) arrange for an independent third party evaluation, at least annually, of the VA's mental health care and suicide prevention programs; and (2) submit a report to Congress, by December 1 of each year, containing the most recent evaluations not yet submitted to Congress and any recommendations the Secretary considers appropriate. (Sec. 3) Directs the Sec
+    ID=110 | ground_truth=Health | origem=train
+    Clay Hunt Suicide Prevention for American Veterans Act or the Clay Hunt SAV Act - Requires the Secretary of Veterans Affairs (VA) and the Secretary of Defense (DOD) to each arrange for an independent third party evaluation of, respectively, the VA and DOD mental health care and suicide prevention programs. Directs the VA Secretary to publish an Internet website that serves as a centralized source to provide veterans with regularly updated information regarding all of the VA's mental health care 
+    ID=111 | ground_truth=Health | origem=train
+    (This measure has not been amended since it was introduced. The expanded summary of the House passed version is repeated here.) Clay Hunt Suicide Prevention for American Veterans Act or the Clay Hunt SAV Act (Sec. 2) Requires the Secretary of Veterans Affairs (VA) to: (1) arrange for an independent third party evaluation, to be conducted by September 30, 2018, and each fiscal year thereafter, of the VA's mental health care and suicide prevention programs; and (2) submit a report to Congress, by 
+
+CLUSTER 11 | 904 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 691 (76.44%)
+  Government Operations: 38 (4.20%)
+  Energy: 34 (3.76%)
+  Environment: 19 (2.10%)
+  Labor: 15 (1.66%)
+  Exemplos de documentos:
+    ID=546 | ground_truth=Education | origem=train
+    Directs the Secretary of Transportation to establish a program to award grants to states and tribal governments to provide continued driver training courses for teenagers (between 16 and 20) who are licensed drivers. Requires the Secretary to give priority to applicants that: (1) maximize participation of teenage drivers in the proposed driver training course; and (2) supplement the grant funds from other sources.
+    ID=1238 | ground_truth=Education | origem=train
+    University Transit Rider Innovation Program Act of 2015 or the UTRIP Act This bill authorizes the Department of Transportation (DOT) to make grants to designated recipients, local or state governmental authorities, private nonprofit organizations, or operators of public transportation services (recipients) to increase the use of public transportation by undergraduate or graduate students attending an institution of higher education (covered students). A recipient may use amounts provided under a
+    ID=1309 | ground_truth=Civil Rights | origem=train
+    Directs the Secretary of Transportation to develop procedures to permit car rental companies to have limited access to information in the National Driver Register in order for them to determine whether an individual possesses a valid driver's license.
+
+CLUSTER 12 | 2354 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 473 (20.09%)
+  Health: 446 (18.95%)
+  Domestic Commerce: 362 (15.38%)
+  Civil Rights: 255 (10.83%)
+  Defense: 195 (8.28%)
+  Exemplos de documentos:
+    ID=52 | ground_truth=Health | origem=train
+    Steps Toward Access and Reform Act of 2009 or the STAR Act of 2009 - Sets conditions for lawsuits arising from health care liability claims regarding health care goods or services or any medical product affecting interstate commerce. Sets a statute of limitations of three years after the date of manifestation of injury or one year after the claimant discovers the injury, with certain exceptions. Provides that nothing in this Act limits recovery of the full amount of available economic damages. L
+    ID=72 | ground_truth=Health | origem=train
+    Fairness to Pet Owners Act of 2011 - Requires the Federal Trade Commission (FTC) to promulgate rules relating to veterinary prescriptions, including rules requiring the prescriber of an animal drug to: (1) provide the pet owner a copy of the veterinary prescription and a written disclosure that the pet owner may fill the prescription through the prescriber (if available) or through another pharmacy determined by the pet owner; and (2) provide or verify the prescription by electronic or other mea
+    ID=82 | ground_truth=Health | origem=train
+    FDA User Fee Corrections Act of 2012 - Amends the Federal Food, Drug, and Cosmetic Act (FFDCA), as amended by the Food and Drug Administration Safety and Innovation Act (P.L. 112-144), to: (1) make clerical corrections to provisions of such Act; and (2) eliminate the restriction that appropriated funds shall be available only for payment of increases in the cost of reviewing medical device applications, including related personnel costs. Specifies due dates in FY2013 under FFDCA for the drug mas
+
+CLUSTER 13 | 749 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 164 (21.90%)
+  Public Lands: 162 (21.63%)
+  Health: 71 (9.48%)
+  International Affairs: 56 (7.48%)
+  Defense: 50 (6.68%)
+  Exemplos de documentos:
+    ID=707 | ground_truth=Education | origem=train
+    (This measure has not been amended since it was reported to the House on July 24, 2014. The summary of that version is repeated here.) Paul D. Wellstone Muscular Dystrophy Community Assistance, Research and Education Amendments of 2014 - (Sec. 2) Amends the Public Health Service Act to revise the muscular dystrophy research program of the National Institutes of Health (NIH). Expands the range of forms of muscular dystrophy included within the program. Requires the research conducted through Paul
+    ID=840 | ground_truth=Education | origem=train
+    (This measure has not been amended since it was introduced. The summary of that version is repeated here.) Amends the Higher Education Act of 1965 to extend by one year, through FY2015, the term of: (1) the National Advisory Committee on Institutional Quality and Integrity, and (2) the Advisory Committee on Student Financial Assistance.
+    ID=976 | ground_truth=Education | origem=train
+    (This measure has not been amended since it was reported to the House on September 30, 2015. The summary of that version is repeated here.) Preservation Research at Institutions Serving Minorities Act or the PRISM Act (Sec. 2) This bill makes Hispanic-serving institutions and Asian American and Native American Pacific Islander-serving institutions of higher education eligible for technical and financial assistance from the Department of the Interior to establish preservation training and degree 
+
+CLUSTER 14 | 627 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 242 (38.60%)
+  Social Welfare: 156 (24.88%)
+  Environment: 43 (6.86%)
+  Education: 39 (6.22%)
+  Energy: 32 (5.10%)
+  Exemplos de documentos:
+    ID=465 | ground_truth=Education | origem=train
+    Ensuring All Students Year-round (EASY) Access to Meals and Snacks Act - Amends the Richard B. Russell National School Lunch Act to reimburse private nonprofit and local government service institutions (other than public schools) under the school lunch program for up to one meal and one snack per child each day during after-school hours, weekends, and school holidays during the regular school calendar. (Currently, such institutions are reimbursed for meals and snacks served to children over the 
+    ID=558 | ground_truth=Education | origem=train
+    Growing Farm to School Programs Act of 2010 - Amends the Richard B. Russell National School Lunch Act to replace the farm-to-cafeteria program with a program providing schools, state and local agencies, Indian tribes, agricultural producers, and nonprofits with competitive matching grants and technical assistance to improve access to local foods by schools participating in the school lunch or breakfast programs. Gives priority to projects that: (1) benefit local small- and medium-sized farms; (2
+    ID=942 | ground_truth=Education | origem=train
+    Scholarships for Opportunity and Results Reauthorization Act or the SOAR Reauthorization Act (Sec. 3) This bill amends the District of Columbia Code to prohibit the Department of Education from limiting the number of eligible students receiving District of Columbia Opportunity Scholarship Program (OSP) scholarships, and from preventing otherwise eligible students from participating in the OSP because of: the type of school the student previously attended; or whether or not the individual previou
+
+CLUSTER 15 | 4055 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 1010 (24.91%)
+  Domestic Commerce: 485 (11.96%)
+  Energy: 430 (10.60%)
+  Labor: 343 (8.46%)
+  Education: 293 (7.23%)
+  Exemplos de documentos:
+    ID=24 | ground_truth=Health | origem=train
+    Health Insurance Tax Credit Assistance Act of 2007 - Amends the Internal Revenue Code to allow a tax credit for charitable contributions to tax-exempt charities which subsidize health insurance premiums and pharmacy co-payments of uninsured individuals or individuals who cannot otherwise afford health insurance or drug treatments.
+    ID=65 | ground_truth=Health | origem=train
+    Health Care Tax Deduction Act of 2011 - Amends the Internal Revenue Code to allow individuals a tax deduction from gross income for health insurance premiums and unreimbursed prescription drug expenses paid for the benefit of the taxpayer and the taxpayer's spouse and dependents.
+    ID=152 | ground_truth=Education | origem=train
+    401Kids Family Savings Act of 2007 - Amends the Economic Growth and Tax Relief Reconciliation Act of 2001 to extend through 2015 provisions allowing increased annual contributions to Coverdell education savings accounts. Amends the Internal Revenue Code to: (1) allow tax-free distributions from a Coverdell education savings account for first-time homebuyer expenses; (2) permit rollovers from Coverdell education savings accounts to Roth individual retirement accounts (Roth IRAs); and (3) rename C
+
+CLUSTER 16 | 779 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 594 (76.25%)
+  Environment: 39 (5.01%)
+  Public Lands: 18 (2.31%)
+  Government Operations: 17 (2.18%)
+  Labor: 16 (2.05%)
+  Exemplos de documentos:
+    ID=159 | ground_truth=Education | origem=train
+    Cellulosic Ethanol Development and Implementation Act of 2007 - Amends the Clean Air Act to direct the Secretary of Energy to establish: (1) a grants program for eligible entities to implement research, development, and demonstration projects relating to the use of cellulosic ethanol fuel for motor vehicles; and (2) a pilot program to provide grants to eligible entities for use in installing infrastructure (such as pumps) that would enable retail gas stations to sell and dispense ethanol fuel. R
+    ID=533 | ground_truth=Education | origem=train
+    Directs the Secretary of Energy to award competitive matching grants to consortia of institutions of higher education (IHEs) located in at least six regions covering all the states to conduct research, extension, and education programs relating to the energy needs of such regions. Includes among such needs: (1) the promotion of low-carbon clean and green energy and related jobs; (2) the development of low-carbon green fuels to reduce dependency on oil; (3) the development of energy storage and e
+    ID=992 | ground_truth=Education | origem=train
+    Investing for Tomorrow's Schools Act of 2015 Authorizes the Secretary of the Treasury to enter into cooperative agreements with states to establish state and multistate infrastructure banks that make loans to local educational agencies, public libraries, and charter schools or their developers to construct or renovate public elementary or secondary schools and public libraries. Requires loans also to community learning centers to connect and improve broadband services, and to educational service
+
+CLUSTER 17 | 786 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 522 (66.41%)
+  Government Operations: 65 (8.27%)
+  Defense: 39 (4.96%)
+  Civil Rights: 33 (4.20%)
+  International Affairs: 25 (3.18%)
+  Exemplos de documentos:
+    ID=1292 | ground_truth=Civil Rights | origem=train
+    Consumer Cellphone Number Distribution Protection Act of 2007 - Amends the federal criminal code to impose a fine and/or prison term of up to six months for knowingly disclosing a wireless subscriber's unlisted cell phone number to another, for gain, without the express permission of such subscriber.
+    ID=1329 | ground_truth=Civil Rights | origem=train
+    Computer Trespass Clarification Act of 2007 - Amends the federal criminal code to: (1) exclude from the definition of "computer trespasser" for purposes of determining the legality of interceptions of computer communications any person who has any relationship with the owner or operator of a protected computer (currently, only persons who have a contractual relationship with the owner or operator of a protected computer are excluded); (2) require the owner or operator of a protected computer to 
+    ID=1348 | ground_truth=Civil Rights | origem=train
+    Consumer Cellphone Number Distribution Protection Act of 2009 - Amends the federal criminal code to impose a fine and/or prison term of up to six months for knowingly disclosing a wireless subscriber's unlisted cell phone number to another, for gain, without the express permission of such subscriber.
+
+CLUSTER 18 | 574 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 355 (61.85%)
+  Domestic Commerce: 30 (5.23%)
+  Civil Rights: 27 (4.70%)
+  Technology: 24 (4.18%)
+  Defense: 23 (4.01%)
+  Exemplos de documentos:
+    ID=1280 | ground_truth=Civil Rights | origem=train
+    Federal Agency Data Breach Protection Act - Amends federal law governing public printing and documents to instruct the Director of Office of Management and Budget (OMB) to establish policies, procedures, and standards for agencies to follow in the event of a breach of data security involving disclosure of sensitive personal information for which harm to an individual could reasonably be expected to result. Requires such policies and procedures to include: (1) timely notification to individuals w
+    ID=1306 | ground_truth=Civil Rights | origem=train
+    Paperwork Assistance Act - Requires a federal agency to inform any person receiving a collection of information from the agency of the agency's contact information, including a website and a telephone number, by which a person may obtain a specific contact person responsible for answering questions about the information collection and other information to assist in responding to the information collection.Requires the Director of the Office of Management and Budget (OMB) to include in the Direct
+    ID=1337 | ground_truth=Civil Rights | origem=train
+    Federal Spending and Taxpayer Accessibility Act - Directs the Congressional Research Service (CRS) to create a free public Internet website that includes data for fiscal years after FY2007 and allows the user to search specified information on each federal earmark, including the intended recipient, total dollar amount, the sponsoring Member of Congress, and the status of the bill to which it is attached. Requires the Secretary of the Treasury to provide, upon an eligible individual's request, hi
+
+CLUSTER 19 | 1624 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 1270 (78.20%)
+  Law and Crime: 53 (3.26%)
+  Civil Rights: 52 (3.20%)
+  Social Welfare: 50 (3.08%)
+  Government Operations: 31 (1.91%)
+  Exemplos de documentos:
+    ID=56 | ground_truth=Health | origem=train
+    Amends the Public Health Service Act to consider certain drugs designated for a rare disease or condition as covered outpatient drugs for children's hospitals under the 340B drug discount program (a program limiting the cost of covered outpatient drugs to certain federal grantees).
+    ID=62 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Transfers funds from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated to the Secretary of Health and Human Services (HHS) to be used in FY2010 to provide assistance in reducing AIDS Drug Assistance Program waiting lists and to address other cost containment measures that state AIDS Drug Assistance Programs implement after Ja
+    ID=63 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Requires specified funds to be transferred to the Secretary of Health and Human Services (HHS) from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated, to be obligated during the FY2010 grant period under the AIDS Drug Assistance Program to provide assistance in reducing waiting lists and to address other cost containment meas
+
+CLUSTER 20 | 942 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 389 (41.30%)
+  Government Operations: 252 (26.75%)
+  Civil Rights: 50 (5.31%)
+  Social Welfare: 50 (5.31%)
+  Health: 33 (3.50%)
+  Exemplos de documentos:
+    ID=284 | ground_truth=Education | origem=train
+    Teaching and Research Assistant Collective Bargaining Rights Act - Amends the National Labor Relations Act to provide collective bargaining rights for students enrolled at a private institution of higher education who perform work for remuneration at the institution's direction, regardless of whether the work relates to their courses of study (teaching and research assistants).
+    ID=1489 | ground_truth=Civil Rights | origem=train
+    Ability to Repay Verification Enabling Act - Prohibits the Secretary of Labor from implementing, enforcing, or administering the requirement in the Unemployment Insurance Program Letter No. 19-12, dated May 23, 2012, that a third-party consumer reporting agency obtain an informed consent agreement from an individual in order to obtain from a state agency confidential unemployment compensation information about the individual, if the consumer reporting agency: (1) serves only as a secure conduit 
+    ID=1596 | ground_truth=Civil Rights | origem=train
+    Ability to Repay Verification Enabling Act Prohibits the Secretary of Labor from implementing, enforcing, or administering the requirement in the Unemployment Insurance Program Letter No. 19-12, dated May 23, 2012, that a third-party consumer reporting agency obtain an informed consent agreement from an individual in order to obtain from a state agency confidential unemployment compensation information about the individual, if the consumer reporting agency: (1) serves only as a secure conduit to

@@ -1,0 +1,1302 @@
+ALGORITMO: dbscan_eps0.55_min10
+====================================================================================================
+
+CLUSTER -1 | 18702 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 2146 (11.47%)
+  Defense: 1705 (9.12%)
+  Health: 1635 (8.74%)
+  Public Lands: 1491 (7.97%)
+  Domestic Commerce: 1444 (7.72%)
+  Exemplos de documentos:
+    ID=4 | ground_truth=Health | origem=train
+    Compassionate Assistance for Rape Emergencies Act of 2007 - Prohibits any federal funds from being provided to a hospital under title XVIII (Medicare) of the Social Security Act or to a state, with respect to hospital services, under title XIX (Medicaid) of such Act, unless the hospital meets certain conditions related to a woman who is a victim of sexual assault, including that the hospital: (1) provides the woman with accurate and unbiased information about emergency contraception; (2) offers 
+    ID=20 | ground_truth=Health | origem=train
+    Comprehensive Immunosuppressive Drug Coverage for Kidney Transplant Patients Act of 2007 - Amends SSA title II (Old Age, Survivors and Disability Insurance) (OASDI) to: (1) continue entitlement to prescription drugs used in immunosuppressive therapy furnished to an individual who receives a kidney transplant for which payment is made under Medicare; and (2) extend Medicare secondary payer requirements for end stage renal disease (ESRD) beneficiaries. Amends title XVIII (Medicare ) of SSA to appl
+    ID=23 | ground_truth=Health | origem=train
+    Prevention Through Affordable Access Act - Amends title XIX (Medicaid) of the Social Security Act to revise requirements for the best price component of the formula for determination of the Medicaid rebate for a covered single source outpatient drug or a covered innovator multiple source outpatient drug. (Under current law, best prices shall not take into account prices that are merely nominal in amount.) Revises the list of entities to which sales by a manufacturer of covered outpatient drugs a
+
+CLUSTER 0 | 4564 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 1810 (39.66%)
+  Defense: 1027 (22.50%)
+  Domestic Commerce: 745 (16.32%)
+  Social Welfare: 253 (5.54%)
+  Housing: 230 (5.04%)
+  Exemplos de documentos:
+    ID=0 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Price Negotiation Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to require the Secretary of Health and Human Services to negotiate with pharmaceutical manufacturers the prices that may be charged to prescription drug plan sponsors and Medicare Advantage organizations for covered part D drugs for part D eligible individuals enrolled under a prescription drug plan or under a Medicare Advantage prescription drug (MA-PD) plan.
+    ID=1 | ground_truth=Health | origem=train
+    Amends part D (Voluntary Prescription Drug Benefit Program) of title XVIII (Medicare) of the Social Security Act to authorize the Secretary of Health and Human Services to negotiate with drug manufacturers and pharmacies prices charged to prescription drug plan (PDP) sponsors and Medicare Advantage organizations for covered part D drugs provided under Medicare.
+    ID=2 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Enrollment Extension Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to extend the annual enrollment periods of the Medicare and Medicare Advantage prescription drug benefit programs.
+
+CLUSTER 1 | 632 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 414 (65.51%)
+  Labor: 107 (16.93%)
+  Civil Rights: 39 (6.17%)
+  Government Operations: 31 (4.91%)
+  Domestic Commerce: 20 (3.16%)
+  Exemplos de documentos:
+    ID=12 | ground_truth=Health | origem=train
+    Equity in Prescription Insurance and Contraceptive Coverage Act of 2007 - Amends the Employee Retirement Income Security Act of 1974 (ERISA) and the Public Health Service Act to prohibit a group health plan, and a health insurance issuer providing group coverage, from: (1) excluding or restricting benefits for prescription contraceptive drugs, devices, and outpatient services if the plan provides benefits for other outpatient prescription drugs, devices, or outpatient services; (2) denying eligi
+    ID=43 | ground_truth=Health | origem=train
+    Equity in Prescription Insurance and Contraceptive Coverage Act of 2007 [sic] - Amends the Employee Retirement Income Security Act of 1974 (ERISA) and the Public Health Service Act to prohibit a group health plan, and a health insurance issuer providing group coverage, from: (1) excluding or restricting benefits for prescription contraceptive drugs, devices, and outpatient services if the plan provides benefits for other outpatient prescription drugs, devices, or outpatient services; (2) denying
+    ID=123 | ground_truth=Health | origem=train
+    Health Insurance Rate Review Act This bill amends the Public Health Service Act to declare that federal requirements that the Department of Health and Human Services (HHS) review unreasonable premium increases in health care coverage do not prohibit a state from imposing additional rate requirements on health insurance issuers that are more protective of consumers. The review is expanded to include all rate increases, not only premium increases. HHS or the relevant state insurance commissioner o
+
+CLUSTER 2 | 21 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 20 (95.24%)
+  International Affairs: 1 (4.76%)
+  Exemplos de documentos:
+    ID=52 | ground_truth=Health | origem=train
+    Steps Toward Access and Reform Act of 2009 or the STAR Act of 2009 - Sets conditions for lawsuits arising from health care liability claims regarding health care goods or services or any medical product affecting interstate commerce. Sets a statute of limitations of three years after the date of manifestation of injury or one year after the claimant discovers the injury, with certain exceptions. Provides that nothing in this Act limits recovery of the full amount of available economic damages. L
+    ID=3475 | ground_truth=Health | origem=train
+    Help Efficient, Accessible, Low Cost, Timely Healthcare (HEALTH) Act of 2011 - Sets conditions for lawsuits arising from health care liability claims regarding health care goods or services or any medical product affecting interstate commerce. Sets a statute of limitations of three years after the date of manifestation of injury or one year after the claimant discovers the injury, with certain exceptions. Limits noneconomic damages to $250,000. Makes each party liable only for the amount of dama
+    ID=19962 | ground_truth=International Affairs | origem=train
+    Medical Justice Act of 2011 - Sets forth provisions regulating civil actions for an injury or death as the result of health care. Sets forth limits on: (1) the non-economic damages that an individual may recover from health care practitioners and health care institutions, and (2) the total damages that a person may recover from any single liable health care practitioner. Declares that an insurer of a health care practitioner or health care institution that rejects a reasonable settlement offer w
+
+CLUSTER 3 | 4105 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 1114 (27.14%)
+  Domestic Commerce: 634 (15.44%)
+  Macroeconomics: 600 (14.62%)
+  Transportation: 329 (8.01%)
+  Environment: 263 (6.41%)
+  Exemplos de documentos:
+    ID=65 | ground_truth=Health | origem=train
+    Health Care Tax Deduction Act of 2011 - Amends the Internal Revenue Code to allow individuals a tax deduction from gross income for health insurance premiums and unreimbursed prescription drug expenses paid for the benefit of the taxpayer and the taxpayer's spouse and dependents.
+    ID=66 | ground_truth=Health | origem=train
+    Restoring Consumer-driven Health Care Act of 2011 - Repeals provisions of the Internal Revenue Code, as added by the Patient Protection and Affordable Care Act, that: (1) limit payments from health and medical savings accounts and health flexible spending arrangements solely to medications that are prescribed drugs or insulin, and (2) increase taxes on distributions from health and medical savings accounts that are not used for qualified medical expenses.
+    ID=152 | ground_truth=Education | origem=train
+    401Kids Family Savings Act of 2007 - Amends the Economic Growth and Tax Relief Reconciliation Act of 2001 to extend through 2015 provisions allowing increased annual contributions to Coverdell education savings accounts. Amends the Internal Revenue Code to: (1) allow tax-free distributions from a Coverdell education savings account for first-time homebuyer expenses; (2) permit rollovers from Coverdell education savings accounts to Roth individual retirement accounts (Roth IRAs); and (3) rename C
+
+CLUSTER 4 | 1304 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 1048 (80.37%)
+  Agriculture: 119 (9.13%)
+  Domestic Commerce: 30 (2.30%)
+  Law and Crime: 23 (1.76%)
+  Civil Rights: 14 (1.07%)
+  Exemplos de documentos:
+    ID=82 | ground_truth=Health | origem=train
+    FDA User Fee Corrections Act of 2012 - Amends the Federal Food, Drug, and Cosmetic Act (FFDCA), as amended by the Food and Drug Administration Safety and Innovation Act (P.L. 112-144), to: (1) make clerical corrections to provisions of such Act; and (2) eliminate the restriction that appropriated funds shall be available only for payment of increases in the cost of reviewing medical device applications, including related personnel costs. Specifies due dates in FY2013 under FFDCA for the drug mas
+    ID=117 | ground_truth=Health | origem=train
+    Personal Drug Importation Fairness Act of 2015 This bill allows a drug to be imported by a person other than the drug's manufacturer if the drug: (1) has the same active ingredients, route of administration, and strength as an approved drug; (2) may be lawfully marketed in, and is imported or reimported from, a country included on a list in this Act that the Food and Drug Administration determines has standards for ensuring drug safety and effectiveness that are at least as protective as U.S. st
+    ID=134 | ground_truth=Health | origem=train
+    Medical Electronic Data Technology Enhancement for Consumers’ Health Act or the MEDTECH Act (Sec. 2) This bill amends the Federal Food, Drug, and Cosmetic Act to exempt certain software from requirements for medical devices. The exemption applies to: administrative software used in health care facilities; software for maintaining or encouraging a healthy lifestyle unrelated to medical care; electronic patient records that are part of certified health information technology; software for transfer
+
+CLUSTER 5 | 212 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 108 (50.94%)
+  Social Welfare: 77 (36.32%)
+  Health: 6 (2.83%)
+  Civil Rights: 6 (2.83%)
+  Immigration: 3 (1.42%)
+  Exemplos de documentos:
+    ID=119 | ground_truth=Health | origem=train
+    Foster Youth Independence Act of 2015 This bill amends part E (Foster Care and Adoption Assistance) of title IV of the Social Security Act to allow the chief executive officer of a state to certify that the state will provide assistance and services under the John H. Chafee Foster Care Independence Program to youths who have aged out of foster care and have not attained age 23 if: the state has elected to extend the eligibility for foster care to all children up to age 21, or the responsible sta
+    ID=1299 | ground_truth=Civil Rights | origem=train
+    Positive Alternatives Act - Amends part A (Temporary Assistance for Needy Families) (TANF) of title IV of the Social Security Act to allow the use of TANF funds for alternative-to-abortion services, including: (1) information or counseling that promotes childbirth instead of abortion; and (2) other services designed to assist a woman to carry her unborn child to term.
+    ID=1354 | ground_truth=Civil Rights | origem=train
+    Amends part A (Temporary Assistance for Needy Families) (TANF) of title IV of the Social Security Act to eliminate the requirement that states collect Social Security numbers from applicants for recreational licenses.
+
+CLUSTER 6 | 468 documentos
+----------------------------------------------------------------------------------------------------
+  Technology: 272 (58.12%)
+  Domestic Commerce: 82 (17.52%)
+  Civil Rights: 39 (8.33%)
+  Government Operations: 14 (2.99%)
+  Health: 13 (2.78%)
+  Exemplos de documentos:
+    ID=120 | ground_truth=Health | origem=train
+    Fairness to Pet Owners Act of 2015 Directs the Federal Trade Commission to require prescribers of animal drugs to verify prescriptions and provide copies of prescriptions to pet owners, pet owner designees, and pharmacies, without the prescriber demanding payment or establishing other conditions. Applies these requirements to medication for a domesticated household animal that consumers are not allowed to purchase without a prescription. Treats a violation of this Act as an unfair or deceptive a
+    ID=136 | ground_truth=Health | origem=train
+    Fairness to Pet Owners Act of 2015 Directs the Federal Trade Commission to require prescribers of animal drugs to verify prescriptions and provide copies of prescriptions to pet owners, pet owner designees, and pharmacies, without the prescriber demanding payment or establishing other conditions. Treats a violation of this Act as an unfair or deceptive act or practice under the Federal Trade Commission Act.
+    ID=412 | ground_truth=Education | origem=train
+    Satellite Consumers' Access to Public Television Digital Programming Act of 2009 - Amends the Communications Act of 1934 to require a satellite carrier that offers multichannel video programming distribution service to over five million subscribers to retransmit the digital signals of each noncommercial educational television station that is located in any local U.S. market.
+
+CLUSTER 7 | 1817 documentos
+----------------------------------------------------------------------------------------------------
+  Education: 1386 (76.28%)
+  Social Welfare: 128 (7.04%)
+  Technology: 60 (3.30%)
+  Domestic Commerce: 33 (1.82%)
+  Environment: 32 (1.76%)
+  Exemplos de documentos:
+    ID=151 | ground_truth=Education | origem=train
+    College Student Relief Act of 2007 - Amends the Higher Education Act of 1965 to phase-in cuts in the interest rate charged undergraduate student borrowers under the Federal Family Education Loan (FFEL) and Direct Loan (DL) programs, thereby reducing such rate from 6.8% in July 2006 to 3.4% in July 2011. Limits FFEL lender insurance to 95% of the unpaid balance of such loans. (Currently, 97% of a FFEL issued after June 2006 is federally-insured.) Provides for graduated reductions in the percentag
+    ID=154 | ground_truth=Education | origem=train
+    Higher Education Science and Technology Competitiveness Act - Amends the Higher Education Act of 1965 to direct the Secretary of Education to award grants to public institutions of higher education to establish and implement statewide articulation agreements that provide a seamless transition for the transfer of students from two-year institutions to four-year institutions through a common core curricula in math, science, engineering, and technology that reflects the workforce needs of private i
+    ID=160 | ground_truth=Education | origem=train
+    Independent Study of Distance Education Act of 2007 - Directs the Secretary of Education to enter into an agreement with the National Academy of Sciences to evaluate the quality of distance education, as compared to campus-based education programs, at institutions of higher education. Requires the study to identify the types of students that derive the most benefit from each program and the types that do not benefit from distance education.
+
+CLUSTER 8 | 801 documentos
+----------------------------------------------------------------------------------------------------
+  Immigration: 449 (56.05%)
+  Defense: 158 (19.73%)
+  International Affairs: 34 (4.24%)
+  Law and Crime: 28 (3.50%)
+  Labor: 21 (2.62%)
+  Exemplos de documentos:
+    ID=289 | ground_truth=Education | origem=train
+    Amends the Immigration and Nationality Act to include among those aliens not subject to worldwide numerical immigrant limitations persons who have earned a master's or higher degree from a U.S. institution of higher education in science, technology, engineering, or mathematics and who have an employment offer from a U.S. employer in a field related to such degree.
+    ID=307 | ground_truth=Education | origem=train
+    Stopping Trained in America Ph.D.s From Leaving the Economy Act of 2008 or the STAPLE Act - Amends the Immigration and Nationality Act to exempt from: (1) direct numerical limitations aliens who have earned a Ph.D. degree in science, technology, engineering, or mathematics from a U.S. institution of higher education and who have an offer of employment from a U.S. employer in a field related to such degree; and (2) H-1B visa (specialty occupation) numerical limitations aliens who have earned a Ph
+    ID=385 | ground_truth=Education | origem=train
+    Amends the Immigration and Nationality Act to require that an alien seeking to enter the United States as a nonimmigrant foreign student (F visa) to study at a language training program enroll at a program that is accredited by an accrediting agency recognized by the Secretary of Education. Authorizes, during the three-year period after enactment of this Act, the granting of an F visa to an alien seeking to enter the United States to pursue a course of study at a language training program which 
+
+CLUSTER 9 | 1971 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 1451 (73.62%)
+  Government Operations: 349 (17.71%)
+  Environment: 40 (2.03%)
+  Defense: 31 (1.57%)
+  Energy: 21 (1.07%)
+  Exemplos de documentos:
+    ID=327 | ground_truth=Education | origem=train
+    Abraham Lincoln National Heritage Area Act - Establishes the Abraham Lincoln National Heritage Area in Illinois, which shall include: (1) a core area in central Illinois comprising 42 counties; (2) any sites, buildings, and districts within the core area that are recommended in the management plan; and (3) specified related historic sites, museums, and places, including the Lincoln Tomb State Historic Site, the Lincoln Douglas Debate Museum, and the Abraham Lincoln Presidential Library & Museum.
+    ID=1119 | ground_truth=Education | origem=train
+    (This measure has not been amended since it was introduced. The expanded summary of the House reported version is repeated here.) Protecting Veterans' Educational Choice Act of 2016 (Sec. 2) This bill requires Department of Veterans Affairs (VA) counselors who provide specified educational or vocational counseling services to provide a requesting veteran or member of the Armed Forces with information about the articulation agreements (agreements governing the transferability of credits toward me
+    ID=1336 | ground_truth=Civil Rights | origem=train
+    No Trespassing Act of 2008 - Bars the Secretary of the Interior from approving a management plan for a National Heritage Area unless the local coordinating entity of the proposed Area provides written notification through the mail of the designation to each individual who resides, or owns property that is located, in that Area. Prohibits any employee of the National Park Service (NPS) or member of the local coordinating entity of a National Heritage Area (including any designee of the NPS or the
+
+CLUSTER 10 | 187 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 139 (74.33%)
+  Defense: 40 (21.39%)
+  Public Lands: 5 (2.67%)
+  Education: 1 (0.53%)
+  Civil Rights: 1 (0.53%)
+  Exemplos de documentos:
+    ID=379 | ground_truth=Education | origem=train
+    Dr. Joseph Medicine Crow Congressional Gold Medal Act - Directs the Speaker of the House of Representatives and the President Pro Tempore of the Senate to make appropriate arrangements for the presentation of a congressional gold medal in commemoration of Dr. Joseph Medicine Crow to recognize his especially meritorious role as a warrior of the Crow Tribe, Army Soldier in World War II, tribal historian, and author.
+    ID=5442 | ground_truth=Defense | origem=train
+    Authorizes the award of a single Congressional Gold Medal to collectively honor the American soldiers who were prisoners of war in Bataan, Philippines, during World War II, in recognition of their personal sacrifice and service to their country. Provides for the Medal's display at the Smithsonian Institution. Expresses the sense of Congress that the Medal should be made available for display elsewhere, particularly at locations associated with the prisoners of war at Bataan.
+    ID=8496 | ground_truth=Public Lands | origem=train
+    Code Talkers Recognition Act - Directs the Speaker of the House of Representatives and the President pro tempore of the Senate to arrange for: (1) the award on behalf of Congress of a single gold medal of appropriate design to honor the Native American members of the U.S. Armed Forces, collectively, who served as Code Talkers in any foreign conflict in which the United States was involved during the 20th century for display in the Smithsonian Institution; and (2) presentation of a gold duplicate
+
+CLUSTER 11 | 88 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 35 (39.77%)
+  Macroeconomics: 33 (37.50%)
+  Government Operations: 13 (14.77%)
+  Transportation: 2 (2.27%)
+  Education: 1 (1.14%)
+  Exemplos de documentos:
+    ID=386 | ground_truth=Education | origem=train
+    Amends the Emergency Economic Stabilization Act to revise the limitation on the Secretary of the Treasury's authority to purchase troubled assets through the Troubled Assets Relief Program (TARP). Changes the Joint Resolution of Disapproval, regarding authority to purchase troubled assets, to a Joint Resolution of Approval. Prohibits the Secretary, that is, from exercising any authority to make any such purchases with regard to any TARP amount authorized, and unobligated as of November 14, 2008,
+    ID=6350 | ground_truth=Macroeconomics | origem=train
+    Amends the Internal Revenue Code to: (1) reduce to 0% the employment tax on employers, employees, and self-employed individuals during the first two months of 2009; and (2) exclude from gross income any wage and self-employment income earned during the first two months of 2009.Amends the Emergency Economic Stabilization Act of 2008 to repeal procedures for authorizing the Secretary of the Treasury to obligate additional amounts under the Troubled Asset Relief Program (TARP).Requires the Secretar
+    ID=6446 | ground_truth=Macroeconomics | origem=train
+    Amends the Internal Revenue Code to: (1) reduce to 0% the employment tax on employers, employees, and self-employed individuals in the first full two-month period after the enactment of this Act; and (2) exclude from gross income any wage and self-employment income earned during the same period .Amends the Emergency Economic Stabilization Act of 2008 to repeal procedures for authorizing the Secretary of the Treasury to obligate additional amounts under the Troubled Asset Relief Program (TARP).Re
+
+CLUSTER 12 | 187 documentos
+----------------------------------------------------------------------------------------------------
+  Civil Rights: 99 (52.94%)
+  Government Operations: 79 (42.25%)
+  Education: 3 (1.60%)
+  Domestic Commerce: 2 (1.07%)
+  Defense: 1 (0.53%)
+  Exemplos de documentos:
+    ID=297 | ground_truth=Education | origem=train
+    Student Voter Opportunity To Encourage Registration Act of 2008 or the Student VOTER Act of 2008 - Amends the National Voter Registration Act of 1993 to require states to designate federally-funded institutions of higher education as agencies for the registration of voters in federal elections. Requires such schools to provide mail voter registration application forms to students registering to enroll in their courses.
+    ID=388 | ground_truth=Education | origem=train
+    Bipartisan Electronic Voting Reform Act of 2008 - Amends the Help America Vote Act of 2002 to require any voting system other than one using paper ballots personally marked by the voter to permit independent verification of cast ballots by various specified means, including paper or electronic. Requires each state to conduct an audit of every federal election to ensure that each certificate of election is justified by the vote totals. Directs the Federal Election Commission to establish an Audit
+    ID=535 | ground_truth=Education | origem=train
+    Student Voter Opportunity To Encourage Registration Act of 2009 or the Student VOTER Act of 2009 - Amends the National Voter Registration Act of 1993 to require states to designate federally-funded institutions of higher education as agencies for the registration of voters in federal elections. Requires such schools to provide mail voter registration application forms to students registering to enroll in their courses.
+
+CLUSTER 13 | 102 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 74 (72.55%)
+  Education: 9 (8.82%)
+  Social Welfare: 5 (4.90%)
+  Government Operations: 3 (2.94%)
+  Public Lands: 2 (1.96%)
+  Exemplos de documentos:
+    ID=441 | ground_truth=Education | origem=train
+    Adult Education and Economic Growth Act of 2009 - Amends the Workforce Investment Act of 1988 to revise requirements for statewide and local workforce investment systems to include adult education activities. Revises member composition of: (1) state workforce investment boards to include state representatives responsible for implementing adult education, literacy, and workplace skills programs under the Adult Education and Family Literacy Act (AEFLA); and (2) youth councils established by local 
+    ID=497 | ground_truth=Education | origem=train
+    Amends the Workforce Investment Act of 1998 to require the Secretary of Labor to award competitive grants to states to provide funds to local boards for provision of technical school training subsidies in local areas through one-stop delivery systems to pay tuition costs for the career and technical education of unemployed individuals enrolled or accepted at a technical school. Limits the aggregate amount of subsidies to an individual to $2,000.
+    ID=789 | ground_truth=Education | origem=train
+    Adult Education and Economic Growth Act - Amends the Workforce Investment Act of 1988 to revise requirements for statewide and local workforce investment systems to include adult education activities. Replaces statewide and local workforce investment systems with adult education and workforce investment systems. Revises member composition of: (1) state workforce investment boards to include the lead state agency officials with particular responsibility for implementing adult education and litera
+
+CLUSTER 14 | 1651 documentos
+----------------------------------------------------------------------------------------------------
+  Foreign Trade: 1594 (96.55%)
+  Agriculture: 12 (0.73%)
+  International Affairs: 11 (0.67%)
+  Domestic Commerce: 8 (0.48%)
+  Transportation: 6 (0.36%)
+  Exemplos de documentos:
+    ID=550 | ground_truth=Education | origem=train
+    Amends the Harmonized Tariff Schedule of the United States to suspend temporarily the duty on certain yard ornaments depicting school mascots.
+    ID=684 | ground_truth=Education | origem=train
+    Amends the Harmonized Tariff Schedule of the United States to extend the temporary suspension of duty on certain educational toys or devices.
+    ID=3912 | ground_truth=Environment | origem=train
+    Strengthening America's Trade Laws Act - Allows, under specified conditions, certain U.S. persons supportive of the government's position before a dispute settlement panel or Appellate Body of the World Trade Organization (WTO) to participate in consultations and panel or Appellate Body proceedings. Establishes the Congressional Advisory Commission on WTO Dispute Settlement to provide advice to Congress on the operation of the WTO dispute settlement system. Amends the Uruguay Round Agreements Ac
+
+CLUSTER 15 | 412 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 212 (51.46%)
+  Government Operations: 149 (36.17%)
+  Health: 13 (3.16%)
+  Social Welfare: 7 (1.70%)
+  Public Lands: 6 (1.46%)
+  Exemplos de documentos:
+    ID=665 | ground_truth=Education | origem=train
+    Budget Control Act of 2011 - Title I: Ten-Year Discretionary Caps with Sequester - (Sec. 101) Amends the Balanced Budget and Emergency Deficit Control Act of 1985 (Gramm-Rudman-Hollings Act) to revise sequestration requirements for enforcement of discretionary spending limits (spending caps). Requires the Office of Management and Budget (OMB) to conduct such a sequestration to eliminate a budget year breach, if any. Eliminates specific formula requirements for adjustments to discretionary spendi
+    ID=1413 | ground_truth=Civil Rights | origem=train
+    Taxpayers Right-To-Know Act - Requires the head of each federal agency, on an annual basis, to: (1) identify and describe every program administered by such agency; (2) determine the total administrative expenses and expenditures for services for each program; (3) estimate the number of clients served by each program and the beneficiaries who received assistance under each program; (4) estimate the number of full-time federal and contract employees who administer each program; and (5) identify f
+    ID=1436 | ground_truth=Civil Rights | origem=train
+    Budget Control Act of 2011 - Title I: Ten-Year Discretionary Caps with Sequester - (Sec. 101) Amends the Balanced Budget and Emergency Deficit Control Act of 1985 (Gramm-Rudman-Hollings Act) to revise sequestration requirements for enforcement of discretionary spending limits (spending caps). Requires the Office of Management and Budget (OMB) to conduct such a sequestration to eliminate a budget year breach, if any. Eliminates specific formula requirements for adjustments to discretionary spendi
+
+CLUSTER 16 | 355 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 263 (74.08%)
+  Government Operations: 21 (5.92%)
+  Education: 20 (5.63%)
+  Health: 11 (3.10%)
+  Civil Rights: 9 (2.54%)
+  Exemplos de documentos:
+    ID=275 | ground_truth=Education | origem=train
+    Makes emergency appropriations for FY2008 for state and local law enforcement assistance under the Edward Byrne Memorial Justice Assistance Grant program.
+    ID=298 | ground_truth=Education | origem=train
+    Center to Advance, Monitor, and Preserve University Security Safety Act of 2008, or the CAMPUS Safety Act of 2008 - Amends the Omnibus Crime Control and Safe Streets Act of 1968 to authorize the Director of the Office of Community Oriented Policing Services to establish and operate a National Center for Campus Public Safety. Tasks the Center with strengthening the safety and security of institutions of higher education (IHEs) by: (1) training IHE public safety agencies and their collaborative pa
+    ID=382 | ground_truth=Education | origem=train
+    Emmett Till Unsolved Civil Rights Crime Act of 2008 - Directs the Attorney General to designate a Deputy Chief in the Criminal Section of the Civil Rights Division of the Department of Justice (DOJ). Makes the Deputy Chief responsible for investigating and prosecuting violations of criminal civil rights statutes in which the alleged violation occurred before January 1, 1970 and resulted in death. Directs the Attorney General to designate a Supervisory Special Agent in the Civil Rights Unit of th
+
+CLUSTER 17 | 123 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 76 (61.79%)
+  Civil Rights: 23 (18.70%)
+  Law and Crime: 8 (6.50%)
+  International Affairs: 8 (6.50%)
+  Domestic Commerce: 3 (2.44%)
+  Exemplos de documentos:
+    ID=1263 | ground_truth=Civil Rights | origem=train
+    NSA Oversight Act - States that provisions of the federal criminal code concerning wire and electronic communications and their interception and the Foreign Intelligence Surveillance Act of 1978 (FISA) are the exclusive means by which domestic electronic surveillance may be conducted until specific statutory authorization for any other such surveillance is enacted. Requires the President to report to the congressional intelligence committees on the Terrorist Surveillance Program of the National 
+    ID=1325 | ground_truth=Civil Rights | origem=train
+    National Security Letter Reform Act of 2007 or the NSL Reform Act of 2007 - Amends the federal criminal code, the Right to Financial Privacy Act of 1978, and the Fair Credit Reporting Act to establish new criteria for the use of National Security Letters issued by the Federal Bureau of Investigation (FBI) to wire or electronic communications service providers, financial institutions, and consumer credit reporting agencies for the production of specified records and information about customers or
+    ID=1366 | ground_truth=Civil Rights | origem=train
+    Judicious Use of Surveillance Tools In Counterterrorism Efforts Act of 2009 or the JUSTICE Act - Revises requirements for the issuance of and public reporting on national security letters and for judicial review of requirements for nondisclosure of the receipt of a national security letter. Amends the Foreign Intelligence Surveillance Act of 1978 (FISA) to revise requirements for obtaining orders for business records in counterterrorism investigations. Amends the federal criminal code to reduce 
+
+CLUSTER 18 | 539 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 419 (77.74%)
+  Civil Rights: 32 (5.94%)
+  Health: 19 (3.53%)
+  Domestic Commerce: 13 (2.41%)
+  International Affairs: 13 (2.41%)
+  Exemplos de documentos:
+    ID=1272 | ground_truth=Civil Rights | origem=train
+    Child Interstate Abortion Notification Act - Amends the federal criminal code to prohibit transporting a minor child across a state line to obtain an abortion (deems such transporting to be a de facto abridgment of the right of a parent under any law in the minors state of residence that requires parental involvement in the minors abortion decision). Makes an exception for an abortion necessary to safe the life of the minor. Makes it an affirmative defense to a prosecution or civil action unde
+    ID=1292 | ground_truth=Civil Rights | origem=train
+    Consumer Cellphone Number Distribution Protection Act of 2007 - Amends the federal criminal code to impose a fine and/or prison term of up to six months for knowingly disclosing a wireless subscriber's unlisted cell phone number to another, for gain, without the express permission of such subscriber.
+    ID=1332 | ground_truth=Civil Rights | origem=train
+    Child Custody Protection Act - Amends the federal criminal code to prohibit transporting a minor child across a state line to obtain an abortion (deems such transporting to be a de facto abridgment of the right of a parent under any law in the minors state of residence that requires parental involvement in the minors abortion decision). Makes an exception for an abortion necessary to safe the life of the minor. Makes it an affirmative defense to a prosecution or civil action under this Act tha
+
+CLUSTER 19 | 173 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 140 (80.92%)
+  Public Lands: 10 (5.78%)
+  Defense: 4 (2.31%)
+  Government Operations: 3 (1.73%)
+  Transportation: 3 (1.73%)
+  Exemplos de documentos:
+    ID=1276 | ground_truth=Civil Rights | origem=train
+    Amends the Privacy Act of 1974 to authorize the disclosure to government agencies of Federal Emergency Management Agency (FEMA) records on assistance provided to individuals in connection with a major disaster or emergency for purposes of complying with a federal or state sex offender registry or notification law. Conditions receipt of federal funds by non-governmental organizations under the Robert T. Stafford Disaster Relief and Emergency Assistance Act on the organization providing assurances
+    ID=2422 | ground_truth=Public Lands | origem=train
+    Dam Rehabilitation and Repair Act of 2007 - Amends the National Dam Safety Program Act to require the Administrator of the Federal Emergency Management Agency (FEMA) to establish a program to provide grant assistance to states for use in rehabilitating publicly-owned dams that fail to meet minimum safety standards and pose an unacceptable risk to the public (deficient dams). Sets forth provisions regarding procedures for grant awards and fund allocation. Requires the Administrator to develop a r
+    ID=2444 | ground_truth=Public Lands | origem=train
+    Dam Rehabilitation and Repair Act of 2007 - Amends the National Dam Safety Program Act to require the Federal Emergency Management Agency (FEMA) to establish a program to provide grant assistance to states for use in rehabilitating publicly-owned dams that fail to meet minimum safety standards and pose an unacceptable risk to the public (deficient dams). Sets forth provisions regarding procedures for grant awards and fund allocation. Requires FEMA to develop a risk-based priority system for iden
+
+CLUSTER 20 | 158 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 105 (66.46%)
+  Housing: 21 (13.29%)
+  Macroeconomics: 13 (8.23%)
+  Government Operations: 12 (7.59%)
+  Energy: 5 (3.16%)
+  Exemplos de documentos:
+    ID=1341 | ground_truth=Civil Rights | origem=train
+    Amends the Federal Housing Enterprises Financial Safety and Soundness Act of 1992, as amended by the Federal Housing Finance Regulatory Reform Act of 2008, to require the Director of the Federal Housing Finance Agency to prohibit any golden parachute payment on or after enactment of this Act with respect to any executive officer or director of: (1) the Federal National Mortgage Association (Fannie Mae) and any affiliate; (2) Federal Home Loan Mortgage Corporation (Freddie Mac) and any affiliate;
+    ID=1597 | ground_truth=Civil Rights | origem=train
+    Fannie Mae and Freddie Mac Transparency Act of 2015 Requires either the Federal National Mortgage Association (Fannie Mae) or the Federal Home Loan Mortgage Corporation (Freddie Mac) to be considered an agency subject to the public information disclosure requirements of the Freedom of Information Act during any period in which such entity is under conservatorship or receivership.
+    ID=6345 | ground_truth=Macroeconomics | origem=train
+    Reliable Economic Stabilization, Capital Utilization, and Enterprise Reform Act of 2008 - Amends the Internal Revenue Code to: (1) exclude from gross income gain from the sale of certain residential or commercial mortgages and related securities issued on or before March 14, 2008, and acquired before January 1, 2010; (2) extend the carryback period for net operating losses to five years; (3) provide an increased dividends received tax deduction for corporations with overseas operations that make
+
+CLUSTER 21 | 120 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 97 (80.83%)
+  Civil Rights: 7 (5.83%)
+  Defense: 4 (3.33%)
+  Domestic Commerce: 3 (2.50%)
+  Technology: 3 (2.50%)
+  Exemplos de documentos:
+    ID=1280 | ground_truth=Civil Rights | origem=train
+    Federal Agency Data Breach Protection Act - Amends federal law governing public printing and documents to instruct the Director of Office of Management and Budget (OMB) to establish policies, procedures, and standards for agencies to follow in the event of a breach of data security involving disclosure of sensitive personal information for which harm to an individual could reasonably be expected to result. Requires such policies and procedures to include: (1) timely notification to individuals w
+    ID=1306 | ground_truth=Civil Rights | origem=train
+    Paperwork Assistance Act - Requires a federal agency to inform any person receiving a collection of information from the agency of the agency's contact information, including a website and a telephone number, by which a person may obtain a specific contact person responsible for answering questions about the information collection and other information to assist in responding to the information collection.Requires the Director of the Office of Management and Budget (OMB) to include in the Direct
+    ID=1417 | ground_truth=Civil Rights | origem=train
+    Federal Information Security Amendments Act of 2012 - (Sec. 2) Amends the Federal Information Security Management Act of 2002 (FISMA) to reestablish the oversight authority of the Director of the Office of Management and Budget (OMB) with respect to agency information and security policies and practices. Extends the security requirements of federal agencies to include responsibilities for: (1) complying with computer standards developed by the National Institute of Standards and Technology (NIST
+
+CLUSTER 22 | 349 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 308 (88.25%)
+  Public Lands: 18 (5.16%)
+  Transportation: 8 (2.29%)
+  Agriculture: 4 (1.15%)
+  Energy: 3 (0.86%)
+  Exemplos de documentos:
+    ID=1425 | ground_truth=Civil Rights | origem=train
+    Farmer's Privacy Act of 2012 - Prohibits the Administrator of the Environmental Protection Agency (EPA), in exercising any authority under the Federal Water Pollution Control Act (commonly known as the Clean Water Act), from conducting aerial surveillance of agricultural land unless the Administrator has: (1) obtained the voluntary written consent of the owner or operator of the land to be surveilled, and (2) obtained from the U.S. District Court for the District of Columbia a certification of r
+    ID=1426 | ground_truth=Civil Rights | origem=train
+    Prohibits the Administrator of the Environmental Protection Agency (EPA) from conducting aerial surveillance in exercising any authority under the Federal Water Pollution Control Act (commonly known as the Clean Water Act) for one year after enactment of this Act.
+    ID=2433 | ground_truth=Public Lands | origem=train
+    Healthy Communities Water Supply Act of 2007 - Amends the Federal Water Pollution Control Act to authorize appropriations for the pilot program for alternative water source projects. Requires the Administrator of the Environmental Protection Agency (EPA), in making grants under the program, to consider whether a project is located in an area which is served by a public water system serving 10,000 individuals or fewer. Prohibits the funds authorized by this Act from being used to lobby government
+
+CLUSTER 23 | 83 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 71 (85.54%)
+  Domestic Commerce: 9 (10.84%)
+  Environment: 2 (2.41%)
+  Civil Rights: 1 (1.20%)
+  Exemplos de documentos:
+    ID=1491 | ground_truth=Civil Rights | origem=train
+    Achieving Less Excess in Regulation and Requiring Transparency Act of 2014 or the ALERRT Act of 2014 - Title I: All Economic Regulations Are Transparent Act - All Economic Regulations are Transparent Act of 2014 or the ALERT Act of 2014 - (Sec. 102) Requires the head of each federal agency to submit a monthly report to the Administrator of the Office of Information and Regulatory Affairs of the Office of Management and Budget (OMB) for each rule such agency expects to propose or finalize during 
+    ID=10825 | ground_truth=Domestic Commerce | origem=train
+    Small Business Regulatory Improvement Act - Revises the Regulatory Flexibility Act. Defines the "economic impact" of a rule to include any direct or indirect economic effects on small entities. Requires initial regulatory flexibility analyses of a proposed rule to contain a detailed statement describing the type of small entities to which the proposed rule will apply.Revises provisions requiring the publication by each agency of a plan for the periodic review of its rules that have a significant
+    ID=10873 | ground_truth=Domestic Commerce | origem=train
+    Independent Office of Advocacy and Small Business Regulatory Reform Act of 2008 - Requires the Office of Advocacy (Office) of the Small Business Administration (SBA) to carry out responsibilities concerning the analysis of regulatory functions, including regulatory flexibility analyses. Requires: (1) each federal budget to include a separate statement of the amount requested for the Office, designated in a separate account in the General Fund of the Treasury; and (2) the SBA Administrator to pro
+
+CLUSTER 24 | 252 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 211 (83.73%)
+  Environment: 26 (10.32%)
+  Defense: 5 (1.98%)
+  Domestic Commerce: 5 (1.98%)
+  Government Operations: 3 (1.19%)
+  Exemplos de documentos:
+    ID=2408 | ground_truth=Public Lands | origem=train
+    San Joaquin River Restoration Settlement Act - Directs the Secretary of the Interior to implement the terms and conditions of the Stipulation of Settlement dated September 13, 2006, in Natural Resources Defense Council, et al. v. Kirk Rodgers, et al., in cooperation with the state of California, including measures to: (1) design and construct channel and structural improvements; (2) modify Friant Dam operations to provide Restoration Flows and Interim Flows; (3) acquire water, water rights, or o
+    ID=2409 | ground_truth=Public Lands | origem=train
+    Authorizes the Secretary of the Interior (the Secretary) to construct, operate, and maintain a project to provide water for irrigation, municipal, domestic, military, and other uses from the Santa Margarita River, California, in accordance with the final feasibility report and environmental reviews for the project and this Act. Authorizes project construction only after the Secretary determines that: (1) the Fallbrook Public Utility District, San Diego County, and the Navy have entered into cont
+    ID=2410 | ground_truth=Public Lands | origem=train
+    Eastern Municipal Water District Recycled Water System Pressurization and Expansion Project - Amends the Reclamation Wastewater and Groundwater Study and Facilities Act to authorize the Secretary of the Interior, in cooperation with the Eastern Municipal Water District, California, to participate in the design, planning, and construction of permanent facilities needed to establish operational pressure zones that will be used to provide recycled water in the district. Limits the federal share to 
+
+CLUSTER 25 | 24 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 15 (62.50%)
+  Public Lands: 9 (37.50%)
+  Exemplos de documentos:
+    ID=2456 | ground_truth=Public Lands | origem=train
+    Replaces the map subtitled "FL-64P," relating to the Coastal Barrier Resources System unit designated as Coastal Barrier Resources System Clam Pass Unit FL-64P, that is included in the set of maps entitled "Coastal Barrier Resources System" and referred to in the Coastal Barrier Resources Act, with another map relating to that unit entitled "Coastal Barrier Resources System Clam Pass Unit, FL-64P", and dated July 21, 2005.
+    ID=2489 | ground_truth=Public Lands | origem=train
+    Replaces the John H. Chafee Coastal Barrier Resources System map subtitled "Daufuski Island Unit M13 Turtle Island Unit SC-10P" with another map.
+    ID=2501 | ground_truth=Public Lands | origem=train
+    Replaces the John H. Chafee Coastal Barrier Resources System map "Captain Sam's Inlet Unit M08" (an area in South Carolina) with a map of the unit entitled "John H. Chafee Coastal Barrier Resources System Captain Sam's Inlet Unit M08," increasing the size of the unit.
+
+CLUSTER 26 | 14 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 7 (50.00%)
+  Public Lands: 5 (35.71%)
+  Energy: 2 (14.29%)
+  Exemplos de documentos:
+    ID=2475 | ground_truth=Public Lands | origem=train
+    Energy and Water Development and Related Agencies Appropriations Act, 2008 - Title I: Corps of Engineers-Civil - Makes FY 2008 appropriations for: (1) the U.S. Army Corps of Engineers for civil functions pertaining to rivers and harbors, flood and storm damage reduction, and aquatic ecosystem restoration; (2) general investigations and construction (including rescissions of funds); (3) flood damage reduction for the Mississippi River alluvial valley below Cape Girardeau, Missouri; (4) operation,
+    ID=2605 | ground_truth=Public Lands | origem=train
+    Energy and Water Development and Related Agencies Appropriations Act, 2010 - Makes appropriations for energy and water development and related agencies for FY2010. Title I: Corps of Engineers-Civil - Makes appropriations for FY2010 to the Department of the Army, Corps of Engineers-Civil, for: (1) civil functions pertaining to rivers and harbors, flood and storm damage reduction, shore protection, and aquatic ecosystem restoration (including the Mississippi River alluvial valley below Cape Girard
+    ID=2671 | ground_truth=Public Lands | origem=train
+    Energy and Water Development and Related Agencies Appropriations Act, 2012 - Makes appropriations for energy and water development and related agencies for FY2012. Title I: Corps Of Engineers - Civil - Appropriates funds to the Department of the Army, Corps of Engineers-Civil, for: (1) civil functions pertaining to rivers and harbors, flood and storm damage reduction, shore protection, and aquatic ecosystem restoration (including the Mississippi River alluvial valley below Cape Girardeau, Missou
+
+CLUSTER 27 | 100 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 84 (84.00%)
+  Public Lands: 10 (10.00%)
+  International Affairs: 5 (5.00%)
+  Agriculture: 1 (1.00%)
+  Exemplos de documentos:
+    ID=2510 | ground_truth=Public Lands | origem=train
+    California Drought Alleviation Act of 2008 - Directs the Secretary of the Interior: (1) within 30 days after the declaration of a drought emergency by the governor of California, to make a written determination as to the existence of a drought emergency for Central Valley Project and State Water Project service areas; and (2) upon determining such an emergency exists, to temporarily exempt operations of the C.W. "Bill" Jones and Harvey O. Banks Pumping Plants from prohibitions under the Endanger
+    ID=2611 | ground_truth=Public Lands | origem=train
+    Requires the Commissioner of the Bureau of Reclamation to initiate (and conclude within 90 days) consultation with the Secretary of the Interior and the Secretary of Commerce on the existing and proposed operations of the Central Valley Project and the California State Water Project, including regarding all endangered, threatened, and candidate species listed under the Endangered Species Act affected by such proposed operations. Requires the Secretaries to: (1) identify, analyze, and describe al
+    ID=2626 | ground_truth=Public Lands | origem=train
+    Species Rescue Act - Amends the Endangered Species Act of 1973 to provide for expedited consultation and conferencing (within 60 days of the date on which initiated) with respect to impacts on endangered or threatened species of federal agency flood control actions. Directs the Secretary of the Interior or of Commerce, as appropriate, acting through the Fish and Wildlife Service, any other federal land management agency, the National Marine Fisheries Service, or a state conservation agency, to r
+
+CLUSTER 28 | 107 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 57 (53.27%)
+  Energy: 10 (9.35%)
+  Government Operations: 9 (8.41%)
+  Defense: 7 (6.54%)
+  Health: 6 (5.61%)
+  Exemplos de documentos:
+    ID=468 | ground_truth=Education | origem=train
+    Dr. Rita Hocog Inos Fellowship Act - Directs the Secretary of the Interior to establish the Dr. Rita Hocog Inos Fellowship Program to award local government and federal government fellowships to qualified students from the Commonwealth of the Northern Mariana Islands. Defines a "qualified student" as a student who is a U.S. citizen, domiciled in that Commonwealth, and enrolled in a degree or certificate program at an institution of higher education. Allows a fellow to receive either a specified 
+    ID=470 | ground_truth=Education | origem=train
+    Northern Mariana Islands College Access Act of 2010 - Directs the Governor of the Northern Mariana Islands to use federal funds authorized by this Act to award grants to public four-year institutions of higher education (IHEs) located in the states, the District of Columbia, Puerto Rico, or Guam to cover the difference between the in-state and out-of-state tuition and fees for students who have: (1) been domiciled in the Northern Mariana Islands for at least the 12 months preceding their enrollm
+    ID=1237 | ground_truth=Education | origem=train
+    (This measure has not been amended since it was passed by the House on June 9, 2016. The summary of that version is repeated here.) Puerto Rico Oversight, Management, and Economic Stability Act or PROMESA This bill addresses Puerto Rico's debt by establishing an oversight board, a process for restructuring debt, and expedited procedures for approving critical infrastructure projects. (Sec. 2) The effective date of this bill is the date of enactment. Title III (Adjustments of Debts) only applies 
+
+CLUSTER 29 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 4 (40.00%)
+  Health: 2 (20.00%)
+  Social Welfare: 2 (20.00%)
+  Public Lands: 1 (10.00%)
+  Government Operations: 1 (10.00%)
+  Exemplos de documentos:
+    ID=2654 | ground_truth=Public Lands | origem=train
+    Realize America's Maritime Promise Act or the RAMP Act - Requires the total budget resources for expenditures from the Harbor Maintenance Trust Fund for harbor maintenance programs to equal the level of receipts plus interest credited to such Fund for that fiscal year. Limits the use of such resources to such programs only. Declares that it shall be out of order in the House of Representatives or the Senate to consider any bill, joint resolution, amendment, motion, or conference report that woul
+    ID=3272 | ground_truth=Health | origem=train
+    Social Security and Medicare Protection Act - Amends the Congressional Budget Act of 1974 to make it out of order in the House of Representatives or the Senate to consider any concurrent resolution on the budget (or related measure) that would set forth a surplus for any fiscal year less than the surplus of the Federal Hospital Insurance Trust Fund for that fiscal year. Creates an exception to such point of order if a violation of it would result from an assumption in the measure of an increase 
+    ID=8246 | ground_truth=Transportation | origem=train
+    Harbor Maintenance Act of 2010 - Requires the total budget resources for expenditures from the Harbor Maintenance Trust Fund for harbor maintenance programs to equal the level of receipts plus interest credited to such Fund for that fiscal year. Limits the use of such resources to such programs only. Declares that it shall be out of order in the House of Representatives or the Senate to consider any bill, joint resolution, amendment, motion, or conference report that would cause total budget res
+
+CLUSTER 30 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 4 (40.00%)
+  Domestic Commerce: 3 (30.00%)
+  Labor: 2 (20.00%)
+  International Affairs: 1 (10.00%)
+  Exemplos de documentos:
+    ID=3670 | ground_truth=Health | origem=train
+    Small Business Tax Credit Accessibility Act - Expresses the sense of the Senate that the Obama Administration should work to make the small employer health care insurance tax credit more accessible for small employers. Amends the Internal Revenue Code, with respect to the small employer health care insurance tax credit, to: (1) revise the definition of "eligible small employer" to mean an employer with not more than 50 (currently, 25) full-time employees; (2) modify the phaseout formula for such
+    ID=3802 | ground_truth=Health | origem=train
+    Small Business Tax Credit Accessibility Act Amends the Internal Revenue Code, with respect to the small employer health care insurance tax credit, to: (1) revise the definition of "eligible small employer" to mean an employer with not more than 50 (currently, 25) full-time employees; (2) modify the phaseout formula for such credit to base such phaseout on number of employees and average annual wages; (3) extend from two to three consecutive taxable years the period during which an employer may c
+    ID=11198 | ground_truth=Domestic Commerce | origem=train
+    Helping Entrepreneurs Lower Prices Act of 2014 - Amends the Internal Revenue Code to revise the definition of "eligible small employer," for purposes of the small employer health insurance tax credit, to mean an employer who has not more than 50 (currently, 25) full-time employees for a taxable year.
+
+CLUSTER 31 | 18 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 18 (100.00%)
+  Exemplos de documentos:
+    ID=4276 | ground_truth=Government Operations | origem=train
+    U.S. Postal Service Improvements Act of 2010 - Directs the Office of Personnel Management (OPM) to make a determination or redetermination of postal surplus or supplemental liability consistent with the report submitted by the Postal Regulatory Commission to the United States Postal Service (USPS) and Congress on June 29, 2010. Requires OPM to redetermine the postal surplus or supplemental liability as of the close of FY2010 and for each year thereafter through FY2043. Provides that if the resul
+    ID=4279 | ground_truth=Government Operations | origem=train
+    United States Postal Service Pension Obligation Recalculation and Restoration Act of 2011 - Prescribes the "average pay" and the appropriate percentage thereof to be used in determining annuities for civilian employment with the United States Postal Service (USPS) for purposes of provisions relating to future benefits attributable to such employment in order to calculate the amount of any USPS surplus or supplemental liability under the Civil Service Retirement System. Requires the Office of Per
+    ID=4285 | ground_truth=Government Operations | origem=train
+    Innovate to Deliver Act of 2011 - Authorizes the United States Postal Service (USPS) to: (1) provide nonpostal services (e.g., check-cashing services, warehousing, public internet access services) using USPS infrastructure in a manner consistent with the public interest, and (2) invest excess moneys of the Competitive Products Fund. Requires the USPS Board of Governors to ensure that the rates and fees charged by USPS are at least equal to the total costs for providing postal services. Repeals t
+
+CLUSTER 32 | 24 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 12 (50.00%)
+  Immigration: 5 (20.83%)
+  Law and Crime: 4 (16.67%)
+  Education: 1 (4.17%)
+  Housing: 1 (4.17%)
+  Exemplos de documentos:
+    ID=645 | ground_truth=Education | origem=train
+    Fulfilling Our Promise to Student Veterans Act of 2012 - Amends the Duncan Hunter National Defense Authorization Act for Fiscal Year 2009 to include among the members and former members of the Armed Forces authorized to request the correction of erroneous Army College Fund benefit amounts those members serving on active duty at the time the request is submitted. Reauthorizes through 2015 any payments required in connection with such corrections.
+    ID=4792 | ground_truth=Defense | origem=train
+    Amends the Ronald W. Reagan National Defense Authorization Act for Fiscal Year 2005 to extend the period during which members of the Armed Forces deployed in connection with Operations Noble Eagle, Enduring Freedom, or Iraqi Freedom may request and receive reimbursement for purchasing protective helmet pads.
+    ID=5015 | ground_truth=Defense | origem=train
+    Private First Class Billy MacLeod Respectful Return Act - Amends the John Warner National Defense Authorization Act for Fiscal Year 2007 to provide that requirements for the military transportation to the United States of the remains of a member of the Armed Forces who dies in a combat theater of operations shall also apply to the remains of any member found after the date of enactment of this Act in any theater of U.S. combat operations since April 6, 1917, who died while participating in such 
+
+CLUSTER 33 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 4 (40.00%)
+  Public Lands: 2 (20.00%)
+  Foreign Trade: 2 (20.00%)
+  Labor: 1 (10.00%)
+  Energy: 1 (10.00%)
+  Exemplos de documentos:
+    ID=6159 | ground_truth=Macroeconomics | origem=train
+    Stop Tax Haven Abuse Act - Amends Internal Revenue Code provisions relating to tax shelter activities to: (1) establish legal presumptions against the validity of transactions involving offshore secrecy jurisdictions (i.e., foreign tax havens identified in this Act and by the Commissioner of the Internal Revenue Service); (2) impose restrictions on foreign jurisdictions, financial institutions, or international transactions that are of primary money laundering concern or that impede U.S. tax enf
+    ID=6488 | ground_truth=Macroeconomics | origem=train
+    Stop Tax Haven Abuse Act - Amends Internal Revenue Code provisions relating to tax shelter activities to: (1) establish legal presumptions against the validity of transactions involving offshore secrecy jurisdictions (i.e., foreign tax havens identified in this Act and by the Secretary of the Treasury); (2) impose restrictions on foreign jurisdictions, financial institutions, or international transactions that are of primary money laundering concern or that impede U.S. tax enforcement; (3) treat
+    ID=6838 | ground_truth=Macroeconomics | origem=train
+    Stop Tax Haven Abuse Act - Authorizes the Secretary of the Treasury to impose restrictions on foreign jurisdictions or financial institutions operating in the United States that are of prime money laundering concern or that impede U.S. tax enforcement. Amends the Internal Revenue Code to: (1) establish a rebuttable presumption against the validity of transactions by institutions that do not comply with reporting requirements under the Foreign Account Tax Compliance Act (FATCA), (2) treat certain
+
+CLUSTER 34 | 56 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 51 (91.07%)
+  Macroeconomics: 4 (7.14%)
+  Energy: 1 (1.79%)
+  Exemplos de documentos:
+    ID=6592 | ground_truth=Macroeconomics | origem=train
+    Unemployment Compensation Extension Act of 2010 - (Sec. 2) Amends the Supplemental Appropriations Act, 2008 with respect to the state-established individual emergency unemployment compensation account (EUCA). Extends the final date for entering a federal-state agreement under the Emergency Unemployment Compensation (EUC) program through November 30, 2010. Postpones the termination of the program until April 30, 2011. Amends the Assistance for Unemployed Workers and Struggling Families Act to ext
+    ID=25236 | ground_truth=Energy | origem=train
+    Creating Opportunities for America's Laid-off (COAL) Miners Act of 2016 This bill allows certain states in which the coal mining and related industries have been adversely impacted by regulations promulgated by the Environmental Protection Agency (EPA) or the Department of the Interior to enter into and participate in a specified agreement with the Department of Labor. These states shall include: Alabama; Illinois; Indiana; Kentucky; Ohio; Pennsylvania; Tennessee; Virginia; Wyoming; and any othe
+    ID=25271 | ground_truth=Labor | origem=train
+    Safety Net Enhancement Act - Amends the Federal-State Extended Unemployment Compensation Act of 1970 to revise the federal-state extended unemployment compensation program established under the Social Security Act (SSA) to revise the formula for "on" and "off" indicators on the state level used to determine extended unemployment compensation benefit periods. Amends the SSA to require: (1) an increase in earnings credited to a state account in the Unemployment Trust Fund when a state meets fundin
+
+CLUSTER 35 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Social Welfare: 6 (46.15%)
+  Macroeconomics: 5 (38.46%)
+  Domestic Commerce: 2 (15.38%)
+  Exemplos de documentos:
+    ID=6275 | ground_truth=Macroeconomics | origem=train
+    Federal Tax Withholding Act of 2008 - Amend the Internal Revenue Code to repeal withholding of tax requirements for income, railroad retirement, and social security taxes. Requires estimated tax payments for social security and railroad retirement taxes.
+    ID=6478 | ground_truth=Macroeconomics | origem=train
+    Amends the Internal Revenue Code to repeal, effective January 1, 2009, the 1993 increase in income taxes on Social Security benefits.
+    ID=6521 | ground_truth=Macroeconomics | origem=train
+    Federal Withholding Tax Repeal Act of 2009 - Repeals provisions of the Internal Revenue Code requiring withholding of income, social security, and railroad retirement taxes from wages.
+
+CLUSTER 36 | 8 documentos
+----------------------------------------------------------------------------------------------------
+  Immigration: 6 (75.00%)
+  Labor: 2 (25.00%)
+  Exemplos de documentos:
+    ID=7256 | ground_truth=Immigration | origem=train
+    Security Through Regularized Immigration and a Vibrant Economy Act of 2007 or STRIVE Act of 2007- Prohibits the Secretary of Homeland Security from implementing the New Worker Program established in title IV or grant conditional nonimmigrant classification under title VI of this Act prior to certification to the President and to Congress that specified conditions have been met respecting: (1) border security; (2) document security; and (3) first phase implementation of the electronic employment 
+    ID=7281 | ground_truth=Immigration | origem=train
+    Secure Borders FIRST (For Integrity, Reform, Safety, and Anti-Terrorism) Act of 2007 - Sets forth provisions respecting: (1) border security; (2) detention of dangerous aliens; (3) removal of alien gang members; (4) grants to state and local law enforcement agencies assisting with borders security and immigration enforcement; and (5) expedited removal on criminal or security grounds. Illegal Immigration Enforcement and Social Security Protection Act of 2007 - Sets forth provisions respecting: (1
+    ID=7315 | ground_truth=Immigration | origem=train
+    Secure America Through Verification and Enforcement Act of 2007 or SAVE Act of 2007 - Sets forth border security and enforcement provisions, including provisions respecting: (1) increases in Border Patrol and investigative personnel; (2) recruitment of former military personnel; (3) use of Department of Defense (DOD) equipment; (4) infrastructure improvements; (5) aerial and other surveillance; (5) a national strategy to secure the borders; (6) emergency deployment of Border Patrol agents; and (
+
+CLUSTER 37 | 191 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 148 (77.49%)
+  Civil Rights: 29 (15.18%)
+  Government Operations: 5 (2.62%)
+  Health: 3 (1.57%)
+  Social Welfare: 3 (1.57%)
+  Exemplos de documentos:
+    ID=3513 | ground_truth=Health | origem=train
+    Auto Enroll Repeal Act - Amends the Fair Labor Standards Act of 1938 to repeal the requirement that employers with more than 200 full-time employees that offer enrollment in one or more health benefits plans enroll automatically all new full-time employees in one of those plans.
+    ID=3746 | ground_truth=Health | origem=train
+    Better Enrollment Options Protect Employee Needs Act or the Be Open Act This bill amends the Fair Labor Standards Act of 1938 to repeal the requirement that employers with more than 200 full-time employees that offer enrollment in one or more health benefits plans automatically enroll all new full-time employees in one of those plans.
+    ID=7321 | ground_truth=Immigration | origem=train
+    Common Sense English Act - Amends the Civil Rights Act of 1964 to declare that, notwithstanding any other provision of the equal employment opportunities provisions of the Act, it is not an unlawful employment practice for an employer to require employees to speak English while engaged in work.
+
+CLUSTER 38 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  Immigration: 8 (72.73%)
+  Labor: 3 (27.27%)
+  Exemplos de documentos:
+    ID=7215 | ground_truth=Immigration | origem=train
+    Employment Eligibility Verification and Anti-Identity Theft Act - Directs the Commissioner of the Social Security Administration to notify a person or entity each time that the combination of name and Social Security account number it has submitted for an individual does not match Social Security Administration records. Directs the Secretary of Homeland Security (HS) to notify a person or entity each time that: (1) an immigration status or employment authorization document presented or reference
+    ID=7328 | ground_truth=Immigration | origem=train
+    New Employee Verification Act of 2008 - Amends the Immigration and Nationality Act (INA) to require employers to verify employee identification and employment eligibility under the Electronic Employment Verification System (EEVS) or the Secure Employment Eligibility Verification System (SEEVS) (as established by this Act). Permits employers subject to employee verification requirements to do so under EEVS or SEEVS. Sets forth provisions respecting: (1) voluntary and expedited participation; (2) 
+    ID=7591 | ground_truth=Immigration | origem=train
+    Electronic Employment Eligibility Verification and Illegal Immigration Control Act - Amends the Immigration and Nationality Act to direct the Secretary of Homeland Security (DHS) to establish a toll-free telephone- or electronic media-based employment eligibility verification system. Requires such system to: (1) provide verification or tentative non-verification of an individual's identity and employment eligibility within three days of an inquiry, and (2) provide, in the case of tentative non-v
+
+CLUSTER 39 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Immigration: 12 (92.31%)
+  Law and Crime: 1 (7.69%)
+  Exemplos de documentos:
+    ID=7383 | ground_truth=Immigration | origem=train
+    Unaccompanied Alien Child Protection Act of 2007 - Addresses the care and custody of unaccompanied alien children (children), defined as children under the age of 18 with no lawful immigration status and no parent or legal guardian in the United States who is available to provide care and physical custody. Directs immigration officers who find such children at U.S. land borders or ports of entry to permit them to withdraw their applications for admission and return to their country of nationalit
+    ID=7806 | ground_truth=Immigration | origem=train
+    Expedited Family Reunification Act of 2014 - Amends the William Wilberforce Trafficking Victims Protection Reauthorization Act of 2008 to provide that any unaccompanied alien child (UAC) who has not been a victim of a severe form of trafficking in persons or does not have a credible fear of persecution on returning to his or her country of nationality or of last habitual residence shall be: (1) placed in removal proceedings, (2) eligible for voluntary departure at no cost to the child, and (3) p
+    ID=7807 | ground_truth=Immigration | origem=train
+    Amends the William Wilberforce Trafficking Victims Protection Reauthorization Act of 2008 to declare that any unaccompanied alien child who has not been a victim of a severe form of trafficking in persons or does not have a credible fear of persecution on returning to his or her country of nationality or of last habitual residence shall be: (1) placed in removal proceedings, (2) eligible for voluntary departure at no cost to the child, and (3) provided with access to counsel. (Currently such exp
+
+CLUSTER 40 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 10 (76.92%)
+  Defense: 2 (15.38%)
+  Immigration: 1 (7.69%)
+  Exemplos de documentos:
+    ID=7279 | ground_truth=Immigration | origem=train
+    Division A: Coast Guard Authorization Act of 2008 - Coast Guard Authorization Act of 2008 - Title I: Authorization - (Sec. 101) Authorizes appropriations for FY2008 for the Coast Guard for: (1) Coast Guard operation and maintenance, with a portion to be derived from the Oil Spill Liability Trust Fund for certain purposes under the Oil Pollution Act of 1990 (OPA purposes); (2) acquisition, construction, rebuilding, and improvement of aids to navigation, shore and offshore facilities, vessels, and
+    ID=8201 | ground_truth=Transportation | origem=train
+    Coast Guard Authorization Act of 2010- Title I: Authorization - (Sec. 101) Authorizes FY2011 appropriations for the Coast Guard, including for: (1) operation and maintenance; (2) acquisition, construction, rebuilding, and improvement of aids to navigation, shore and offshore facilities, vessels, and aircraft; (3) research, development, test, and evaluation of technologies, materials, and human factors relating to the Coast Guard's mission in search and rescue, aids to navigation, marine safety, 
+    ID=8268 | ground_truth=Transportation | origem=train
+    (This measure has not been amended since it was amended by the House on December 5, 2012. The summary of that version is repeated here.) Coast Guard and Maritime Transportation Act of 2012 - Title I: Authorization - (Sec. 101) Authorizes FY2013-FY2014 appropriations for the Coast Guard for: (1) operation and maintenance; (2) acquisition, construction, rebuilding, and improvement of navigation aids, shore and offshore facilities, vessels, aircraft, and related equipment; (3) the Coast Guard Reser
+
+CLUSTER 41 | 189 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 162 (85.71%)
+  Government Operations: 6 (3.17%)
+  Defense: 5 (2.65%)
+  Civil Rights: 3 (1.59%)
+  Law and Crime: 2 (1.06%)
+  Exemplos de documentos:
+    ID=4946 | ground_truth=Defense | origem=train
+    Fair, Accurate, Secure, and Timely Redress Act of 2008 or the FAST Redress Act of 2008 - Amends the Homeland Security Act of 2002 to direct the Secretary of Homeland Security to establish: (1) a timely and fair process for individuals who believe they were delayed or prohibited from boarding a commercial aircraft because they were wrongly identified as a threat when screened against any terrorist watchlist or database used by the Transportation Security Administration (TSA) or any component of t
+    ID=7753 | ground_truth=Immigration | origem=train
+    Revises requirements with respect to the training of aliens and other individuals designated by the Secretary of Homeland Security (DHS) in the operation of certain aircraft. Authorizes a flight instructor, pilot school, or aviation training center to provide training to an individual in the operation of an aircraft with a takeoff weight of more than 12,500 pounds only if that individual has been checked against databases available to the Assistant Secretary of Homeland Security (Transportation 
+    ID=8205 | ground_truth=Transportation | origem=train
+    Replaces the Under Secretary of Transportation for Security in the Department of Transportation (DOT) with the Assistant Secretary of Homeland Security as head of the Transportation Security Administration (TSA) in the Department of Homeland Security (DHS). Increases the term of office of the Assistant Secretary from 5 to 10 years.
+
+CLUSTER 42 | 149 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 139 (93.29%)
+  Transportation: 2 (1.34%)
+  Macroeconomics: 2 (1.34%)
+  Energy: 2 (1.34%)
+  Public Lands: 1 (0.67%)
+  Exemplos de documentos:
+    ID=8262 | ground_truth=Transportation | origem=train
+    Marine Corps Aviation Centennial Commemorative Coin Act - Directs the Secretary of the Treasury, during the one-year period beginning on January 1, 2015, to mint and issue up to 100,000 $10 coins emblematic of the warrior ethos of the U.S. Marine Corps. Requires all coin sales to include a $35 surcharge, and all surcharges received to be paid promptly to the Marine Corps Heritage Foundation for construction of the Marine Corps Heritage Center.
+    ID=9104 | ground_truth=Public Lands | origem=train
+    Plymouth 400th Anniversary Commemorative Coin Act of 2016 This bill directs the Department of the Treasury to issue up to 100,000 $5 gold coins, 500,000 $1 silver coins, and 750,000 half-dollar clad coins emblematic of the landing and settlement of Plymouth Colony, Massachusetts, the signing of the Mayflower Compact, and the role of the indigenous Wampanoag tribes in the realization of the settlement. These coins may be issued only during a two-year period beginning January 1, 2020. Sales of suc
+    ID=18758 | ground_truth=Domestic Commerce | origem=train
+    American Eagle Palladium Bullion Coin Act of 2010 - Authorizes the Secretary of the Treasury to mint and issue a $25 palladium bullion investment coin bearing designs that are close likenesses of the work of American coin designer and medallic artist Adolph Alexander Weinman. Requires the obverse to bear a high-relief likeness of the "Winged Liberty" design used on the obverse of the "Mercury dime," and the reverse a high-relief version of the reverse design of the 1907 American Institute of Arc
+
+CLUSTER 43 | 164 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 158 (96.34%)
+  Public Lands: 3 (1.83%)
+  Civil Rights: 3 (1.83%)
+  Exemplos de documentos:
+    ID=8525 | ground_truth=Public Lands | origem=train
+    Amends the Federal Election Campaign Act of 1971 to treat members of an unincorporated Indian tribe in the same manner as the stockholders of a corporation.
+    ID=8774 | ground_truth=Public Lands | origem=train
+    Amends the Federal Election Campaign Act of 1971 to prohibit any authorized committee of a candidate or any other political committee established, maintained, or controlled by a candidate or person who holds a federal office from employing the spouse or any immediate family member of such candidate or federal office holder. Amends the federal criminal code to subject to specified criminal and civil penalties any spouse of a Member of Congress who: (1) was not a registered lobbyist at least one y
+    ID=8951 | ground_truth=Public Lands | origem=train
+    Government By the People Act of 2015 Amends the Internal Revenue Code (IRC) to allow a refundable credit of 50% of qualified congressional House campaign contributions paid or incurred during the taxable year (contributions of cash by an individual to a House candidate or a political committee established and maintained by a national political party if the contribution is not prohibited under the Federal Election Campaign Act of 1971 [FECA], to be known as "My Voice Federal" contributions). Dire
+
+CLUSTER 44 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 10 (100.00%)
+  Exemplos de documentos:
+    ID=9118 | ground_truth=Law and Crime | origem=train
+    Ninth Circuit Court of Appeals Judgeship and Reorganization Act of 2007 - Divides the U.S. Court of Appeals for the Ninth Circuit into: (1) the Ninth Circuit, composed of California, Guam, Hawaii, and Northern Mariana Islands; and (2) the Twelfth Circuit, composed of Alaska, Arizona, Idaho, Montana, Nevada, Oregon, and Washington.Directs the President to appoint two additional judges for the former Ninth Circuit, three additional judges for the new Ninth Circuit, and two temporary judges for the
+    ID=9142 | ground_truth=Law and Crime | origem=train
+    Federal Judgeship and Administrative Efficiency Act of 2007 - Federal Judgeship Act of 2007 - Directs the President to: (1) appoint additional circuit judges for the first, second, sixth, and ninth circuit courts of appeals and temporary judges for the eighth and ninth circuit courts of appeals; and (2) appoint additional permanent and temporary district judges for districts in specified states. Establishes a federal judicial district in the Virgin Islands. Revises provisions relating to the jur
+    ID=9169 | ground_truth=Law and Crime | origem=train
+    Circuit Court of Appeals Restructuring and Modernization Act of 2007 - Amends the federal judicial code to divide the Ninth Judicial Circuit into the Ninth Circuit (to be composed of California, Guam, Hawaii, and the Northern Mariana Islands) and the Twelfth Circuit (to be composed of Alaska, Arizona, Idaho, Montana, Nevada, Oregon, and Washington).Requires the President to appoint five additional circuit judges for the new Ninth Circuit and two temporary judges for the former Ninth Circuit, to 
+
+CLUSTER 45 | 147 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 68 (46.26%)
+  Law and Crime: 60 (40.82%)
+  Civil Rights: 5 (3.40%)
+  Transportation: 3 (2.04%)
+  Health: 2 (1.36%)
+  Exemplos de documentos:
+    ID=1295 | ground_truth=Civil Rights | origem=train
+    Sanctity of Human Life Act - Declares that: (1) the right to life guaranteed by the Constitution is vested in each human and is the person's paramount and most fundamental right; (2) each human life begins with fertilization, cloning, or its functional equivalent, at which time every human has all legal and constitutional attributes and privileges of personhood; and (3) Congress, each state, the District of Columbia, and all U.S. territories have the authority to protect all human lives.
+    ID=1331 | ground_truth=Civil Rights | origem=train
+    State Secrets Protection Act - Amends the federal judicial code to: (1) require a federal court to determine which filings, motions, and affidavits (or portions) submitted under this Act shall be submitted ex parte; (2) allow a federal court to order a party to provide a redacted, unclassified, or summary substitute of a filing, motion, or affidavit to other parties; and (3) require a federal court to make decisions under this Act, taking into consideration the interests of justice and national 
+    ID=1377 | ground_truth=Civil Rights | origem=train
+    State Secrets Protection Act - Amends the federal judicial code to: (1) require a federal court to determine which filings, motions, and affidavits (or portions) submitted under this Act shall be submitted ex parte; (2) allow a federal court to order a party to provide a redacted, unclassified, or summary substitute of a filing, motion, or affidavit to other parties; and (3) require a federal court to make decisions under this Act, taking into consideration the interests of justice and national 
+
+CLUSTER 46 | 17 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 10 (58.82%)
+  Civil Rights: 3 (17.65%)
+  Domestic Commerce: 2 (11.76%)
+  Defense: 2 (11.76%)
+  Exemplos de documentos:
+    ID=1303 | ground_truth=Civil Rights | origem=train
+    State Secret Protection Act of 2008 - Declares that in any civil action brought in federal or state court the government has a privilege to refuse to give evidence and to prevent any person from giving evidence only if the government shows that public disclosure of the evidence that the government seeks to protect would be reasonably likely to cause significant harm to the national defense or the diplomatic relations of the United States. Requires the court to take steps, including in camera hea
+    ID=1497 | ground_truth=Civil Rights | origem=train
+    State Secrets Protection Act - Declares that in any civil action brought in federal or state court, the government has a privilege to refuse to give information and to prevent any person from giving information only if the government shows that public disclosure of the information that the government seeks to protect would be reasonably likely to cause significant harm to the national defense or the diplomatic relations of the United States. Requires the court to take steps, which may include in
+    ID=9152 | ground_truth=Law and Crime | origem=train
+    Sunshine in Litigation Act of 2008 - Amends the federal judicial code to prohibit a court from entering an order restricting the disclosure of information obtained through discovery, approving a settlement disagreement that would restrict such disclosure, or restricting access to court records in a civil case, unless the court has found that: (1) such order would not restrict the disclosure of information which is relevant to the protection of public health or safety; or (2) the public interest 
+
+CLUSTER 47 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 9 (69.23%)
+  Agriculture: 3 (23.08%)
+  Transportation: 1 (7.69%)
+  Exemplos de documentos:
+    ID=8224 | ground_truth=Transportation | origem=train
+    Captive Primate Safety Act - Amends the Lacey Act Amendments of 1981 to add nonhuman primates to the definition of "prohibited wildlife species" for purposes of the prohibition against the sale or purchase of such species in interstate or foreign commerce.Makes it unlawful for a person to import, export, transport, sell, receive, acquire, or purchase a live animal of any prohibited wildlife species in interstate or foreign commerce (i.e., for pet trade purposes). Sets forth exceptions to such pr
+    ID=9578 | ground_truth=Environment | origem=train
+    Captive Primate Safety Act - Amends the Lacey Act Amendments of 1981 to add nonhuman primates (i.e., monkeys, great apes, lemurs, etc.) to the definition of "prohibited wildlife species" for purposes of the prohibition against the sale or purchase of such species in interstate or foreign commerce. Makes it unlawful for a person to sell or purchase a live animal of any prohibited wildlife species in interstate or foreign commerce (i.e., for pet trade purposes). Sets forth: (1) exceptions to such 
+    ID=9586 | ground_truth=Environment | origem=train
+    Captive Wildlife Safety Technical Amendments Act of 2008 - Makes technical and conforming amendments to the Lacey Act Amendments of 1981 relating to the enforcement of, and civil and criminal penalties under, the Captive Wildlife Safety Act. Prohibits any person from importing, exporting, transporting, selling, receiving, acquiring, or purchasing in interstate or foreign commerce any live animal of any prohibited wildlife species. Authorizes appropriations to carry out captive wildlife offense p
+
+CLUSTER 48 | 50 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 41 (82.00%)
+  Environment: 4 (8.00%)
+  Labor: 2 (4.00%)
+  International Affairs: 2 (4.00%)
+  Public Lands: 1 (2.00%)
+  Exemplos de documentos:
+    ID=2659 | ground_truth=Public Lands | origem=train
+    Coastal Jobs Creation Act of 2011 - Directs the Secretary of Commerce to implement a Coastal Jobs Creation Grant Program which shall include: (1) cooperative research to collect and compile economic and social data related to recreational and commercial fisheries management: (2) establishment and implementation of state recreational fishing registry programs; (3) training and deploying observers authorized or required under the Magnuson-Stevens Fishery Conservation and Management Act; (4) preser
+    ID=9591 | ground_truth=Environment | origem=train
+    Shark Conservation Act of 2008 - Amends the High Seas Driftnet Fishing Moratorium Protection Act to direct the Secretary of Commerce to list a nation in the biennial report on international compliance if the nation's fishing vessels are or have been engaged in fishing activities that target or incidentally catch sharks and the nation has not adopted a shark conservation program that is comparable, taking into account different conditions, to that of the United States, including measures to prohi
+    ID=9620 | ground_truth=Environment | origem=train
+    Shark Conservation Act of 2008 - Amends the High Seas Driftnet Fishing Moratorium Protection Act to direct the Secretary of Commerce to list a nation in the biennial report on international compliance if the nation's fishing vessels are or have been engaged in fishing activities that target or incidentally catch sharks and the nation has not adopted a shark conservation program that is comparable, taking into account different conditions, to that of the United States, including measures to prohi
+
+CLUSTER 49 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 12 (92.31%)
+  Defense: 1 (7.69%)
+  Exemplos de documentos:
+    ID=10030 | ground_truth=Domestic Commerce | origem=train
+    Credit Union Regulatory Relief Act of 2008 - Amends the Federal Credit Union Act to: (1) permit a credit union to invest in securities for its own account, subject to certain percentage limitations; and (2) increase the investment and lending limit in credit union service organizations from 1% to 3% of a credit union's total paid and unimpaired capital and surplus. Excludes credit union loans to nonprofit religious organizations from limitations placed upon member business loans. Authorizes the 
+    ID=10145 | ground_truth=Domestic Commerce | origem=train
+    Promoting Lending to America's Small Businesses Act of 2009 - Amends the Federal Credit Union Act to increase the total permissible amount of member business loans by an insured credit union (excluding those made to nonprofit religious organizations) to a limit of 25% of the credit union's total assets. Increases from $50,000 to $250,000 the maximum total extensions of credit a borrower or associated member of an insured credit union may have before any extension of credit shall be considered a 
+    ID=10263 | ground_truth=Domestic Commerce | origem=train
+    Small Business Lending Enhancement Act of 2011 - Amends the Federal Credit Union Act to prohibit an insured credit union from making any member business loan that would result in the total amount of such loans outstanding at that credit union at any one time exceeding either: (1) 1.75 times the actual net worth of the credit union, or (2) 12.25% of the total assets of the credit union. Authorizes the National Credit Union Administration Board to approve an application by an insured credit union 
+
+CLUSTER 50 | 108 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 100 (92.59%)
+  Government Operations: 2 (1.85%)
+  Public Lands: 2 (1.85%)
+  Agriculture: 1 (0.93%)
+  Labor: 1 (0.93%)
+  Exemplos de documentos:
+    ID=10424 | ground_truth=Domestic Commerce | origem=train
+    Title I: Homeowner Flood Insurance Affordability Act - Homeowner Flood Insurance Affordability Act of 2014 - (Sec. 103) Prohibits the Administrator of the Federal Emergency Management Agency (FEMA) from implementing during a specified six-month period a requirement of the National Flood Insurance Act of 1968 (NFIA) that would: (1) increase flood insurance risk premium rates to reflect the current risk of flood for property located in specified areas subject to a certain mandatory premium adjustm
+    ID=11442 | ground_truth=Government Operations | origem=train
+    Prohibits the Administrator of the Federal Emergency Management Agency (FEMA) from updating a floodplain area or flood-risk zone under the National Flood Insurance Act of 1968 until the Administrator submits a community outreach plan to Congress.Amends the Internal Revenue Code to provide for a credit equal to the premium paid by the taxpayer for flood insurance covering any residential property which is a qualified flood risk property, subject to an income-based limitation. Defines "qualified f
+    ID=12473 | ground_truth=Public Lands | origem=train
+    Burn Area Flood Prevention Act of 2010 - Amends the Federal Land Assistance, Management, and Enhancement Act of 2009 to include within the purpose of FLAME Wildlife Suppression Reserve Funds to cover the costs of burn area responses, including flood prevention. Amends the National Flood Insurance Act of 1968 to make the waiting period for coverage under a new contract for flood insurance coverage, and any modification to coverage under an existing flood insurance contract, inapplicable to the in
+
+CLUSTER 51 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Social Welfare: 9 (69.23%)
+  Housing: 3 (23.08%)
+  Energy: 1 (7.69%)
+  Exemplos de documentos:
+    ID=10713 | ground_truth=Housing | origem=train
+    Energy Assistance for American Families Act - Amends the Low-Income Home Energy Assistance Act of 1981 to authorize appropriations for FY2014-FY2018. Permits a state to use any allotment from such appropriations to assist households whose income does not exceed 75% of the state median income.
+    ID=10746 | ground_truth=Housing | origem=train
+    Energy Assistance for American Families Act This bill amends the Low-Income Home Energy Assistance Act of 1981 to reauthorize the Low-Income Home Energy Assistance Program for FY2016-FY2020. A state may use any allotment from funds appropriated for FY2016-FY2020 to assist households whose income does not exceed 75% of the state median income.
+    ID=10747 | ground_truth=Housing | origem=train
+    Home Energy Utility Assistance Act This bill amends the Low Income Home Energy Assistance Act of 1981 to reauthorize the Low Income Home Energy Assistance Program (LIHEAP) for FY2016-FY2025. The bill also requires states to ensure that households seeking assistance under the program are not required to file more than one application per year.
+
+CLUSTER 52 | 109 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 99 (90.83%)
+  Environment: 3 (2.75%)
+  Foreign Trade: 2 (1.83%)
+  Energy: 1 (0.92%)
+  Health: 1 (0.92%)
+  Exemplos de documentos:
+    ID=10893 | ground_truth=Domestic Commerce | origem=train
+    Declares that this Act is enacted pursuant to the constitutional power granted to Congress to regulate commerce. Amends the Consumer Product Safety Act to allow a secondhand seller to sell, offer for sale, or distribute a product or substance that is not in conformity with a consumer product safety rule relating to lead in children's products or to currently-required labeling for children's products. Defines "secondhand seller" to include: (1) a consignment or thrift shop; (2) an individual who 
+    ID=16720 | ground_truth=Energy | origem=train
+    Amends the Children's Gasoline Burn Prevention Act to require each portable fuel container manufactured for sale in the United States and intended for use by consumers to conform to American Society for Testing and Materials (ASTM) International standard specifications for: (1) child resistance of portable fuel containers for consumer use; (2) cautionary labeling of portable gasoline, kerosene, and diesel containers for consumer use; and (3) portable kerosene and diesel containers for consumer u
+    ID=18669 | ground_truth=Domestic Commerce | origem=train
+    Requires the Consumer Product Safety Commission (CPSC) to issue regulations requiring that a specified warning label be placed on the packaging of any video game that is rated T (Teen) or higher by the Electronics Software Ratings Board.
+
+CLUSTER 53 | 33 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 33 (100.00%)
+  Exemplos de documentos:
+    ID=11333 | ground_truth=Government Operations | origem=train
+    Designates the federal building and U.S. courthouse and customhouse located at 515 West First Street in Duluth, Minnesota, as the "Gerald W. Heaney Federal Building and United States Courthouse and Customhouse."
+    ID=11335 | ground_truth=Government Operations | origem=train
+    Designates the U.S. courthouse located at 225 Cadman Plaza East, Brooklyn, New York, as the "Hugh L. Carey United States Courthouse."
+    ID=11336 | ground_truth=Government Operations | origem=train
+    Designates the United States bankruptcy courthouse located at 271 Cadman Plaza East, Brooklyn, New York, as the "Conrad B. Duberstein United States Bankruptcy Courthouse."
+
+CLUSTER 54 | 21 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 21 (100.00%)
+  Exemplos de documentos:
+    ID=12283 | ground_truth=Public Lands | origem=train
+    National Trails System Willing Seller Act - Amends the National Trails System Act to: (1) prohibit the federal acquisition of lands outside the exterior boundaries of any federally administered area, except with the owner's consent, for the Oregon, Mormon Pioneer, Lewis and Clark, Iditarod, and Nez Perce National Historic Trails and the Continental Divide, North Country, Ice Age, and Potomac Heritage National Scenic Trails; and (2) provide that federal authority to acquire fee title shall be lim
+    ID=12394 | ground_truth=Public Lands | origem=train
+    North Country National Scenic Trail Willing Seller Act - Amends the National Trails System Act to bar the acquisition by the federal government of any land or interest in land outside the exterior boundaries of any federally administered area for the North Country National Scenic Trail except with the owner's consent.
+    ID=12398 | ground_truth=Public Lands | origem=train
+    National Trails System Willing Seller Act - Amends the National Trails System Act (the Act) to: (1) prohibit the federal acquisition of lands outside the exterior boundaries of any federally administered area, except with the owner's consent, for the Oregon, Mormon Pioneer, Lewis and Clark, Iditarod, and Nez Perce National Historic Trails and the Continental Divide, North Country, Ice Age, and Potomac Heritage National Scenic Trails; and (2) provide that federal authority to acquire fee title sh
+
+CLUSTER 55 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 10 (100.00%)
+  Exemplos de documentos:
+    ID=12816 | ground_truth=Public Lands | origem=train
+    (This measure has not been amended since it was reported to the House on December 9, 2014. The summary of that version is repeated here.) John Muir National Historic Site Expansion Act - Authorizes the Department of the Interior to acquire by donation approximately 44 acres of land to include in the John Muir National Historic Site in Martinez, California.
+    ID=12934 | ground_truth=Public Lands | origem=train
+    (This measure has not been amended since it was reported to the House on July 21, 2015. The summary of that version is repeated here.) John Muir National Historic Site Expansion Act The Department of the Interior may acquire by donation approximately 44 acres of land to include in the John Muir National Historic Site in Martinez, California. The acquired land shall be administered as part of such site.
+    ID=12985 | ground_truth=Public Lands | origem=train
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) Kennesaw Mountain National Battlefield Park Boundary Adjustment Act of 2015 (Sec. 3) This bill modifies the boundary of the Kennesaw Mountain National Battlefield Park in Georgia to include approximately eight acres identified as Wallis House and Harriston Hill. The Department of the Interior may acquire land or interests, by donation or exchange, from willing owners
+
+CLUSTER 56 | 9 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 7 (77.78%)
+  Law and Crime: 2 (22.22%)
+  Exemplos de documentos:
+    ID=13379 | ground_truth=Health | origem=train
+    Prescription Drug Abuse Prevention and Treatment Act of 2011 - Amends the Public Health Service Act to direct the Administrator of the Substance Abuse and Mental Health Services Administration to award grants to states and nonprofit entities for consumer education about opioid abuse, including methadone abuse. Amends the Controlled Substances Act to: (1) set forth training requirements for practitioners registered to prescribe or dispense methadone or other opioids; and (2) require each register
+    ID=13541 | ground_truth=Health | origem=train
+    Empowering Pharmacists in the Fight Against Opioid Abuse Act This bill requires the Drug Enforcement Administration (DEA) to develop and disseminate training programs and materials on: (1) the circumstances under which a pharmacist may refuse to fill a controlled substance prescription suspected to be fraudulent, forged, or indicative of abuse or diversion; and (2) federal requirements related to such refusal. The DEA must seek input from relevant stakeholders.
+    ID=15285 | ground_truth=Law and Crime | origem=train
+    Methadone Treatment and Protection Act of 2009 - Amends the Public Health Service Act to: (1) direct the Administrator of the Substance Abuse and Mental Health Services Administration in the Department of Health and Human Services (HHS) to award grants to states and nonprofit community organizations to distribute culturally sensitive educational materials about the dangers of opioid abuse, including methadone abuse; (2) establish a Controlled Substances Clinical Standards Commission to develop s
+
+CLUSTER 57 | 16 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 16 (100.00%)
+  Exemplos de documentos:
+    ID=13796 | ground_truth=Government Operations | origem=train
+    Redistricting Reform Act of 2007 - Prohibits a state that has been redistricted after an apportionment from being redistricted again until after the next apportionment of Representatives, unless the state is ordered by a court to conduct such a subsequent redistricting in order to: (1) comply with the U.S. Constitution; or (2) enforce the Voting Rights Act of 1965.Requires such redistricting to be conducted according to: (1) a plan developed by the independent redistricting commission establishe
+    ID=14078 | ground_truth=Government Operations | origem=train
+    Let the People Draw the Lines Act of 2013 - Prohibits a state that has been redistricted after an apportionment from being redistricted again until after the next apportionment of Representatives, unless the state is ordered by a court to conduct such a subsequent redistricting in order to comply with the Constitution or enforce the Voting Rights Act of 1965. Requires any congressional redistricting to be conducted according to: (1) a plan developed by the independent redistricting commission es
+    ID=14111 | ground_truth=Government Operations | origem=train
+    Fairness and Independence in Redistricting Act - Prohibits a state that has been redistricted after an apportionment from being redistricted again until after the next apportionment of Representatives, unless the state is ordered by a court to conduct such a subsequent redistricting in order to comply with the U.S. Constitution or enforce the Voting Rights Act of 1965. Requires such redistricting to be conducted through a plan developed by the independent redistricting commission established in 
+
+CLUSTER 58 | 60 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 54 (90.00%)
+  Labor: 3 (5.00%)
+  Law and Crime: 2 (3.33%)
+  Transportation: 1 (1.67%)
+  Exemplos de documentos:
+    ID=14056 | ground_truth=Government Operations | origem=train
+    End the Congressional Revolving Door Act - Prohibits a former Member of Congress or former congressional employee who is a registered lobbyist, and entitled to compensation as such, from being eligible for any benefits beginning after enactment of this Act under: the Civil Service Retirement System (CSRS), including the Thrift Savings Plan (TSP); the Federal Employees' Retirement System (FERS), including the TSP; the Federal Employees' Health Benefits (FEHB) Program, including federal enhanced d
+    ID=14075 | ground_truth=Government Operations | origem=train
+    Revolving Door Pension Prevention Act - Prohibits any former Member of Congress who is registered as a lobbyist from receiving pension benefits under either the Civil Service Retirement System (CSRS) or the Federal Employees' Retirement System (FERS) while such former Member is employed as a lobbyist and is receiving an annual income from lobbying activities in excess of $1 million.
+    ID=14119 | ground_truth=Government Operations | origem=train
+    End the Congressional Revolving Door Act Prohibits a former Member of Congress or former congressional employee who is a registered lobbyist, and entitled to compensation as such, from being eligible for any benefits beginning after enactment of this Act under: the Civil Service Retirement System (CSRS), including the Thrift Savings Plan (TSP); the Federal Employees' Retirement System (FERS), including the TSP; the Federal Employees' Health Benefits Program, including federal enhanced dental and
+
+CLUSTER 59 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 11 (100.00%)
+  Exemplos de documentos:
+    ID=4273 | ground_truth=Government Operations | origem=train
+    Accountability and Transparency in Ethics Act of 2010 - Amends the federal criminal code to revise post-employment restrictions on former officers, employees, and elected officials of the executive and legislative branches. Increases from one to two years the ban on lobbying contacts by the following individuals with a Member, officer, or employee of the entity in which they served before his or her tenure terminated: (1) former senior and very senior personnel of the executive branch and indepe
+    ID=13963 | ground_truth=Government Operations | origem=train
+    Close the Revolving Door Act of 2010 - Amends the federal criminal code to impose a permanent ban (currently, a two-year ban) on lobbying contacts by any former Member of Congress or elected officer of the Senate or the House of Representatives with any Member, officer, or employee of either house of Congress or any employee of any other legislative office. Provides for a six-year lobbying ban (currently, a one-year ban) on former congressional staff. Amends the Lobbying Disclosure Act of 1995 t
+    ID=13997 | ground_truth=Government Operations | origem=train
+    Amends the federal criminal code to replace the current two-year ban on lobbying contacts by former Senators and one-year ban on lobbying contacts by former Members of the House of Representatives with any Member, officer, or employee of either chamber with an outright ban at any time on such contacts, subject to fines and/or imprisonment. Specifies a one-year ban on lobbying contacts by former elected officers of the House with any House Member, officer, or employee.
+
+CLUSTER 60 | 7 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 7 (100.00%)
+  Exemplos de documentos:
+    ID=14688 | ground_truth=Energy | origem=train
+    Energy Savings Act of 2007 - Biofuels for Energy Security and Transportation Act of 2007 - Sets forth a schedule for motor vehicle fuel, home heating oil, and boiler fuel to contain specified volumes of renewable fuel by calendar year 2022.Prescribes a pilot program to establish refueling infrastructure corridors for gasoline blends containing renewable fuel.Amends the Energy Policy Act of 2005 to: (1) increase funding for bioenergy research and development; (2) establish bioresearch centers tha
+    ID=14694 | ground_truth=Energy | origem=train
+    Biofuels Research and Development Enhancement Act - Directs the Secretary of Energy to establish an information center on research, development, and commercial application of technologies related to biofuels and biorefineries, including: (1) biochemical and thermochemical conversion technologies to make fuels from lignocellulosic feedstocks; (2) biotechnology processes that emphasize enzyme-based processing systems; and (3) other advanced processes and technologies that will enable biofuel devel
+    ID=14785 | ground_truth=Energy | origem=train
+    Clean, Affordable, and Domestic Fuels for Energy Security Act of 2007 - Instructs the President to promulgate regulations to ensure that aviation fuel, motor vehicle fuel, home heating oil, and boiler fuel sold or introduced into commerce in the United States on an annual average basis contains prescribed volumes of coal-derived fuel. Requires such coal-derived fuel to meet specified greenhouse gas emissions levels.Sets forth: (1) standards for reduction of greenhouse gas emissions levels; and (
+
+CLUSTER 61 | 19 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 16 (84.21%)
+  Government Operations: 2 (10.53%)
+  Health: 1 (5.26%)
+  Exemplos de documentos:
+    ID=15472 | ground_truth=Agriculture | origem=train
+    Amends the Federal Crop Insurance Act to require offering farmers supplemental crop insurance based on an area yield and loss plan of insurance.
+    ID=15604 | ground_truth=Agriculture | origem=train
+    Containing Risk, Offering Protection Act - Amends the Federal Crop Insurance Act to include coverage for losses to an insured commodity when, as a result of a federally-imposed quarantine, the commodity must be destroyed or is unable to be marketed or utilized for its intended purpose.
+    ID=15606 | ground_truth=Agriculture | origem=train
+    Crop Insurance Subsidy Reduction Act - Amends the Federal Crop Insurance Act to reduce crop insurance premium subsidy rates.
+
+CLUSTER 62 | 12 documentos
+----------------------------------------------------------------------------------------------------
+  Social Welfare: 9 (75.00%)
+  Civil Rights: 3 (25.00%)
+  Exemplos de documentos:
+    ID=15938 | ground_truth=Social Welfare | origem=train
+    Strengthening Services for America's Seniors Act - Amends the Older Americans Act of 1965 to authorize the Assistant Secretary for Aging in the Department of Health and Human Services (HHS) to make grants to states to establish a program to assess the needs of family caregivers for targeted support services. Allows Aging and Disability Resource Centers to carry out an assessment program with respect to informal caregivers and care recipients. Establishes an Advisory Committee to Assess, Coordina
+    ID=15942 | ground_truth=Social Welfare | origem=train
+    Older Americans Act Amendments of 2012 - Revises the Older Americans Act of 1965 with respect to functions and duties of the Administration on Aging of the Department of Health and Human Services (HHS), particularly with respect to those with the greatest social need caused by specified noneconomic factors. Reauthorizes the Act through FY2017. Requires the Director of the Office of Long-Term Care Ombudsman Programs to recommend to the Assistant Secretary for Aging resources (including including 
+    ID=15943 | ground_truth=Social Welfare | origem=train
+    Elder Protection and Abuse Prevention Act - Amends the Older Americans Act of 1965 to direct the Assistant Secretary of Health and Human Services for Aging to: (1) ensure that all programs funded under such Act include appropriate training in elder abuse prevention and the provision of services that address elder justice and exploitation, and (2) update periodically the need for and benefit of such training related to prevention of abuse, neglect, and exploitation (including financial exploitati
+
+CLUSTER 63 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 10 (90.91%)
+  Housing: 1 (9.09%)
+  Exemplos de documentos:
+    ID=10650 | ground_truth=Housing | origem=train
+    Instructs the Federal Energy Regulatory Commission, the Secretary of Transportation, and the Secretary of the department in which the Coast Guard is operating to: (1) require an applicant for approval under the Natural Gas Act or the Deepwater Port Act of 1974 (DPA) of the siting, construction, expansion, or operation of a liquefied natural gas facility (including an off-shore facility under DPA), to identify each employee or agent engaged in activities to persuade communities of the benefits of
+    ID=16239 | ground_truth=Energy | origem=train
+    Amends the Natural Gas Act to repeal the exclusive authority of the Federal Energy Regulatory Commission (FERC) to approve or deny an application for the siting, construction, expansion, and operation of liquefied natural gas (LNG) terminals.Predicates FERC approval or denial authority regarding such application upon the express concurrence of each state affected by the application.Directs FERC to: (1) require such application to identify each employee or agent engaged in activities to persuade 
+    ID=16257 | ground_truth=Energy | origem=train
+    Amends the Federal Power Act and the Natural Gas Act to direct the Federal Energy Regulatory Commission (FERC), before issuing a permit or other authorization for any action that may affect land use in any locality, to hold a public hearing in that locality, if requested by five or more individuals or an organization representing 30 or more individuals. Requires the hearing to be held in a statistical metropolitan area at a location reasonably central to the affected areas, if a facility affects
+
+CLUSTER 64 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 8 (80.00%)
+  Energy: 2 (20.00%)
+  Exemplos de documentos:
+    ID=3909 | ground_truth=Environment | origem=train
+    Amends the Safe Drinking Water Act to permit federal regulation of hydraulic fracturing (a process for extracting oil and gas from wells by the injection of fluids at high pressure).
+    ID=4022 | ground_truth=Environment | origem=train
+    Fracturing Responsibility and Awareness of Chemicals (FRAC) Act - Amends the Safe Drinking Water Act to: (1) repeal the exemption from restrictions on underground injection of fluids near drinking water sources granted to hydraulic fracturing operations under such Act; and (2) require oil and gas companies to disclose the chemicals used in hydraulic fracturing operations.
+    ID=4057 | ground_truth=Environment | origem=train
+    Fracturing Responsibility and Awareness of Chemicals Act of 2011 - Amends the Safe Drinking Water Act to repeal the exemption from restrictions on underground injection of fluids or propping agents granted to hydraulic fracturing operations related to oil, gas, or geothermal production activities under such Act. Requires: (1) state underground injection programs to direct a person conducting hydraulic fracturing operations to disclose to the state (or the Administrator if the Administrator has p
+
+CLUSTER 65 | 53 documentos
+----------------------------------------------------------------------------------------------------
+  Social Welfare: 29 (54.72%)
+  Government Operations: 8 (15.09%)
+  Labor: 7 (13.21%)
+  Law and Crime: 3 (5.66%)
+  Education: 2 (3.77%)
+  Exemplos de documentos:
+    ID=9461 | ground_truth=Education | origem=train
+    Healthy Families Act - Requires certain employers, who employ 15 or more employees for each working day during 20 or more workweeks a year, to provide a minimum paid sick leave and employment benefits of: (1) seven days annually for those who work at least 30 hours per week; and (2) a prorated annual amount for those who work less than 30 but at least 20 hours a week, or less than 1,500 but at least 1,000 hours per year. Allows employees to use such leave to meet their own medical needs or to ca
+    ID=13259 | ground_truth=Health | origem=train
+    Living Organ Donor Job Security Act - Amends the Family and Medical Leave Act of 1993 (FMLA) to entitle employees covered by FMLA to leave to provide a living organ donation, including for time spent for: (1) tests to determine medical suitability of the employee for donation; (2) physical, psychological, and social evaluations of the donor; (3) pretransplant outpatient services; (4) postoperative inpatient and outpatient transplantation services; (5) travel in connection with such tests, evalua
+    ID=15813 | ground_truth=Social Welfare | origem=train
+    Healthy Families Act - Requires certain employers, who employ 15 or more employees for each working day during 20 or more workweeks a year, to permit each employee to earn at least one hour of paid sick time for every 30 hours worked. Declares that an employer shall not be required to permit an employee to earn more than 56 hours of paid sick time in a calendar year, unless the employer chooses to set a higher limit. Allows employees to use such time to: (1) meet their own medical needs; (2) car
+
+CLUSTER 66 | 12 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 12 (100.00%)
+  Exemplos de documentos:
+    ID=14274 | ground_truth=Law and Crime | origem=train
+    Child Protection Improvements Act of 2008 - Amends the National Child Protection Act of 1993 to direct the Attorney General to: (1) establish policies and procedures for a program for national criminal history background checks for child-serving organizations; (2) assist such organizations in obtaining access to nationwide background checks; (3) establish procedures for insuring the accuracy of criminal history records; (4) identify individuals convicted of serious misdemeanors or felonies invol
+    ID=14307 | ground_truth=Law and Crime | origem=train
+    Child Protection Improvements Act of 2008 - (Sec. 3) Amends the National Child Protection Act of 1993 to direct the Attorney General to establish a program for national criminal history background checks for child-serving organizations. Requires the Attorney General to: (1) establish within the federal government or through an agreement with a nongovernmental entity an applicant processing center; (2) enter into an agreement for the National Center for Missing and Exploited Children to establish
+    ID=17502 | ground_truth=Law and Crime | origem=train
+    Child Protection Improvements Act of 2009 - Amends the National Child Protection Act of 1993 to direct the Attorney General to establish a program for national criminal history background checks for child-serving organizations. Amends the PROTECT Act to terminate the Child Safety Pilot Program on the date the program established under this Act is operating and able to enroll any organization using that Program.Requires the Attorney General to: (1) establish an applicant processing center to stre
+
+CLUSTER 67 | 236 documentos
+----------------------------------------------------------------------------------------------------
+  International Affairs: 193 (81.78%)
+  Defense: 27 (11.44%)
+  Civil Rights: 8 (3.39%)
+  Law and Crime: 4 (1.69%)
+  Health: 1 (0.42%)
+  Exemplos de documentos:
+    ID=4488 | ground_truth=Health | origem=train
+    Global Autism Assistance Act of 2011 - Directs the Administrator for the United States Agency for International Development (USAID) to establish and administer a health and education grant program (Global Autism Assistance Program) to: (1) support activities by nongovernmental organizations and other service providers, including advocacy groups, focused on autism in developing countries; and (2) establish a "teach the teachers" program to train health and education professionals working with aut
+    ID=4761 | ground_truth=Defense | origem=train
+    This bill amends the Iran Sanctions Act of 1996 to provide that such Act shall cease to be effective on the date the President certifies to Congress that the International Atomic Energy Agency has reached a broader conclusion that all nuclear material in Iran remains in peaceful activities.
+    ID=5125 | ground_truth=Defense | origem=train
+    Enhanced Partnership with Pakistan Act of 2008 - (Sec. 3) Defines specified terms. (Sec. 4) States that it is U.S. policy to: (1) support the consolidation of democracy in Pakistan; (2) build a long-term relationship with Pakistan; (3) further the economic development of Pakistan by expanding bilateral engagement with the government of Pakistan; (4) work with Pakistan and the countries bordering Pakistan to facilitate regional peace; (5) work with the government of Pakistan to prevent Pakistani 
+
+CLUSTER 68 | 26 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 18 (69.23%)
+  Government Operations: 8 (30.77%)
+  Exemplos de documentos:
+    ID=18018 | ground_truth=Government Operations | origem=train
+    Intelligence Authorization Act for Fiscal Year 2011 - Authorizes appropriations for FY2011 for the conduct of intelligence and intelligence-related activities of the: (1) Office of the Director of National Intelligence; (2) Central Intelligence Agency (CIA); (3) Department of Defense (DOD); (4) Defense Intelligence Agency (DIA); (5) National Security Agency (NSA); (6) Departments of the Army, Navy, and Air Force; (7) Coast Guard; (8) Departments of State, the Treasury, Energy, and Justice; (9) F
+    ID=18067 | ground_truth=Government Operations | origem=train
+    Intelligence Authorization Act for Fiscal Year 2010 - Title I: Budget and Personnel Authorizations - (Sec. 101) Authorizes appropriations for FY2010 for the conduct of intelligence and intelligence-related activities of the following: (1) Office of the Director of National Intelligence (DNI); (2) Central Intelligence Agency (CIA); (3) Department of Defense (DOD); (4) Defense Intelligence Agency (DIA); (5) National Security Agency (NSA); (6) Departments of the Army, Navy, and Air Force; (7) Coast
+    ID=18083 | ground_truth=Government Operations | origem=train
+    Intelligence Authorization Act for Fiscal Year 2010 - Title I: Budget and Personnel Authorizations - (Sec. 101) Authorizes appropriations for FY2010 for the conduct of intelligence and intelligence-related activities of the following: (1) Office of the Director of National Intelligence (DNI); (2) Central Intelligence Agency (CIA); (3) Department of Defense (DOD); (4) Defense Intelligence Agency (DIA); (5) National Security Agency (NSA); (6) Departments of the Army, Navy, and Air Force; (7) Coast
+
+CLUSTER 69 | 16 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 16 (100.00%)
+  Exemplos de documentos:
+    ID=18562 | ground_truth=Domestic Commerce | origem=train
+    Emergency Home Ownership and Mortgage Equity Protection Act of 2007 - Amends federal bankruptcy law governing a chapter 13 debtor (adjustment of debts of an individual with regular income) to prohibit the holder of a claim in bankruptcy which is secured by debtor's principal residence from adding fees, costs, or charges while the case is pending, unless such claimholder gives timely notice to both debtor and the bankruptcy trustee. Revises requirements for the discretionary features of a chapter
+    ID=18623 | ground_truth=Domestic Commerce | origem=train
+    Homeowners' Protection Act of 2008 - Amends the federal bankruptcy code to eliminate the pre-petition credit counseling requirement for a debtor under chapter 13 (Adjustment of Debts of an Individual with Regular Income) who is facing foreclosure, if the debtor submits to the court a certification that the debtor has received notice that the holder of a claim secured by the debtor's principal residence may commence foreclosure. Allows modification of the rights of claim holders, in the event of 
+    ID=18666 | ground_truth=Domestic Commerce | origem=train
+    Helping Families Save their Homes in Bankruptcy Act of 2009 - (Sec. 1) Amends federal bankruptcy law governing a Chapter 13 debtor (adjustment of debts of an individual with regular income). Excludes from computation of debts the secured or unsecured portions of: (1) debts secured by the debtor's principal residence if the current value of that residence is less than the secured debt limit; or (2) debts secured or formerly secured by a debtor's principal residence that was either sold in foreclo
+
+CLUSTER 70 | 15 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 13 (86.67%)
+  Government Operations: 2 (13.33%)
+  Exemplos de documentos:
+    ID=19251 | ground_truth=Labor | origem=train
+    Rocky Flats Special Exposure Cohort Act - Amends the Energy Employees Occupational Illness Compensation Program Act of 2000 to amend the definition of a "member of the Special Exposure Cohort" for purposes of such Program to include persons who were employed by the Department of Energy (DOE) or a DOE contractor or subcontractor for an aggregate of at least 250 work days before January 1, 2006, at the Rocky Flats site in Colorado.
+    ID=19265 | ground_truth=Labor | origem=train
+    Ray Ruiz Special Exposure Cohort Act - Amends the Energy Employees Occupational Illness Compensation Program Act of 2000 to include an employee of the Department of Energy (DOE) or its contractors or subcontractors who worked for at least 250 work days at the Los Alamos site in New Mexico within the meaning of the term "member of the Special Exposure Cohort" for purposes of occupational illness compensation.Provides that a claim that an individual qualifies for compensation or benefits under suc
+    ID=19267 | ground_truth=Labor | origem=train
+    Nevada Test Site Veterans' Compensation Act of 2007 - Amends the Energy Employees Occupational Illness Compensation Program Act of 2000 to include within the definition of a "member of the Special Exposure Cohort" under the Energy Employees Occupational Illness Compensation Program a Department of Energy (DOE) employee, contractor employee, or atomic weapons employee who was so employed at the Nevada Test Site or other similar sites located in Nevada during the period of January 1, 1950, to Dece
+
+CLUSTER 71 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  International Affairs: 6 (54.55%)
+  Immigration: 3 (27.27%)
+  Defense: 2 (18.18%)
+  Exemplos de documentos:
+    ID=7743 | ground_truth=Immigration | origem=train
+    End Immuity for Brazilian Criminals Act - Prohibits the issuance of a visa to a citizen, subject, national, or resident of Brazil until the President certifies to Congress that the government of Brazil has removed the prohibition on extradition of Brazilian nationals to other countries. Authorizes the President to waive such prohibition on a case-by-case basis if in the U.S. national interest.
+    ID=7930 | ground_truth=Immigration | origem=train
+    Karl Hoerig Foreign Aid Suspension Act Prohibits assistance to Brazil until the President certifies to Congress that the government of Brazil has removed the prohibition on extradition of Brazilian nationals to other countries. Authorizes the President to waive such prohibition on a case-by-case basis if in the U.S. national interest.
+    ID=7931 | ground_truth=Immigration | origem=train
+    End Immuity for Brazilian Criminals Act Prohibits the issuance of a visa to a citizen, subject, national, or resident of Brazil until the President certifies to Congress that the government of Brazil has removed the prohibition on extradition of Brazilian nationals to other countries. Authorizes the President to waive such prohibition on a case-by-case basis if in the U.S. national interest.
+
+CLUSTER 72 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 7 (70.00%)
+  Defense: 1 (10.00%)
+  Social Welfare: 1 (10.00%)
+  Law and Crime: 1 (10.00%)
+  Exemplos de documentos:
+    ID=5537 | ground_truth=Defense | origem=train
+    Seniors Financial Fraud Prevention Act of 2011 - Establishes a separate office within the Federal Trade Commission (FTC) for the prevention of fraud targeting seniors and requires the office to assist the FTC in monitoring the market for mail, telemarketing, television, and Internet fraud which targets seniors. Requires the FTC through such office: (1) to disseminate to seniors and their families and caregivers information on mail, telemarketing, television, and Internet fraud targeting seniors,
+    ID=15861 | ground_truth=Social Welfare | origem=train
+    Senior Financial Empowerment Act of 2010 - Requires the Federal Trade Commission (FTC): (1) to disseminate to seniors and their families and caregivers information on mail, telemarketing, and Internet fraud targeting seniors, including on ways of referring complaints to appropriate law enforcement agencies; (2) in response to a request about a particular entity or individual, to provide publicly available information on any record of civil or criminal law enforcement action for such fraud; and (
+    ID=20384 | ground_truth=Domestic Commerce | origem=train
+    Seniors Financial Fraud Prevention Act of 2010 - Establishes a separate office within the Federal Trade Commission (FTC) for the prevention of fraud targeting seniors and requires the office to assist the FTC in monitoring the market for mail, telemarketing, television, and Internet fraud which targets seniors. Requires the FTC through such office: (1) to disseminate to seniors and their families and caregivers information on mail, telemarketing, television, and Internet fraud targeting seniors,
+
+CLUSTER 73 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  Foreign Trade: 8 (72.73%)
+  Law and Crime: 1 (9.09%)
+  Government Operations: 1 (9.09%)
+  International Affairs: 1 (9.09%)
+  Exemplos de documentos:
+    ID=14562 | ground_truth=Law and Crime | origem=train
+    Customs Training Enhancement Act Directs the Commissioner of the U.S. Customs and Border Protection (CBP) to establish educational seminars at U.S. ports of entry to improve the ability of CBP personnel to classify and appraise articles imported into the United States in accordance with U.S. customs laws, including their ability to identify and prevent the mislabeling and transshipment of such articles.
+    ID=17954 | ground_truth=Government Operations | origem=train
+    Directs the United States Customs and Border Protection to liquidate or reliquidate certain entries of large newspaper printing presses and components thereof.
+    ID=19940 | ground_truth=International Affairs | origem=train
+    Directs U.S. Customs and Border Protection to liquidate or reliquidate certain entries of top-of-the-stove stainless steel cooking ware from the Republic of Korea.
+
+CLUSTER 74 | 22 documentos
+----------------------------------------------------------------------------------------------------
+  Transportation: 22 (100.00%)
+  Exemplos de documentos:
+    ID=23089 | ground_truth=Transportation | origem=train
+    Federal Aviation Administration Extension Act of 2007 - Amends the Internal Revenue Code to extend through December 31, 2007: (1) the excise taxes on aviation fuels and air transportation of persons and property for funding the Airport and Airway Trust Fund; and (2) the expenditure authority for such Trust Fund.Amends federal transportation law to extend funding through December 31, 2007, for: (1) grants for airport planning and development and airport noise compatibility planning and programs; 
+    ID=23099 | ground_truth=Transportation | origem=train
+    Airport and Airway Extension Act of 2008 - Amends the Internal Revenue Code to extend through June 30, 2008: (1) the excise taxes on aviation fuels and air transportation of persons and property for funding the Airport and Airway Trust Fund; and (2) the expenditure authority for such Trust Fund.Amends federal transportation law to provide funding for airport planning and development and noise compatibility planning programs for the nine-month period beginning October 1, 2007. Extends until June 
+    ID=23107 | ground_truth=Transportation | origem=train
+    Federal Aviation Administration Extension Act of 2008 - Amends the Internal Revenue Code to extend through FY2008: (1) excise taxes on aviation fuels and air transportation of persons and property; and (2) the expenditure authority for the Airport and Airway Trust Fund.Amends federal transportation laws to extend funding through September 30, 2008, for various airport development projects, including: (1) the pilot program for passenger facility fees at nonhub airports; (2) state and local airpor
+
+CLUSTER 75 | 12 documentos
+----------------------------------------------------------------------------------------------------
+  Education: 10 (83.33%)
+  Social Welfare: 2 (16.67%)
+  Exemplos de documentos:
+    ID=13704 | ground_truth=Social Welfare | origem=train
+    IDEA Full Funding Act Amends the Individuals with Disabilities Education Act (IDEA) to reauthorize and make appropriations for the grant program to assist states and outlying areas in providing special education and related services to children with disabilities. Sets the amount to be authorized and the amount to be appropriated for each fiscal year from FY2016-FY2024 as the greater of: (1) a specified amount, or (2) a specified percentage of an amount determined pursuant to a formula that multi
+    ID=23840 | ground_truth=Education | origem=train
+    Keep Our Promise to America's Children and Teachers Act or the Keep Our PACT Act - Makes appropriations of: (1) the greater of specified amounts or the authorized amounts for programs under the Elementary and Secondary Education Act of 1965 for FY2007-FY2014; and (2) specified amounts for FY2007-FY2015 and an amount determined pursuant to a specified formula (based on the number of children who received special education, the average per-pupil expenditure, and the rate of change in a state's pop
+    ID=23846 | ground_truth=Education | origem=train
+    IDEA Full Funding Act - Amends the Individuals with Disabilities Education Act (IDEA) to reauthorize part B programs of education of all children with disabilities. Authorizes appropriations for part B: (1) for FY2008-FY2015 in specified amounts; and (2) for FY2016 and each fiscal year thereafter in an amount equal to the sum of the maximum amounts of the grants all states may receive under certain IDEA provisions. (Provides phased-in increases of such authorized funding.)Makes appropriations fo
+
+CLUSTER 76 | 29 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 18 (62.07%)
+  Government Operations: 10 (34.48%)
+  Defense: 1 (3.45%)
+  Exemplos de documentos:
+    ID=11416 | ground_truth=Government Operations | origem=train
+    Designates the Liberty Memorial at the National World War I Museum in Kansas City, Missouri, as the National World War I Memorial.
+    ID=12035 | ground_truth=Public Lands | origem=train
+    Brigadier General Francis Marion Memorial Act of 2007 - Authorizes the Marion Park Project, a committee of the Palmetto Conservation Foundation, to establish a commemorative work on federal land in the District of Columbia and its environs to honor Brigadier General Francis Marion. Prohibits the use of federal funds to pay any expense of its establishment. Makes the Marion Park Project solely responsible for acceptance of contributions for, and payment of the expenses of, the establishment of su
+    ID=24500 | ground_truth=Government Operations | origem=train
+    Frank Buckles World War I Memorial Act - Authorizes the World War I Memorial Foundation to establish a commemorative work rededicating the District of Columbia War Memorial as a National and District of Columbia World War I Memorial.
+
+CLUSTER 77 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Labor: 9 (90.00%)
+  Energy: 1 (10.00%)
+  Exemplos de documentos:
+    ID=19291 | ground_truth=Labor | origem=train
+    Robert C. Byrd Miner Safety and Health Act of 2010 - Title I: Additional Inspection and Investigation Authority - (Sec. 101) Amends the Federal Mine Safety and Health Act of 1977 (this Act) to require the Secretary of Labor (Secretary), in conducting health and safety related accident investigations in coal or other mines, to: (1) determine why an accident occurred and whether there were violations of law, mandatory health and safety standards, or other requirements; (2) issue citations and pena
+    ID=19296 | ground_truth=Labor | origem=train
+    Robert C. Byrd Mine Safety Protection Act of 2010 - Amends the Federal Mine Safety and Health Act of 1977 (this Act) to require the Secretary of Labor (Secretary), in conducting health and safety related accident investigations in coal or other mines, to: (1) determine why an accident occurred and whether there were violations of law, mandatory health and safety standards, or other requirements; (2) in cases involving violations of federal criminal law, refer them to the Attorney General; and (3
+    ID=19301 | ground_truth=Labor | origem=train
+    Robert C. Byrd Mine and Workplace Safety and Health Act of 2010 - Amends the Federal Mine Safety and Health Act of 1977 (this Act) to require the Secretary of Labor (Secretary), in conducting health and safety related accident investigations in coal or other mines, to: (1) determine why an accident occurred and whether there were violations of law, mandatory health and safety standards, or other requirements; (2) issue citations and penalties in case of violations, and in cases involving possibl
+
+CLUSTER 78 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 13 (100.00%)
+  Exemplos de documentos:
+    ID=26256 | ground_truth=Energy | origem=train
+    (This measure has not been amended since it was reported to the Senate on June 27, 2013. The summary of that version is repeated here.) Collinsville Renewable Energy Production Act - Authorizes the Federal Energy Regulatory Commission (FERC), upon request of the town of Canton, Connecticut (Town), to: (1) reinstate the expired license for either or each of the projects numbered 10822 and 10823; (2) extend for two years after the date on which either or each such project is reinstated the time pe
+    ID=26275 | ground_truth=Energy | origem=train
+    (This measure has not been amended since it was introduced. The summary of that version is repeated here.) Directs the Federal Energy Regulatory Commission (FERC), upon the request of the licensee for the project numbered 12423 (American Falls Reservoir, Idaho), to reinstate the license and extend for three years after enactment of this Act the time period during which the licensee is required to commence the construction of project works.
+    ID=26282 | ground_truth=Energy | origem=train
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) (Sec. 1) This bill requires the Federal Energy Regulatory Commission, upon request, to reinstate the construction license granted to Clark Canyon Hydro Company for the Clark Canyon Dam Hydroelectric Project located on the Beaverhead River in Beaverhead County, Montana. Clark Canyon Hydro Company is required to commence construction on the project within three years.
+
+CLUSTER 79 | 9 documentos
+----------------------------------------------------------------------------------------------------
+  Environment: 5 (55.56%)
+  Public Lands: 2 (22.22%)
+  Agriculture: 1 (11.11%)
+  Domestic Commerce: 1 (11.11%)
+  Exemplos de documentos:
+    ID=9575 | ground_truth=Environment | origem=train
+    Global Warming Wildlife Survival Act - Requires the Secretary of the Interior to promulgate a national strategy for mitigating the impacts of global warming on wildlife populations and to revise it within five years after its promulgation and not later than every ten years thereafter to reflect new information.Requires the Secretary to establish a science advisory board to: (1) provide scientific and technical advice and recommendations on the impacts of global warming on wildlife and its habita
+    ID=9581 | ground_truth=Environment | origem=train
+    Southern Sea Otter Recovery and Research Act - Requires the Secretary of the Interior, acting through the United States Fish and Wildlife Service, to carry out a recovery program for southern sea otter populations along the coast of California.Requires the Secretary to: (1) develop a Southern Sea Otter Health Assessment Plan; (2) collect and analyze tissue samples from southern sea otters; and (3) submit the tissue to the Secretary of Commerce for inclusion in the National Marine Mammal Tissue B
+    ID=12439 | ground_truth=Public Lands | origem=train
+    Natural Resources Climate Adaptation Act - Declares as the purposes of this Act to: (1) integrate federal agency activities to respond to ongoing and expected impacts of climate change by protecting, restoring, and conserving the natural resources and associated ecosystem services of the United States; and (2) provide financial support and incentives for authorized programs, strategies, and activities to protect, restore, and conserve natural resources and associated ecosystem services in respon
+
+CLUSTER 80 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Energy: 9 (90.00%)
+  Domestic Commerce: 1 (10.00%)
+  Exemplos de documentos:
+    ID=27760 | ground_truth=Energy | origem=train
+    Nuclear Power Licensing Reform Act of 2007 - Amends the Atomic Energy Act of 1954 to require, for a commercial license for an atomic power production or utilization facility, that: (1) the facility does not pose an unreasonable threat to persons or the environment because of safety or security vulnerabilities (including vulnerability to terrorist attacks); and (2) there exist adequate evacuation plans for emergency events which have been approved by the relevant federal agencies and states withi
+    ID=27764 | ground_truth=Energy | origem=train
+    Amends the Atomic Energy Act of 1954 to direct the Nuclear Regulatory Commission (NRC) to: (1) develop an independent safety assessment procedure for nuclear facilities; and (2) create a team to inspect the design, construction, maintenance, and operational safety performance of a facility. Declares that a final NRC decision on whether to extend an operating license, approve an extended power uprate, or continue to operate a facility shall not be made until: (1) the NRC has completed the indepen
+    ID=27773 | ground_truth=Energy | origem=train
+    Amends the Atomic Energy Act of 1954 to direct the Nuclear Regulatory Commission (NRC) to: (1) develop an independent safety assessment procedure for nuclear facilities; and (2) create a team to inspect the design, construction, maintenance, and operational safety performance of a facility. Declares that a final NRC decision on whether to extend an operating license, approve an extended power uprate, or continue to operate a facility shall not be made until: (1) the NRC has completed the indepen
+
+CLUSTER 81 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  International Affairs: 12 (92.31%)
+  Law and Crime: 1 (7.69%)
+  Exemplos de documentos:
+    ID=15305 | ground_truth=Law and Crime | origem=train
+    Directs the Secretary of State to designate as a foreign terrorist organization each of the following: (1) the Arellano Feliz Organization, (2) the Los Zetas Cartel, (3) the Beltran Leyva Organization, (4) La Familia Michoacana, (5) the Sinaloa Cartel, and (6) the Gulf Cartel/New Federation.
+    ID=19657 | ground_truth=International Affairs | origem=train
+    End the Turkish Blockade of Armenia Act - Expresses the sense of Congress that the President and Secretary of State should call upon Turkey to comply with the long-standing U.S. position that Turkey should lift its ongoing blockade with Armenia. Directs the Secretary to report on U.S. plans and steps taken to end such blockade.
+    ID=28080 | ground_truth=International Affairs | origem=train
+    Directs the Secretary of State to designate the Haqqani network (an insurgent network operating in Pakistan and Afghanistan) as a foreign terrorist organization.
+
+CLUSTER 82 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 7 (70.00%)
+  Government Operations: 3 (30.00%)
+  Exemplos de documentos:
+    ID=14332 | ground_truth=Law and Crime | origem=train
+    Law Enforcement Officers Equity Act - Amends the definition of the term "law enforcement officer" under provisions of the Federal Employees Retirement System (FERS) and the Civil Service Retirement System (CSRS) to include: (1) federal employees not otherwise covered by such term whose duties include the investigation or apprehension of suspected or convicted individuals and who are authorized to carry a firearm; and (2) such employees of the Internal Revenue Service (IRS) whose duties are prima
+    ID=14414 | ground_truth=Law and Crime | origem=train
+    Law Enforcement Officers Retirement Equity Act of 2010 - Redefines the term "law enforcement officer" under provisions of the Federal Employees Retirement System (FERS) and the Civil Service Retirement System (CSRS) to include: (1) federal employees not otherwise covered by such term whose duties include the investigation or apprehension of suspected or convicted individuals and who are authorized to carry a firearm; and (2) such employees of the Internal Revenue Service (IRS) whose duties are p
+    ID=14420 | ground_truth=Law and Crime | origem=train
+    Law Enforcement Officers Equity Act - Amends the definition of the term "law enforcement officer" under provisions of the Federal Employees Retirement System (FERS) and the Civil Service Retirement System (CSRS) to include: (1) federal employees not otherwise covered by such term whose duties include the investigation or apprehension of suspected or convicted individuals and who are authorized to carry a firearm; and (2) such employees of the Internal Revenue Service (IRS) whose duties are prima
+
+CLUSTER 83 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Public Lands: 13 (100.00%)
+  Exemplos de documentos:
+    ID=31887 | ground_truth=Public Lands | origem=test
+    Prohibits any further extension or establishment of national parks and monuments in Utah except by express authorization of Congress.
+    ID=31889 | ground_truth=Public Lands | origem=test
+    Prohibits any further extension or establishment of national parks and monuments in Nevada from being undertaken except by express authorization of Congress.
+    ID=31890 | ground_truth=Public Lands | origem=test
+    Prohibits any further extension or establishment of national parks and monuments in California from being undertaken, except by express authorization of Congress.
+
+CLUSTER 84 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 13 (100.00%)
+  Exemplos de documentos:
+    ID=33206 | ground_truth=Domestic Commerce | origem=test
+    Midwestern Disaster Tax Relief Act of 2008 - Amends the Internal Revenue Code to provide tax benefits to individuals affected by presidentially-declared natural disasters (i.e., severe storms, tornadoes, or flooding) in the states of Arkansas, Illinois, Indiana, Iowa, Kansas, Michigan, Minnesota, Missouri, Nebraska, and Wisconsin on or after May 20, 2008, and before August 1, 2008 (Midwestern disaster area).Makes specified provisions of the Internal Revenue Code, which currently apply only to re
+    ID=33208 | ground_truth=Domestic Commerce | origem=test
+    Fair Disaster Tax Relief Act of 2008 - Amends the Internal Revenue Code to provide special tax rules for individuals affected by a federally declared disaster, including: (1) allowance of all personal casualty losses incurred in a federally declared disaster in excess of $500; (2) an increase in the standard tax deduction for disaster losses; (3) full expensing of business-related disaster cleanup expenses; (4) extension of the net operating loss carryback period from two to five years for disas
+    ID=33221 | ground_truth=Domestic Commerce | origem=test
+    Hurricane Ike Tax Relief Act of 2008 - Amends the Internal Revenue Code to provide tax benefits to individuals affected by Hurricane Ike.Makes specified provisions of the Internal Revenue Code, which currently apply only to residents of the Gulf Opportunity Zone and the Hurricane Katrina disaster area, applicable to the Hurricane Ike recovery area, including: (1) tax-exempt bond financing, the low-income housing tax credit, accelerated depreciation and increased expensing of business assets, an 
+
+CLUSTER 85 | 15 documentos
+----------------------------------------------------------------------------------------------------
+  International Affairs: 11 (73.33%)
+  Government Operations: 2 (13.33%)
+  Social Welfare: 1 (6.67%)
+  Domestic Commerce: 1 (6.67%)
+  Exemplos de documentos:
+    ID=28365 | ground_truth=Social Welfare | origem=train
+    Division A: Foreign Relations Authorization Act, Fiscal Years 2010 and 2011- Foreign Relations Authorization Act, Fiscal Years 2010 and 2011- Title I: Authorization of Appropriations - (Sec. 101) Authorizes FY2010-FY2011 appropriations for the Department of State (Department) to carry diplomatic and consular affairs, including: (1) worldwide security protection; (2) public diplomacy; (3) the Bureau of Democracy, Human Rights, and Labor; (4) the Capital Investment Fund; (5) embassy security, cons
+    ID=34839 | ground_truth=Domestic Commerce | origem=test
+    Department of State, Foreign Operations and Related Programs Appropriations Act, 2009 - Makes FY2009 appropriations for the Department of State (Department) for: (1) administration of foreign affairs and diplomatic and consular programs; (2) the civilian stabilization initiative; (3) the Capital Investment Fund; (4) the Office of Inspector General; (5) educational and cultural exchange programs; (6) representation allowances; (7) protection of foreign missions and officials; (8) U.S. embassy sec
+    ID=39402 | ground_truth=Government Operations | origem=test
+    Department of State, Foreign Operations, and Related Programs Appropriations Act, 2010 - Title I: Department of State and Related Agency - Makes FY2010 appropriations for the Department of State (Department) for: (1) administration of foreign affairs and diplomatic and consular programs; (2) the civilian stabilization initiative; (3) the Capital Investment Fund; (4) the Office of Inspector General; (5) educational and cultural exchange programs; (6) representation allowances; (7) protection of f
+
+CLUSTER 86 | 16 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 16 (100.00%)
+  Exemplos de documentos:
+    ID=36543 | ground_truth=Macroeconomics | origem=test
+    Makes 1% across-the-board rescissions in non-defense, non-homeland-security discretionary spending for FY2007.
+    ID=36544 | ground_truth=Macroeconomics | origem=test
+    Makes 2% across-the-board rescissions in non-defense, non-homeland-security discretionary spending for FY2007.
+    ID=36545 | ground_truth=Macroeconomics | origem=test
+    Makes 5% across-the-board recissions in non-defense, non-homeland-security discretionary spending for FY2007.
+
+CLUSTER 87 | 37 documentos
+----------------------------------------------------------------------------------------------------
+  Macroeconomics: 35 (94.59%)
+  Government Operations: 2 (5.41%)
+  Exemplos de documentos:
+    ID=30006 | ground_truth=Government Operations | origem=test
+    Authorizes an extension of the presidential authority to modify the public debt ceiling (subject to enactment of a congressional joint resolution of disapproval). Authorizes the Secretary of the Treasury to borrow an additional amount estimated to be sufficient to meet commitments for one year whenever the President certifies to Congress that the public debt subject to limit is within $100 billion of the $16.394 trillion limit and that further borrowing is required to meet existing commitments. 
+    ID=31365 | ground_truth=Government Operations | origem=test
+    Ending Fiscal Cliffs Act of 2012 - Authorizes an increase or decrease in the public debt limit, as necessary, by the amount determined by the Secretary of the Treasury to be required to meet existing commitments after enactment of any Act of Congress that provides budget authority or reduces revenues.
+    ID=36654 | ground_truth=Macroeconomics | origem=test
+    Full Faith and Credit Act of 2011 - Repeals public debt limit requirements. Limits the issuance of obligations for the public debt only to fund commitments incurred by the federal government that require current funding. (Thus eliminates the statutory cap on the public debt.)
+
+CLUSTER 88 | 16 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 12 (75.00%)
+  Social Welfare: 2 (12.50%)
+  Health: 1 (6.25%)
+  Housing: 1 (6.25%)
+  Exemplos de documentos:
+    ID=13205 | ground_truth=Health | origem=train
+    Rural Opportunities Act of 2007 - Amends the Security and Rural Investment Act of 2002 to direct the Secretary of Agriculture to: (1) make state grants for extension, education, applied research, and development activities at institutions of higher education, state agencies, or partnerships for local and regional bioenergy and biobased product use and production; and (2) provide funds for basic research on next generation technology. Authorizes the Secretary to make supplemental rural cooperativ
+    ID=15589 | ground_truth=Agriculture | origem=train
+    Beginning Farmer and Rancher Opportunity Act of 2011 - Amends the Food Security Act of 1985 to extend: (1) the conservation reserve and related programs, (2) the pilot program for enrollment of wetland and buffer acreage in the conservation reserve program, (3) the environmental quality incentives program, (4) activities to address air quality concerns from agricultural operations, and (5) the conservation access program. Permits conservation reserve contract modification to facilitate transfers
+    ID=15652 | ground_truth=Agriculture | origem=train
+    Beginning Farmer and Rancher Opportunity Act of 2013 - Amends the Food Security Act of 1985 to extend: (1) the conservation reserve and related programs, and (2) assistance to disadvantaged or beginning farmers or ranchers for access to the environmental quality incentives and the conservation stewardship programs. Permits conservation reserve contract modification to facilitate transfers from retiring owners to limited resource farmers or ranchers. Amends the Consolidated Farm and Rural Develop
+
+CLUSTER 89 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 10 (100.00%)
+  Exemplos de documentos:
+    ID=15477 | ground_truth=Agriculture | origem=train
+    Food, Conservation, and Energy Act of 2008 - Title I: Commodity Programs - (Sec. 1001) Defines specified terms. Subtitle A: Direct Payments and Counter-Cyclical Payments - (Sec. 1101) Directs the Secretary of Agriculture (Secretary) to adjust base acres for covered commodities for a farm whenever: (1) a conservation reserve contract expires or is voluntarily terminated; (2) cropland is released from coverage under a conservation reserve contract; or (3) the producer has eligible pulse crop or oi
+    ID=15653 | ground_truth=Agriculture | origem=train
+    Dairy Freedom Act - Amends the Food, Conservation, and Energy Act of 2008 to direct the Secretary of Agriculture (USDA) to establish a dairy producer margin insurance program to protect dairy producer income by paying participating dairy producers margin insurance payments when actual dairy producer margins are less than such payments' threshold levels. Makes the program available to all U.S. dairy producers. Sets forth program provisions. Repeals: (1) the dairy product price support program, (2
+    ID=15658 | ground_truth=Agriculture | origem=train
+    Federal Agriculture Reform and Risk Management Act of 2013 - Title I: Commodities - Subtitle A: Repeals and Reforms - (Sec. 1101) Repeals, but continues for crop year 2013: (1) direct payments, (2) countercyclical payments, and (3) the average crop revenue election program (ACRE). (Sec. 1105) Directs the Secretary of Agriculture (USDA) to provide for a farm's base acreage adjustment for covered commodities if: (1) a conservation reserve contract expires or is voluntarily terminated, (2) cropland
+
+CLUSTER 90 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Housing: 9 (90.00%)
+  Defense: 1 (10.00%)
+  Exemplos de documentos:
+    ID=5949 | ground_truth=Defense | origem=train
+    Foreclosure Relief and Extension for Servicemembers Act of 2014 - Amends the Honoring America's Veterans and Caring for Camp Lejeune Families Act of 2012 to make permanent the extended one-year period after a servicemember's military service during which: (1) a court may stay proceedings to enforce an obligation on real or personal property owned by the servicemember prior to such military service; and (2) the sale, foreclosure, or seizure of such property is invalid without a court order or agr
+    ID=38420 | ground_truth=Housing | origem=test
+    Amends the Honoring America's Veterans and Caring for Camp Lejeune Families Act of 2012 with respect to the one-year period after a service member's military service during which: (1) a court may stay proceedings to enforce an obligation on real or personal property owned by the service member before such military service; and (2) any sale, foreclosure, or seizure of such property shall be invalid without a court order or waiver agreement signed by the service member. Repeals the revival, effect
+    ID=38421 | ground_truth=Housing | origem=test
+    Servicemembers Foreclosure Protection Act of 2014 - Amends the Honoring America's Veterans and Caring for Camp Lejeune Families Act of 2012 to extend through calendar 2016 the one-year period after a servicemember's military service during which: (1) a court may stay proceedings to enforce an obligation on real or personal property owned by the servicemember before such military service; and (2) any sale, foreclosure, or seizure of such property shall be invalid without a court order or a waiver
+
+CLUSTER 91 | 14 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 10 (71.43%)
+  Housing: 2 (14.29%)
+  Transportation: 2 (14.29%)
+  Exemplos de documentos:
+    ID=38664 | ground_truth=Housing | origem=test
+    Transportation, Housing and Urban Development, and Related Agencies Appropriations Act, 2011 - Title I: Department of Transportation - Department of Transportation Appropriations Act, 2011 - Makes appropriations for FY2011 to the Department of Transportation (DOT), including: (1) the Office of the Secretary; (2) the Federal Aviation Administration (FAA); (3) the Federal Highway Administration; (4) the Federal Motor Carrier Safety Administration; (5) the National Highway Traffic Safety Administra
+    ID=38680 | ground_truth=Housing | origem=test
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) Transportation, Housing and Urban Development, and Related Agencies Appropriations Act, 2014 - Title I: Department of Transportation - Department of Transportation Appropriations Act, 2014 - Makes appropriations for FY2014 to the Department of Transportation (DOT), including: (1) the Office of the Secretary, (2) the Federal Aviation Administration (FAA), (3) the Fede
+    ID=39336 | ground_truth=Government Operations | origem=test
+    Transportation, Housing and Urban Development, and Related Agencies Appropriations Act, 2008 - Title I: Department of Transportation - Department of Transportation Appropriations Act, 2008 - Makes appropriations for FY2008 to the Department of Transportation, including: (1) the Office of the Secretary; (2) the Federal Aviation Administration (FAA); (3) the Federal Highway Administration; (4) the Federal Motor Carrier Safety Administration; (5) the National Highway Traffic Safety Administration (
+
+CLUSTER 92 | 10 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 10 (100.00%)
+  Exemplos de documentos:
+    ID=39334 | ground_truth=Government Operations | origem=test
+    Financial Services and General Government Appropriations Act, 2008 - Title I: Department of the Treasury - Department of the Treasury Appropriations Act, 2008 - Makes appropriations for FY2008 to the Department of the Treasury for: (1) departmental offices; (2) department-wide systems and capital investments programs; (3) the Office of Inspector General; (4) the Treasury Inspector General for Tax Administration; (5) the Air Transportation Stabilization Program Account; (6) the Financial Crimes E
+    ID=39343 | ground_truth=Government Operations | origem=test
+    Financial Services and General Government Appropriations Act, 2009 - Title I: Department of the Treasury - Department of the Treasury Appropriations Act, 2009- Makes appropriations for FY2009 to the Department of the Treasury for: (1) departmental offices; (2) department-wide systems and capital investments programs; (3) the Office of Inspector General; (4) the Treasury Inspector General for Tax Administration; (5) the Financial Crimes Enforcement Network; (6) the Financial Management Service; (
+    ID=39357 | ground_truth=Government Operations | origem=test
+    Financial Services and General Government Appropriations Act, 2009 - Title I: Department of the Treasury - Department of the Treasury Appropriations Act, 2009 - Makes appropriations for FY2009 to the Department of the Treasury for: (1) departmental offices; (2) department-wide systems and capital investments programs; (3) the Office of Inspector General; (4) the Treasury Inspector General for Tax Administration; (5) the Financial Crimes Enforcement Network; (6) the Financial Management Service; 
+
+CLUSTER 93 | 15 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 15 (100.00%)
+  Exemplos de documentos:
+    ID=39337 | ground_truth=Government Operations | origem=test
+    Departments of Commerce and Justice, Science, and Related Agencies Appropriations Act, 2008 - Makes appropriations for FY2008 for the Departments of Commerce and Justice, for science-related programs, and related agencies.Title I: Department of Commerce - Department of Commerce Appropriations Act, 2008 - Makes appropriations for the Department of Commerce for FY2008 for: (1) the International Trade Administration; (2) the Bureau of Industry and Security; (3) the Economic Development Administrati
+    ID=39342 | ground_truth=Government Operations | origem=test
+    Commerce, Justice, Science, and Related Agencies Appropriations Act, 2009 - Makes appropriations for FY2009 for the Departments of Commerce and Justice, science-related programs, and related agencies.Title I: Department of Commerce - Department of Commerce Appropriations Act, 2009 - Makes appropriations for the Department of Commerce for FY2009 for: (1) the International Trade Administration; (2) the Bureau of Industry and Security; (3) the Economic Development Administration; (4) the Minority B
+    ID=39349 | ground_truth=Government Operations | origem=test
+    Departments of Commerce and Justice, Science, and Related Agencies Appropriations Act, 2008 - Makes appropriations for FY2008 for the Departments of Commerce and Justice, for science-related programs, and related agencies.Title I: Department of Commerce - Department of Commerce Appropriations Act, 2008 - Makes appropriations for the Department of Commerce for FY2008 for: (1) the International Trade Administration; (2) the Bureau of Industry and Security; (3) the Economic Development Administrati
+
+CLUSTER 94 | 20 documentos
+----------------------------------------------------------------------------------------------------
+  Agriculture: 14 (70.00%)
+  Government Operations: 5 (25.00%)
+  International Affairs: 1 (5.00%)
+  Exemplos de documentos:
+    ID=39370 | ground_truth=Government Operations | origem=test
+    (This measure has not been amended since it was passed by the House on February 25, 2009. The summary of that version is repeated here.) Omnibus Appropriations Act, 2009 - (Sec. 4) Declares that the explanatory statement regarding this Act printed in the House of Representatives section of the Congressional Record on or about February 23, 2009, by the Chairman of the Committee on Appropriations of the House shall have the same effect with respect to the allocation of funds and implementation of 
+    ID=39438 | ground_truth=Government Operations | origem=test
+    (This measure has not been amended since it was passed by the Senate on March 20, 2013. The summary of that version is repeated here.) Consolidated and Further Continuing Appropriations Act, 2013 - Division A: Agriculture, Rural Development, Food and Drug Administration, and Related Agencies Appropriations Act, 2013 - Title I: Agricultural Programs - Appropriates FY2013 funds for the following Department of Agriculture (USDA) programs and services: Office of the Secretary of Agriculture (Secreta
+    ID=39468 | ground_truth=Government Operations | origem=test
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) Agriculture, Rural Development, Food and Drug Administration, and Related Agencies Appropriations Act, 2015 - Title I: Agricultural Programs - Appropriates FY2015 funds for the following Department of Agriculture (USDA) programs and services: (1) Office of the Secretary of Agriculture (Secretary); (2) Office of the Chief Economist; (3) National Appeals Division; (4) 
+
+CLUSTER 95 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 13 (100.00%)
+  Exemplos de documentos:
+    ID=39447 | ground_truth=Government Operations | origem=test
+    Anti-Self-Destruction Act or the Fiscal Sanity Act of 2013 - Makes FY2014 appropriations for: (1) each project or activity for which budget authority was provided in the Consolidated and Further Continuing Appropriations Act, 2013 (P.L. 113-6) in an amount equal to the authority provided in such Act, as reduced pursuant to the presidential sequestration order dated March 1, 2013, to remain available for a comparable period of availability; and (2) entitlements and other mandatory payments whose 
+    ID=39448 | ground_truth=Government Operations | origem=test
+    Fiscal Sanity Act for Appropriations - Makes appropriations for 30 days for: (1) each project or activity for which budget authority was provided in the Consolidated and Further Continuing Appropriations Act, 2013 (P.L. 113-6) in an amount equal to the authority provided in such Act, as reduced pursuant to the presidential sequestration order dated March 1, 2013, to remain available for a comparable period of availability; and (2) entitlements and other mandatory payments whose budget authority 
+    ID=39449 | ground_truth=Government Operations | origem=test
+    Fiscal Sanity Act for Appropriations - Makes appropriations for 60 days for: (1) each project or activity for which budget authority was provided in the Consolidated and Further Continuing Appropriations Act, 2013 (P.L. 113-6) in an amount equal to the authority provided in such Act, as reduced pursuant to the presidential sequestration order dated March 1, 2013, to remain available for a comparable period of availability; and (2) entitlements and other mandatory payments whose budget authority 
+
+CLUSTER 96 | 11 documentos
+----------------------------------------------------------------------------------------------------
+  Law and Crime: 10 (90.91%)
+  Health: 1 (9.09%)
+  Exemplos de documentos:
+    ID=4445 | ground_truth=Health | origem=train
+    Juvenile Crime Reduction Act - Amends the Juvenile Justice and Delinquency Prevention Act of 1974 to allow the Administrator of the Office of Juvenile Justice and Delinquency Prevention to award grants to public agencies to: (1) provide training to individuals involved in making decisions regarding the disposition of cases involving youth who enter the juvenile justice system; and (2) develop a plan to address the service needs of juveniles with mental health or substance abuse disorders who com
+    ID=39536 | ground_truth=Law and Crime | origem=test
+    Youth Crime Deterrence Act of 2007 - Amends the Juvenile Justice and Delinquency Prevention Act of 1974 to set forth additional requirements for state plans under the juvenile justice and delinquency prevention program (program) relating to juvenile truancy from detention or placement settings and housing, reentry and aftercare services for juveniles released from the juvenile justice system. Authorizes the Administrator of the Office of Juvenile Justice and Delinquency Prevention to make grants
+    ID=39544 | ground_truth=Law and Crime | origem=test
+    Juvenile Justice Reform Act of 2008 - Amends the Juvenile Justice and Delinquency Prevention Act of 1974 to: (1) revise the definition of "contact" in such Act to include any sight or sound interaction between a juvenile in custody and an adult inmate; (2) expand eligibility for participation in grant programs under such Act to certain individuals and organizations with an interest in the juvenile justice system ("juvenile justice stakeholders"); (3) require state plans under such Act to provide

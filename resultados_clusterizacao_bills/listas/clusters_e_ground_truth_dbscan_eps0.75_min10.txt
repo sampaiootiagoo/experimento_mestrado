@@ -1,0 +1,82 @@
+ALGORITMO: dbscan_eps0.75_min10
+====================================================================================================
+
+CLUSTER -1 | 2091 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 332 (15.88%)
+  Public Lands: 190 (9.09%)
+  Domestic Commerce: 187 (8.94%)
+  Defense: 151 (7.22%)
+  Law and Crime: 148 (7.08%)
+  Exemplos de documentos:
+    ID=62 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Transfers funds from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated to the Secretary of Health and Human Services (HHS) to be used in FY2010 to provide assistance in reducing AIDS Drug Assistance Program waiting lists and to address other cost containment measures that state AIDS Drug Assistance Programs implement after Ja
+    ID=63 | ground_truth=Health | origem=train
+    Addressing Cost Containment Measures To Ensure the Sustainability and Success of ADAP Act or the ACCESS ADAP Act - Requires specified funds to be transferred to the Secretary of Health and Human Services (HHS) from discretionary amounts appropriated under the American Recovery and Reinvestment Act that remain unobligated, to be obligated during the FY2010 grant period under the AIDS Drug Assistance Program to provide assistance in reducing waiting lists and to address other cost containment meas
+    ID=145 | ground_truth=Health | origem=train
+    Preventing Overprescribing for Pain Act of 2016 This bill requires the Centers for Disease Control and Prevention to issue guidelines for the safe prescribing of opioids for the treatment of acute pain. (Opioids are drugs with effects similar to opium, such as certain pain medications.)
+
+CLUSTER 0 | 39788 documentos
+----------------------------------------------------------------------------------------------------
+  Health: 5124 (12.88%)
+  Government Operations: 3624 (9.11%)
+  Domestic Commerce: 3397 (8.54%)
+  Public Lands: 3332 (8.37%)
+  Defense: 3093 (7.77%)
+  Exemplos de documentos:
+    ID=0 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Price Negotiation Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to require the Secretary of Health and Human Services to negotiate with pharmaceutical manufacturers the prices that may be charged to prescription drug plan sponsors and Medicare Advantage organizations for covered part D drugs for part D eligible individuals enrolled under a prescription drug plan or under a Medicare Advantage prescription drug (MA-PD) plan.
+    ID=1 | ground_truth=Health | origem=train
+    Amends part D (Voluntary Prescription Drug Benefit Program) of title XVIII (Medicare) of the Social Security Act to authorize the Secretary of Health and Human Services to negotiate with drug manufacturers and pharmacies prices charged to prescription drug plan (PDP) sponsors and Medicare Advantage organizations for covered part D drugs provided under Medicare.
+    ID=2 | ground_truth=Health | origem=train
+    Medicare Prescription Drug Enrollment Extension Act of 2007 - Amends title XVIII (Medicare) of the Social Security Act to extend the annual enrollment periods of the Medicare and Medicare Advantage prescription drug benefit programs.
+
+CLUSTER 1 | 4 documentos
+----------------------------------------------------------------------------------------------------
+  Defense: 4 (100.00%)
+  Exemplos de documentos:
+    ID=5390 | ground_truth=Defense | origem=train
+    World War II Merchant Mariner Service Act - Directs the Secretary of Defense (DOD) to consider certain methods for verifying that an individual performed honorable service as a member of the merchant marine during the period beginning on December 7, 1941, and ending on December 31, 1946, for purposes of eligibility for veterans' benefits under the GI Bill Improvement Act of 1977. Requires such methods to include Social Security Administration (SSA) records and validated testimony in the case of 
+    ID=5559 | ground_truth=Defense | origem=train
+    World War II Merchant Mariner Service Act - Directs the Secretary of Homeland Security (DHS) to consider certain methods for verifying that an individual performed honorable service as a member of the merchant marine during the period beginning on December 7, 1941, and ending on December 31, 1946, for purposes of eligibility for veterans' benefits under the GI Bill Improvement Act of 1977. Requires such methods to include Social Security Administration (SSA) records and validated testimony in th
+    ID=37090 | ground_truth=Defense | origem=test
+    World War II Merchant Mariner Service Act - Directs the Secretary of Homeland Security (DHS) to accept additional documentation for verifying that an individual performed honorable service as a coastwise merchant seaman during the period beginning on December 7, 1941, and ending on December 31, 1946, for purposes of eligibility for veterans' benefits under the GI Bill Improvement Act of 1977. Requires such documentation to include Social Security Administration (SSA) records and validated testim
+
+CLUSTER 2 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Civil Rights: 6 (46.15%)
+  Government Operations: 3 (23.08%)
+  Public Lands: 1 (7.69%)
+  Health: 1 (7.69%)
+  Law and Crime: 1 (7.69%)
+  Exemplos de documentos:
+    ID=12737 | ground_truth=Public Lands | origem=train
+    (This measure has not been amended since it was introduced. The expanded summary of the House reported version is repeated here, with an updated short title.) Private Property Rights Protection Act of 2014 - (Sec. 2) Prohibits a state or political subdivision from exercising its power of eminent domain, or allowing the exercise of such power by delegation, over property to be used for economic development or over property that is used for economic development within seven years after that exerci
+    ID=13200 | ground_truth=Health | origem=train
+    Private Property Rights Protection Act - Makes ineligible for federal funds any condemning authority or acquiring party that engages or participates in a taking or condemnation of any real property interest not for a public use or public purpose using the power of eminent domain, without the owner's consent. Requires any entity applying for federal funds to certify eligibility. Allows the Commissioner of the Internal Revenue Service (IRS) to audit any condemning authority or acquiring party that
+    ID=15364 | ground_truth=Law and Crime | origem=train
+    Fifth Amendment Restoration Act of 2014 - Prohibits government seizures of private property under any federal law providing for civil asset forfeiture. Defines "property" to include real property, financial assets, and commonly held property owned by more than one person. Bars federal agencies from: (1) participating in or benefiting from any multiple-jurisdiction, equitable sharing, or shared civil asset forfeiture program with any state or local government; or (2) accepting or adopting propert
+
+CLUSTER 3 | 21 documentos
+----------------------------------------------------------------------------------------------------
+  Domestic Commerce: 20 (95.24%)
+  Energy: 1 (4.76%)
+  Exemplos de documentos:
+    ID=24703 | ground_truth=Domestic Commerce | origem=train
+    Homeowners' Insurance Availability Act of 2007 - Instructs the Secretary of the Treasury to implement a reinsurance coverage program available only through contracts for reinsurance coverage purchased at regional auctions. States that the purpose of the program is to improve: (1) the availability of homeowners' insurance for the purpose of facilitating the pooling, and spreading the risk, of catastrophic financial losses from disasters; and (2) the solvency of the homeowners' insurance markets. 
+    ID=24725 | ground_truth=Domestic Commerce | origem=train
+    Homeowners' Defense Act of 2010 - Title I: National Catastrophe Risk Consortium - (Sec. 101) Establishes the National Catastrophe Risk Consortium as a nonprofit, nonfederal entity to: (1) maintain an inventory of catastrophe risk obligations held by state reinsurance funds, state residual insurance market entities, and state-sponsored providers of natural catastrophe insurance; (2) issue, on a conduit basis, securities and other financial instruments linked to catastrophe risks insured or reinsu
+    ID=24749 | ground_truth=Domestic Commerce | origem=train
+    Homeowners' Defense Act of 2013 - Establishes the National Catastrophe Risk Consortium, as a non-federal, non-profit entity, to ensure the availability and affordability of homeowners' insurance coverage for catastrophic events. Directs the Consortium to: (1) maintain an inventory of catastrophe risk obligations held by state reinsurance funds, state residual insurance market entities, and state-sponsored providers of natural catastrophe insurance; (2) issue, on a conduit basis, securities and o
+
+CLUSTER 4 | 13 documentos
+----------------------------------------------------------------------------------------------------
+  Government Operations: 11 (84.62%)
+  Labor: 2 (15.38%)
+  Exemplos de documentos:
+    ID=39335 | ground_truth=Government Operations | origem=test
+    Departments of Labor, Health and Human Services, and Education, and Related Agencies Appropriations Act, 2008 - Makes appropriations for the Departments of Labor, Health and Human Services, and Education, and related agencies for FY2008. Title I: Department of Labor - Department of Labor Appropriations Act, 2008 - Makes appropriations for FY2008 to the Department of Labor for: (1) the Employment and Training Administration, including training and employment services; (2) community service employ
+    ID=39348 | ground_truth=Government Operations | origem=test
+    Departments of Labor, Health and Human Services, and Education, and Related Agencies Appropriations Act, 2008 - Makes appropriations for the Departments of Labor, Health and Human Services, and Education, and Related agencies for FY2008. Title I: Department of Labor - Department of Labor Appropriations Act, 2008 - Makes appropriations for FY2008 to the Department of Labor for: (1) the Employment and Training Administration, including training and employment services; (2) community service employ
+    ID=39355 | ground_truth=Government Operations | origem=test
+    (This measure has not been amended since it was introduced. The summary has been expanded because action occurred on the measure.) Departments of Labor, Health and Human Services, and Education, and Related Agencies Appropriations Act, 2009 - Title I: Department of Labor - Department of Labor Appropriations Act, 2009 - Makes appropriations for FY2009 to the Department of Labor for: (1) the Employment and Training Administration, including training and employment services; (2) community service e
