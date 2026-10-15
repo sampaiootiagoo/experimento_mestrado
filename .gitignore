@@ -52,3 +52,4 @@ anaconda3/
 
 # Caches do Python
 __pycache__/
+.npy

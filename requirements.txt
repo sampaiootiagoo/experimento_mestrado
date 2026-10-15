@@ -34,10 +34,18 @@ sentence-transformers
 faiss-cpu==1.8.0
 
 # Biblioteca fundamental para computação numérica, dependência do faiss e sentence-transformers
-numpy==1.26.4
+numpy==1.26.2
 
 #
 scipy==1.12.0
 
 # 
 topicgpt_python
+
+regex 
+sentence-transformers 
+torch 
+transformers 
+huggingface-hub 
+FlagEmbedding 
+accelerate
