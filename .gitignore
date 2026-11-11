@@ -17,6 +17,7 @@ venv/
 env/
 .venv/
 .env
+*.env
 
 # Arquivos do Jupyter Notebook
 .ipynb_checkpoints/
@@ -52,3 +53,4 @@ anaconda3/
 
 # Caches do Python
 __pycache__/
+env.env

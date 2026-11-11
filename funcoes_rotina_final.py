@@ -11,7 +11,8 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
 from sklearn.metrics.cluster import contingency_matrix
-from ollama import Client
+import openai
+from dotenv import load_dotenv
 
 # ==============================================================================
 # CONTROLE DE SAÍDA
@@ -83,7 +84,7 @@ def silenciar_saida_detalhada():
 # ==============================================================================
 
 # 🛑 IMPORTANTE: Mude para False quando for rodar o experimento oficial na madrugada!
-MODO_TESTE = False
+MODO_TESTE = True
 # Parâmetros oficiais do artigo TopicGPT para salvar no Log
 HIPERPARAMETROS = {
     "max_tokens": 300,
@@ -96,12 +97,18 @@ HIPERPARAMETROS = {
 }
 
 class ConfiguradorOllama:
+    # Mantida apenas para compatibilidade de nomes, mas agora configura a OpenAI/Proxy
     @staticmethod
-    def setup_ambiente_topicgpt(host="127.0.0.1", port="11434"):
-        base_url = f"http://{host}:{port}/v1"
+    def setup_ambiente_topicgpt(host=None, port=None):
+        load_dotenv("env.env")
+        api_key = os.environ.get("API_KEY")
+        if not api_key:
+            raise ValueError("API_KEY não encontrada no arquivo env.env")
+        
+        base_url = "https://ia-router.unb.br/"
         os.environ["OPENAI_API_BASE"] = base_url
         os.environ["OPENAI_BASE_URL"] = base_url
-        os.environ["OPENAI_API_KEY"] = "ollama-key-falsa" 
+        os.environ["OPENAI_API_KEY"] = api_key
         print(f"Ambiente configurado! topicgpt_python apontará para: {base_url}")
 
 class PreparadorDatasets:
@@ -585,7 +592,7 @@ class PreparadorDatasets:
         )
 
 class PipelineMestrado:
-    def __init__(self, model_name="gemma2:9b"):
+    def __init__(self, model_name="GPT-Lunar"):
         self.api = "openai"
         self.model_name = model_name
 
@@ -1274,8 +1281,8 @@ if __name__ == "__main__":
     print(f"=== INICIANDO EXPERIMENTO TOPICGPT {'(MODO TESTE)' if MODO_TESTE else '(MODO COMPLETO)'} ===")
     
     os.makedirs("resultados", exist_ok=True)
-    ConfiguradorOllama.setup_ambiente_topicgpt(host="127.0.0.1", port="11434")
-    pipeline = PipelineMestrado(model_name="gemma2:9b") # Altere o modelo aqui se necessário
+    ConfiguradorOllama.setup_ambiente_topicgpt()
+    pipeline = PipelineMestrado(model_name="GPT-Lunar") # Atualizado para GPT-Lunar conforme solicitado
 
     # 1. PROCESSAR BILLS
     print("\n" + "="*50 + "\nDATASET 1: CONGRESSIONAL BILLS\n" + "="*50)
