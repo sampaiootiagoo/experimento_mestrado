@@ -111,5 +111,37 @@
             "Respostas_Sem_Topico_Valido": 184,
             "Respostas_Sem_Conteudo": 0
         }
+    },
+    {
+        "dataset": "BILLS",
+        "modelo": "UnB-Qwen/qwen3-8-27b",
+        "base_url": "https://ia-router.unb.br/",
+        "timestamp": "2026-11-24 20:02:31",
+        "modo_teste": true,
+        "amostra_geracao": 10,
+        "amostra_atribuicao": 10,
+        "parametros_llm": {
+            "max_tokens": 300,
+            "temperature": 0.0,
+            "top_p": 1.0,
+            "auto_correction_limit": 10,
+            "min_doc_frequency_bills": 10,
+            "min_doc_frequency_wiki": 5,
+            "max_words_per_doc": 250,
+            "estrategia_thinking": "extra_body"
+        },
+        "metricas": {
+            "NMI": 0.5421402215428217,
+            "ARI": 0.03485254691689008,
+            "HMP": 0.5538461538461539,
+            "Purity": 0.4,
+            "Inverse_Purity": 0.9,
+            "Amostras_Validadas": 10,
+            "Topicos_Disponiveis": 6,
+            "Topicos_Utilizados": 3,
+            "Topicos_Ground_Truth": 8,
+            "Respostas_Sem_Topico_Valido": 0,
+            "Respostas_Sem_Conteudo": 0
+        }
     }
 ]

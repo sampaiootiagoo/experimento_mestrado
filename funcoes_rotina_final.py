@@ -1,8 +1,19 @@
+import warnings
+
+# Silencia warnings de ambiente/dependências antes dos imports das bibliotecas
+warnings.filterwarnings("ignore", message=r".*IProgress not found.*")
+warnings.filterwarnings("ignore", category=FutureWarning, module=r"google\.api_core.*")
+warnings.filterwarnings("ignore", category=FutureWarning, module=r"google\.generativeai.*")
+warnings.filterwarnings("ignore", category=FutureWarning, module=r"topicgpt_python.*")
+warnings.filterwarnings("ignore", category=FutureWarning, message=r".*google\.generativeai.*")
+warnings.filterwarnings("ignore", category=FutureWarning, message=r".*non-supported Python version.*")
+
 import os
 import json
 import re
 import sys
 import time
+import functools
 import contextlib
 import logging
 from datetime import datetime
@@ -11,25 +22,21 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
 from sklearn.metrics.cluster import contingency_matrix
-from ollama import Client
+import openai
+from dotenv import load_dotenv
 
 # ==============================================================================
 # CONTROLE DE SAÍDA
 # ==============================================================================
 @contextlib.contextmanager
-def silenciar_saida_detalhada():
+def silenciar_saida_detalhada(ativo=True):
     """
-    Silencia temporariamente:
-
-    - prints das bibliotecas;
-    - barras de progresso do tqdm;
-    - mensagens em stderr;
-    - logs INFO e WARNING do Sentence Transformers;
-    - logs INFO e WARNING do Transformers;
-    - logs internos do TopicGPT.
-
-    Ao final, todas as configurações são restauradas.
+    Silencia temporariamente prints, barras tqdm e logs verbosos.
+    Quando ativo=False (ex.: MODO_TESTE=True), mantém a saída visível para diagnóstico.
     """
+    if not ativo:
+        yield
+        return
 
     loggers_silenciados = [
         "sentence_transformers",
@@ -56,7 +63,6 @@ def silenciar_saida_detalhada():
         logger.disabled = True
         logger.propagate = False
 
-    # Alguns registros podem estar sendo enviados diretamente ao root logger.
     root_logger = logging.getLogger()
     nivel_root_anterior = root_logger.level
     root_logger.setLevel(logging.CRITICAL + 1)
@@ -68,10 +74,8 @@ def silenciar_saida_detalhada():
                 yield
 
     finally:
-        # Restaura o logger raiz.
         root_logger.setLevel(nivel_root_anterior)
 
-        # Restaura individualmente os loggers alterados.
         for nome_logger, estado in estados_anteriores.items():
             logger = logging.getLogger(nome_logger)
             logger.setLevel(estado["level"])
@@ -82,27 +86,217 @@ def silenciar_saida_detalhada():
 # CONFIGURAÇÕES GERAIS DO EXPERIMENTO
 # ==============================================================================
 
-# 🛑 IMPORTANTE: Mude para False quando for rodar o experimento oficial na madrugada!
+# Mude para False quando validar o teste de 10 documentos e for rodar o experimento completo
 MODO_TESTE = False
-# Parâmetros oficiais do artigo TopicGPT para salvar no Log
+
+# Configurações da API / Proxy UnB
+ARQUIVO_ENV = "env.env"
+NOME_VAR_CHAVE = "UNB_AK"
+BASE_URL_PROXY = "https://ia-router.unb.br/"
+MODELO_LLM = "UnB-Qwen/qwen3-8-27b"
+
+# Parâmetros oficiais do experimento para salvar no Log
 HIPERPARAMETROS = {
     "max_tokens": 300,
     "temperature": 0.0,
-    "top_p": 0.0,
-    "auto_correction_limit": 10, # Limite teórico aplicado pela biblioteca/prompt
+    "top_p": 1.0,  # Ajustado de 0.0 para 1.0 (equivalente com temperature=0.0; exigido pelo vLLM/LiteLLM)
+    "auto_correction_limit": 10,
     "min_doc_frequency_bills": 10,
     "min_doc_frequency_wiki": 5,
-    "max_words_per_doc": 250 # Truncate manual para caber no contexto do LLM
+    "max_words_per_doc": 250,
 }
 
-class ConfiguradorOllama:
+
+class ConfiguradorUnB:
+    _estrategia_thinking = None
+    _min_max_tokens_thinking = 2048
+
     @staticmethod
-    def setup_ambiente_topicgpt(host="127.0.0.1", port="11434"):
-        base_url = f"http://{host}:{port}/v1"
+    def _limpar_conteudo(texto):
+        if not isinstance(texto, str):
+            return ""
+        # Remove eventuais blocos <think>...</think> que vazem no content
+        limpo = re.sub(r"<think>.*?</think>", "", texto, flags=re.DOTALL)
+        return limpo.strip()
+
+    @classmethod
+    def _ajustar_kwargs(cls, kwargs):
+        # 1. Corrige top_p=0.0 -> 1.0 exigido pelo LiteLLM/vLLM
+        if "top_p" in kwargs and kwargs["top_p"] is not None and kwargs["top_p"] <= 0:
+            kwargs["top_p"] = 1.0
+
+        # 2. Aplica a estratégia ativa para lidar com o modo thinking do Qwen3
+        if cls._estrategia_thinking == "extra_body":
+            extra_body = dict(kwargs.get("extra_body") or {})
+            chat_kwargs = dict(extra_body.get("chat_template_kwargs") or {})
+            chat_kwargs["enable_thinking"] = False
+            extra_body["chat_template_kwargs"] = chat_kwargs
+            kwargs["extra_body"] = extra_body
+
+        elif cls._estrategia_thinking == "no_think":
+            msgs = kwargs.get("messages")
+            if isinstance(msgs, list) and msgs:
+                novas_msgs = [dict(m) for m in msgs]
+                for i in range(len(novas_msgs) - 1, -1, -1):
+                    if (
+                        novas_msgs[i].get("role") == "user"
+                        and isinstance(novas_msgs[i].get("content"), str)
+                    ):
+                        if "/no_think" not in novas_msgs[i]["content"]:
+                            novas_msgs[i]["content"] = (
+                                novas_msgs[i]["content"].rstrip() + "\n/no_think"
+                            )
+                        break
+                kwargs["messages"] = novas_msgs
+
+        elif cls._estrategia_thinking == "high_max_tokens":
+            atual = kwargs.get("max_tokens")
+            if atual is None or atual < cls._min_max_tokens_thinking:
+                kwargs["max_tokens"] = cls._min_max_tokens_thinking
+
+        return kwargs
+
+    @classmethod
+    def _limpar_resposta(cls, response):
+        try:
+            if getattr(response, "choices", None):
+                for choice in response.choices:
+                    msg = getattr(choice, "message", None)
+                    if msg is not None and isinstance(getattr(msg, "content", None), str):
+                        msg.content = cls._limpar_conteudo(msg.content)
+        except Exception:
+            pass
+        return response
+
+    @classmethod
+    def aplicar_patch_openai(cls):
+        """
+        Intercepta chamadas do SDK OpenAI feitas pelo topicgpt_python para:
+        - converter top_p <= 0 em 1.0;
+        - aplicar a estratégia detectada para modelos com reasoning/thinking (Qwen3);
+        - limpar tags <think>...</think> residuais na resposta.
+        """
+        from openai.resources.chat.completions import Completions, AsyncCompletions
+
+        if not getattr(Completions.create, "_unb_patched", False):
+            original_create = Completions.create
+
+            @functools.wraps(original_create)
+            def patched_create(self, *args, **kwargs):
+                cls._ajustar_kwargs(kwargs)
+                response = original_create(self, *args, **kwargs)
+                return cls._limpar_resposta(response)
+
+            patched_create._unb_patched = True
+            Completions.create = patched_create
+
+        if not getattr(AsyncCompletions.create, "_unb_patched", False):
+            original_async_create = AsyncCompletions.create
+
+            @functools.wraps(original_async_create)
+            async def patched_async_create(self, *args, **kwargs):
+                cls._ajustar_kwargs(kwargs)
+                response = await original_async_create(self, *args, **kwargs)
+                return cls._limpar_resposta(response)
+
+            patched_async_create._unb_patched = True
+            AsyncCompletions.create = patched_async_create
+
+    @classmethod
+    def setup_ambiente_topicgpt(
+        cls,
+        arquivo_env=ARQUIVO_ENV,
+        nome_var_chave=NOME_VAR_CHAVE,
+        base_url=BASE_URL_PROXY,
+    ):
+        load_dotenv(arquivo_env, override=True)
+        chave = os.getenv(nome_var_chave)
+
+        if not chave:
+            raise ValueError(
+                f"ERRO: a variável '{nome_var_chave}' não foi carregada a partir de '{arquivo_env}'."
+            )
+
         os.environ["OPENAI_API_BASE"] = base_url
         os.environ["OPENAI_BASE_URL"] = base_url
-        os.environ["OPENAI_API_KEY"] = "ollama-key-falsa" 
-        print(f"Ambiente configurado! topicgpt_python apontará para: {base_url}")
+        os.environ["OPENAI_API_KEY"] = chave
+
+        cls.aplicar_patch_openai()
+        print(f"Ambiente configurado! topicgpt_python apontará para: {base_url} (patch UnB ativo)")
+        return chave
+
+    @classmethod
+    def testar_conexao(
+        cls,
+        model_name=MODELO_LLM,
+        base_url=BASE_URL_PROXY,
+    ):
+        chave = os.environ.get("OPENAI_API_KEY")
+        if not chave:
+            raise ValueError(
+                "OPENAI_API_KEY não configurada. Execute setup_ambiente_topicgpt() primeiro."
+            )
+
+        client = openai.OpenAI(api_key=chave, base_url=base_url)
+
+        estrategias = [
+            ("extra_body", "desabilitar thinking via chat_template_kwargs"),
+            ("no_think", "desabilitar thinking via sufixo /no_think"),
+            (
+                "high_max_tokens",
+                f"manter thinking ativo com max_tokens={cls._min_max_tokens_thinking}",
+            ),
+        ]
+
+        print(f"Testando conexão e modo de resposta no proxy da UnB ({model_name})...")
+
+        for estrategia, descricao in estrategias:
+            cls._estrategia_thinking = estrategia
+            try:
+                response = client.chat.completions.create(
+                    model=model_name,
+                    messages=[{"role": "user", "content": "Responda apenas 'OK'."}],
+                    temperature=0.0,
+                    top_p=0.0,
+                    max_tokens=64,
+                )
+                choice = response.choices[0]
+                msg = choice.message
+                conteudo = msg.content
+                reasoning = getattr(msg, "reasoning_content", None) or (
+                    getattr(msg, "model_extra", None) or {}
+                ).get("reasoning_content")
+
+                if isinstance(conteudo, str) and conteudo.strip():
+                    HIPERPARAMETROS["estrategia_thinking"] = estrategia
+                    if estrategia == "high_max_tokens":
+                        HIPERPARAMETROS["max_tokens"] = cls._min_max_tokens_thinking
+                    print(
+                        f"Conexão validada com sucesso! Estratégia ativa: '{estrategia}' "
+                        f"({descricao}) | Resposta: {conteudo.strip()!r}"
+                    )
+                    return conteudo.strip()
+
+                print(
+                    f" -> Estratégia '{estrategia}' retornou content vazio/None "
+                    f"(finish_reason={choice.finish_reason}, "
+                    f"reasoning_content_presente={bool(reasoning)}). Tentando próxima..."
+                )
+            except Exception as erro:
+                print(
+                    f" -> Estratégia '{estrategia}' falhou ({type(erro).__name__}: {erro}). "
+                    f"Tentando próxima..."
+                )
+
+        cls._estrategia_thinking = None
+        raise RuntimeError(
+            f"O modelo '{model_name}' não retornou texto em 'message.content' em nenhuma "
+            f"estratégia testada. Verifique os parâmetros aceitos pelo proxy da UnB."
+        )
+
+# Alias mantido apenas por compatibilidade caso algum script externo importe o nome antigo
+ConfiguradorOllama = ConfiguradorUnB
+
 
 class PreparadorDatasets:
     """Baixa e prepara os quatro arquivos oficiais usados no experimento."""
@@ -163,7 +357,6 @@ class PreparadorDatasets:
             url=url,
             output=str(temporario),
             quiet=False,
-            #fuzzy=True,
             use_cookies=False,
         )
         if not resultado or not temporario.exists() or temporario.stat().st_size == 0:
@@ -265,105 +458,55 @@ class PreparadorDatasets:
 
     @staticmethod
     def _preparar_dataset(
-    prefixo,
-    nome_exibicao,
-    n_gen,
-    n_ass,
+        prefixo,
+        nome_exibicao,
+        n_gen,
+        n_ass,
     ):
         """
         Baixa e lê as bases de treino e teste, une as observações,
-    remove duplicidades e cria amostras independentes para:
+        remove duplicidades e cria amostras independentes para:
 
         1. geração de tópicos;
-    2. atribuição de tópicos.
+        2. atribuição de tópicos.
 
         Uma observação selecionada para geração nunca será utilizada
         na atribuição.
         """
 
-        caminho_train = (
-            PreparadorDatasets._baixar_arquivo_drive(
-                f"{prefixo}_train"
-            )
-        )
+        caminho_train = PreparadorDatasets._baixar_arquivo_drive(f"{prefixo}_train")
+        caminho_test = PreparadorDatasets._baixar_arquivo_drive(f"{prefixo}_test")
 
-        caminho_test = (
-            PreparadorDatasets._baixar_arquivo_drive(
-                f"{prefixo}_test"
-            )
-        )
-
-        df_train = (
-            PreparadorDatasets._ler_jsonl_com_labels(
-                caminho_train,
-                nome_exibicao,
-            )
-        )
-
-        df_test = (
-            PreparadorDatasets._ler_jsonl_com_labels(
-                caminho_test,
-                nome_exibicao,
-            )
-        )
-
-        quantidade_train = len(df_train)
-        quantidade_test = len(df_test)
+        df_train = PreparadorDatasets._ler_jsonl_com_labels(caminho_train, nome_exibicao)
+        df_test = PreparadorDatasets._ler_jsonl_com_labels(caminho_test, nome_exibicao)
 
         print(
             f"[{nome_exibicao}] Registros antes da união | "
-            f"Train: {quantidade_train} | "
-            f"Test: {quantidade_test}"
+            f"Train: {len(df_train)} | "
+            f"Test: {len(df_test)}"
         )
 
-        # Acrescenta a origem somente para fins de rastreabilidade.
         df_train = df_train.copy()
         df_test = df_test.copy()
 
         df_train["origem"] = "train"
         df_test["origem"] = "test"
 
-        # Une treino e teste em uma única base.
-        df_total = pd.concat(
-            [
-                df_train,
-                df_test,
-            ],
-            ignore_index=True,
-        )
-
+        df_total = pd.concat([df_train, df_test], ignore_index=True)
         quantidade_antes_deduplicacao = len(df_total)
 
-        # Remove documentos repetidos entre treino e teste.
-        # A deduplicação considera o conteúdo textual do documento.
         df_total = (
             df_total
-            .drop_duplicates(
-                subset=["text"],
-                keep="first",
-            )
+            .drop_duplicates(subset=["text"], keep="first")
             .reset_index(drop=True)
         )
 
-        quantidade_duplicados = (
-            quantidade_antes_deduplicacao
-            - len(df_total)
-        )
+        quantidade_duplicados = quantidade_antes_deduplicacao - len(df_total)
 
-        print(
-            f"[{nome_exibicao}] Base total após a união: "
-            f"{len(df_total)} documentos únicos"
-        )
+        print(f"[{nome_exibicao}] Base total após a união: {len(df_total)} documentos únicos")
+        print(f"[{nome_exibicao}] Duplicidades removidas: {quantidade_duplicados}")
 
-        print(
-            f"[{nome_exibicao}] Duplicidades removidas: "
-            f"{quantidade_duplicados}"
-        )
-
-        quantidade_labels = (
-            df_total["label_name"]
-            .nunique(dropna=True)
-        )
+        quantidade_labels = df_total["label_name"].nunique(dropna=True)
 
         if quantidade_labels <= 1:
             raise ValueError(
@@ -371,29 +514,11 @@ class PreparadorDatasets:
                 f"{quantidade_labels} label distinta."
             )
 
-        print(
-            f"[{nome_exibicao}] Labels distintos: "
-            f"{quantidade_labels}"
-        )
+        print(f"[{nome_exibicao}] Labels distintos: {quantidade_labels}")
 
-        # No modo de teste, utiliza somente 10 observações
-        # em cada etapa.
-        n_gen_real = (
-            10
-            if MODO_TESTE
-            else n_gen
-        )
-
-        n_ass_real = (
-            10
-            if MODO_TESTE
-            else n_ass
-        )
-
-        quantidade_necessaria = (
-            n_gen_real
-            + n_ass_real
-        )
+        n_gen_real = 10 if MODO_TESTE else n_gen
+        n_ass_real = 10 if MODO_TESTE else n_ass
+        quantidade_necessaria = n_gen_real + n_ass_real
 
         if len(df_total) < quantidade_necessaria:
             raise ValueError(
@@ -404,59 +529,17 @@ class PreparadorDatasets:
                 f"{n_ass_real} para atribuição."
             )
 
-        # Embaralha toda a base uma única vez.
-        # O random_state garante reprodutibilidade.
-        df_total = (
-            df_total
-            .sample(
-                frac=1,
-                random_state=42,
-            )
-            .reset_index(drop=True)
-        )
+        df_total = df_total.sample(frac=1, random_state=42).reset_index(drop=True)
 
-        # Seleciona os primeiros registros para geração.
-        df_gen = (
-            df_total
-            .iloc[:n_gen_real]
-            .copy()
-            .reset_index(drop=True)
-        )
+        df_gen = df_total.iloc[:n_gen_real].copy().reset_index(drop=True)
 
-        # Seleciona os registros seguintes para atribuição.
-        # Como os intervalos não se sobrepõem, nenhum documento
-        # de geração será utilizado na atribuição.
         inicio_atribuicao = n_gen_real
+        fim_atribuicao = n_gen_real + n_ass_real
+        df_ass = df_total.iloc[inicio_atribuicao:fim_atribuicao].copy().reset_index(drop=True)
 
-        fim_atribuicao = (
-            n_gen_real
-            + n_ass_real
-        )
-
-        df_ass = (
-            df_total
-            .iloc[
-                inicio_atribuicao:
-                fim_atribuicao
-            ]
-            .copy()
-            .reset_index(drop=True)
-        )
-
-        # Validação adicional para garantir que não existe
-        # sobreposição textual entre as duas amostras.
-        textos_geracao = set(
-            df_gen["text"]
-        )
-
-        textos_atribuicao = set(
-            df_ass["text"]
-        )
-
-        documentos_sobrepostos = (
-            textos_geracao
-            .intersection(textos_atribuicao)
-        )
+        textos_geracao = set(df_gen["text"])
+        textos_atribuicao = set(df_ass["text"])
+        documentos_sobrepostos = textos_geracao.intersection(textos_atribuicao)
 
         if documentos_sobrepostos:
             raise RuntimeError(
@@ -465,16 +548,8 @@ class PreparadorDatasets:
                 f"simultaneamente na geração e na atribuição."
             )
 
-        # Valida novamente os labels nas duas amostras.
-        labels_geracao = (
-            df_gen["label_name"]
-            .nunique(dropna=True)
-        )
-
-        labels_atribuicao = (
-            df_ass["label_name"]
-            .nunique(dropna=True)
-        )
+        labels_geracao = df_gen["label_name"].nunique(dropna=True)
+        labels_atribuicao = df_ass["label_name"].nunique(dropna=True)
 
         if labels_geracao <= 1:
             raise ValueError(
@@ -488,89 +563,34 @@ class PreparadorDatasets:
                 f"somente {labels_atribuicao} label distinta."
             )
 
-        pasta = Path(
-            "datasets/experimento"
-        )
+        pasta = Path("datasets/experimento")
+        pasta.mkdir(parents=True, exist_ok=True)
 
-        pasta.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
+        path_gen = pasta / f"{prefixo}_gen.jsonl"
+        path_ass = pasta / f"{prefixo}_ass.jsonl"
 
-        path_gen = (
-            pasta
-            / f"{prefixo}_gen.jsonl"
-        )
-
-        path_ass = (
-            pasta
-            / f"{prefixo}_ass.jsonl"
-        )
-
-        # A coluna origem é usada apenas nas validações internas.
-        # Os arquivos do experimento mantêm somente o formato
-        # esperado pelo pipeline.
-        df_gen[
-            [
-                "text",
-                "label_name",
-            ]
-        ].to_json(
+        df_gen[["text", "label_name"]].to_json(
             path_gen,
             orient="records",
             lines=True,
             force_ascii=False,
         )
 
-        df_ass[
-            [
-                "text",
-                "label_name",
-            ]
-        ].to_json(
+        df_ass[["text", "label_name"]].to_json(
             path_ass,
             orient="records",
             lines=True,
             force_ascii=False,
         )
 
-        print(
-            f"[{nome_exibicao}] Preparação concluída!"
-        )
+        print(f"[{nome_exibicao}] Preparação concluída!")
+        print(f"[{nome_exibicao}] Geração: {len(df_gen)} documentos | {labels_geracao} labels")
+        print(f"[{nome_exibicao}] Atribuição: {len(df_ass)} documentos | {labels_atribuicao} labels")
+        print(f"[{nome_exibicao}] Sobreposição entre as amostras: {len(documentos_sobrepostos)}")
+        print(f"[{nome_exibicao}] Arquivo de geração: {path_gen}")
+        print(f"[{nome_exibicao}] Arquivo de atribuição: {path_ass}")
 
-        print(
-            f"[{nome_exibicao}] Geração: "
-            f"{len(df_gen)} documentos | "
-            f"{labels_geracao} labels"
-        )
-
-        print(
-            f"[{nome_exibicao}] Atribuição: "
-            f"{len(df_ass)} documentos | "
-            f"{labels_atribuicao} labels"
-        )
-
-        print(
-            f"[{nome_exibicao}] Sobreposição entre as amostras: "
-            f"{len(documentos_sobrepostos)}"
-        )
-
-        print(
-            f"[{nome_exibicao}] Arquivo de geração: "
-            f"{path_gen}"
-        )
-
-        print(
-            f"[{nome_exibicao}] Arquivo de atribuição: "
-            f"{path_ass}"
-        )
-
-        return (
-            str(path_gen),
-            str(path_ass),
-            len(df_gen),
-            len(df_ass),
-        )
+        return str(path_gen), str(path_ass), len(df_gen), len(df_ass)
 
     @staticmethod
     def preparar_bills():
@@ -584,8 +604,9 @@ class PreparadorDatasets:
             prefixo="wiki", nome_exibicao="WIKI", n_gen=1100, n_ass=8024
         )
 
+
 class PipelineMestrado:
-    def __init__(self, model_name="gemma2:9b"):
+    def __init__(self, model_name=MODELO_LLM):
         self.api = "openai"
         self.model_name = model_name
 
@@ -636,7 +657,7 @@ class PipelineMestrado:
         from topicgpt_python import generate_topic_lvl1
         print(" -> Iniciando Fase 1: Geração de Tópicos...")
         inicio = time.time()
-        with silenciar_saida_detalhada():
+        with silenciar_saida_detalhada(ativo=not MODO_TESTE):
             generate_topic_lvl1(
                 api=self.api,
                 model=self.model_name,
@@ -645,7 +666,7 @@ class PipelineMestrado:
                 seed_file=seed_file,
                 out_file=out_file,
                 topic_file=topic_file,
-                verbose=False,
+                verbose=MODO_TESTE,
             )
         qtd_topicos = len(self._ler_topicos_de_txt(topic_file))
         tempo = time.time() - inicio
@@ -666,21 +687,18 @@ class PipelineMestrado:
     ):
         print(" -> Iniciando Fase 2: Refinamento de Tópicos...")
         inicio = time.time()
-    
-        # Conta os tópicos originais da fase de geração.
-        qtd_antes = len(
-            self._ler_topicos_de_txt(topic_file)
-        )
-    
+
+        qtd_antes = len(self._ler_topicos_de_txt(topic_file))
+
         if qtd_antes == 0:
             raise ValueError(
                 f"Nenhum tópico válido foi encontrado no arquivo "
                 f"original: '{topic_file}'"
             )
-    
-        with silenciar_saida_detalhada():
+
+        with silenciar_saida_detalhada(ativo=not MODO_TESTE):
             from topicgpt_python import refine_topics
-    
+
             refine_topics(
                 api=self.api,
                 model=self.model_name,
@@ -689,40 +707,28 @@ class PipelineMestrado:
                 topic_file=topic_file,
                 out_file=out_file,
                 updated_file=updated_file,
-                verbose=False,
+                verbose=MODO_TESTE,
                 remove=True,
                 mapping_file=mapping_file,
             )
-    
-        # O TopicGPT salva a árvore final refinada em out_file.
+
         if not os.path.exists(out_file):
             raise FileNotFoundError(
-                f"O refinamento não criou o arquivo esperado: "
-                f"'{out_file}'"
+                f"O refinamento não criou o arquivo esperado: '{out_file}'"
             )
-    
+
         if os.path.getsize(out_file) == 0:
             raise ValueError(
-                f"O arquivo refinado foi criado vazio: "
-                f"'{out_file}'"
+                f"O arquivo refinado foi criado vazio: '{out_file}'"
             )
-    
-        # Mantém os nomes esperados pela rotina:
-        # b_top_refinados_limpo.txt ou w_top_refinados_limpo.txt.
-        arquivo_limpo = updated_file.replace(
-            ".json",
-            "_limpo.txt",
+
+        arquivo_limpo = updated_file.replace(".json", "_limpo.txt")
+
+        arquivo_limpo, qtd_depois = self._salvar_topicos_para_atribuicao(
+            out_file,
+            arquivo_limpo,
         )
-    
-        # A lista limpa deve ser criada a partir de out_file,
-        # que contém a árvore refinada, e não de topic_file.
-        arquivo_limpo, qtd_depois = (
-            self._salvar_topicos_para_atribuicao(
-                out_file,
-                arquivo_limpo,
-            )
-        )
-    
+
         if qtd_depois > qtd_antes:
             raise RuntimeError(
                 "O refinamento aumentou a quantidade de tópicos "
@@ -730,54 +736,34 @@ class PipelineMestrado:
                 "Isso não é esperado. Verifique a saída em "
                 f"'{out_file}'."
             )
-    
-        quantidade_fundida_ou_removida = (
-            qtd_antes - qtd_depois
-        )
-    
+
+        quantidade_fundida_ou_removida = qtd_antes - qtd_depois
         quantidade_mapeamentos = 0
-    
+
         if os.path.exists(mapping_file):
             try:
-                with open(
-                    mapping_file,
-                    "r",
-                    encoding="utf-8",
-                ) as arquivo:
+                with open(mapping_file, "r", encoding="utf-8") as arquivo:
                     mapeamentos = json.load(arquivo)
-    
+
                 quantidade_mapeamentos = sum(
                     1
-                    for topico_original, topico_novo
-                    in mapeamentos.items()
+                    for topico_original, topico_novo in mapeamentos.items()
                     if topico_original != topico_novo
                 )
-    
-            except (
-                json.JSONDecodeError,
-                OSError,
-                AttributeError,
-            ):
+            except (json.JSONDecodeError, OSError, AttributeError):
                 quantidade_mapeamentos = 0
-    
+
         tempo = time.time() - inicio
-    
+
         print(
             f"    [✔] Concluído em {tempo:.2f}s | "
             f"Tópicos: {qtd_antes} -> {qtd_depois} | "
             f"Redução: {quantidade_fundida_ou_removida} | "
             f"Mapeamentos alterados: {quantidade_mapeamentos}"
         )
-    
-        print(
-            f"    [✔] Árvore refinada original: {out_file}"
-        )
-    
-        print(
-            f"    [✔] Lista refinada para atribuição: "
-            f"{arquivo_limpo}"
-        )
-    
+        print(f"    [✔] Árvore refinada original: {out_file}")
+        print(f"    [✔] Lista refinada para atribuição: {arquivo_limpo}")
+
         return qtd_depois
 
     def atribuir_topicos(self, data_file, prompt_file, out_file, topic_file):
@@ -793,7 +779,6 @@ class PipelineMestrado:
             if os.path.getsize(caminho) == 0:
                 raise ValueError(f"O {descricao} está vazio: '{caminho}'")
 
-        # Se já for o TXT refinado, usa diretamente. Caso contrário, converte.
         if topic_file.endswith(".txt"):
             topic_file_pronto = topic_file
             quantidade_topicos = len(self._ler_topicos_de_txt(topic_file))
@@ -806,7 +791,7 @@ class PipelineMestrado:
         if os.path.exists(out_file):
             os.remove(out_file)
         try:
-            with silenciar_saida_detalhada():
+            with silenciar_saida_detalhada(ativo=not MODO_TESTE):
                 from topicgpt_python import assign_topics
                 assign_topics(
                     api=self.api,
@@ -815,7 +800,7 @@ class PipelineMestrado:
                     prompt_file=prompt_file,
                     out_file=out_file,
                     topic_file=topic_file_pronto,
-                    verbose=False,
+                    verbose=MODO_TESTE,
                 )
         except Exception as erro:
             raise RuntimeError(
@@ -835,119 +820,57 @@ class PipelineMestrado:
             f"Tópicos disponíveis: {quantidade_topicos} | Saída: {out_file}"
         )
 
+
 class AvaliadorMetricas:
     @staticmethod
     def calcular_purity(y_true, y_pred):
-        matriz = contingency_matrix(
-            y_true,
-            y_pred,
-        )
-
-        return (
-            np.sum(np.amax(matriz, axis=0))
-            / np.sum(matriz)
-        )
+        matriz = contingency_matrix(y_true, y_pred)
+        return np.sum(np.amax(matriz, axis=0)) / np.sum(matriz)
 
     @staticmethod
     def calcular_inverse_purity(y_true, y_pred):
-        matriz = contingency_matrix(
-            y_true,
-            y_pred,
-        )
-
-        return (
-            np.sum(np.amax(matriz, axis=1))
-            / np.sum(matriz)
-        )
+        matriz = contingency_matrix(y_true, y_pred)
+        return np.sum(np.amax(matriz, axis=1)) / np.sum(matriz)
 
     @staticmethod
     def _normalizar_topico(texto):
         texto = str(texto).strip().lower()
-
-        texto = re.sub(
-            r"\s+",
-            " ",
-            texto,
-        )
-
-        texto = texto.strip(
-            " \t\r\n:;,.\"'`()[]"
-        )
-
+        texto = re.sub(r"\s+", " ", texto)
+        texto = texto.strip(" \t\r\n:;,.\"'`()[]")
         return texto
 
     @staticmethod
     def _carregar_topicos_validos(topic_file):
         if not os.path.exists(topic_file):
-            raise FileNotFoundError(
-                f"Arquivo de tópicos não encontrado: "
-                f"'{topic_file}'"
-            )
+            raise FileNotFoundError(f"Arquivo de tópicos não encontrado: '{topic_file}'")
 
         topicos_validos = {}
+        padrao = re.compile(r"^\[\d+\]\s+(.+?)(?:\s+\(Count:\s*\d+\))?\s*:")
 
-        padrao = re.compile(
-            r"^\[\d+\]\s+"
-            r"(.+?)"
-            r"(?:\s+\(Count:\s*\d+\))?"
-            r"\s*:"
-        )
-
-        with open(
-            topic_file,
-            "r",
-            encoding="utf-8",
-        ) as arquivo:
+        with open(topic_file, "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 conteudo = linha.strip()
-
                 if not conteudo:
                     continue
-
                 match = padrao.match(conteudo)
-
                 if not match:
                     continue
-
-                nome_original = (
-                    match.group(1).strip()
-                )
-
-                nome_normalizado = (
-                    AvaliadorMetricas
-                    ._normalizar_topico(
-                        nome_original
-                    )
-                )
-
-                topicos_validos[
-                    nome_normalizado
-                ] = nome_original
+                nome_original = match.group(1).strip()
+                nome_normalizado = AvaliadorMetricas._normalizar_topico(nome_original)
+                topicos_validos[nome_normalizado] = nome_original
 
         if not topicos_validos:
-            raise ValueError(
-                f"Nenhum tópico válido foi encontrado em "
-                f"'{topic_file}'."
-            )
+            raise ValueError(f"Nenhum tópico válido foi encontrado em '{topic_file}'.")
 
         return topicos_validos
 
     @staticmethod
-    def _extrair_topico_valido(
-        resposta,
-        topicos_validos,
-    ):
+    def _extrair_topico_valido(resposta, topicos_validos):
         if not isinstance(resposta, str):
             return None
 
-        padrao_topico = re.compile(
-            r"\[\d+\]\s*"
-            r"([^:\n]+)"
-        )
-
-        candidatos = padrao_topico.findall(
-            resposta
-        )
+        padrao_topico = re.compile(r"\[\d+\]\s*([^:\n]+)")
+        candidatos = padrao_topico.findall(resposta)
 
         for candidato in candidatos:
             candidato = re.sub(
@@ -956,79 +879,31 @@ class AvaliadorMetricas:
                 candidato,
                 flags=re.IGNORECASE,
             )
-
-            candidato_normalizado = (
-                AvaliadorMetricas
-                ._normalizar_topico(
-                    candidato
-                )
-            )
-
-            if (
-                candidato_normalizado
-                in topicos_validos
-            ):
+            candidato_normalizado = AvaliadorMetricas._normalizar_topico(candidato)
+            if candidato_normalizado in topicos_validos:
                 return candidato_normalizado
 
-        resposta_normalizada = (
-            AvaliadorMetricas
-            ._normalizar_topico(
-                resposta
-            )
-        )
-
-        topicos_ordenados = sorted(
-            topicos_validos.keys(),
-            key=len,
-            reverse=True,
-        )
+        resposta_normalizada = AvaliadorMetricas._normalizar_topico(resposta)
+        topicos_ordenados = sorted(topicos_validos.keys(), key=len, reverse=True)
 
         for topico in topicos_ordenados:
-            padrao_nome = (
-                r"(?<!\w)"
-                + re.escape(topico)
-                + r"(?!\w)"
-            )
-
-            if re.search(
-                padrao_nome,
-                resposta_normalizada,
-            ):
+            padrao_nome = r"(?<!\w)" + re.escape(topico) + r"(?!\w)"
+            if re.search(padrao_nome, resposta_normalizada):
                 return topico
 
         return None
 
     @staticmethod
-    def avaliar_resultados(
-        caminho_arquivo_json,
-        dataset_name,
-        topic_file=None,
-    ):
+    def avaliar_resultados(caminho_arquivo_json, dataset_name, topic_file=None):
         if topic_file is None:
             if dataset_name.upper() == "WIKI":
-                topic_file = (
-                    "resultados/"
-                    "w_top_refinados_limpo.txt"
-                )
-
+                topic_file = "resultados/w_top_refinados_limpo.txt"
             elif dataset_name.upper() == "BILLS":
-                topic_file = (
-                    "resultados/"
-                    "b_top_refinados_limpo.txt"
-                )
-
+                topic_file = "resultados/b_top_refinados_limpo.txt"
             else:
-                raise ValueError(
-                    "Informe topic_file para datasets "
-                    "diferentes de WIKI e BILLS."
-                )
+                raise ValueError("Informe topic_file para datasets diferentes de WIKI e BILLS.")
 
-        topicos_validos = (
-            AvaliadorMetricas
-            ._carregar_topicos_validos(
-                topic_file
-            )
-        )
+        topicos_validos = AvaliadorMetricas._carregar_topicos_validos(topic_file)
 
         y_true = []
         y_pred = []
@@ -1039,96 +914,47 @@ class AvaliadorMetricas:
         respostas_sem_topico_valido = 0
         respostas_sem_conteudo = 0
 
-        with open(
-            caminho_arquivo_json,
-            "r",
-            encoding="utf-8",
-        ) as arquivo:
+        with open(caminho_arquivo_json, "r", encoding="utf-8") as arquivo:
             try:
                 dados = json.load(arquivo)
-
             except json.JSONDecodeError:
                 arquivo.seek(0)
-
-                dados = [
-                    json.loads(linha)
-                    for linha in arquivo
-                    if linha.strip()
-                ]
+                dados = [json.loads(linha) for linha in arquivo if linha.strip()]
 
         for item in dados:
-            verdadeiro = item.get(
-                "label_name"
-            )
-
-            resposta = item.get(
-                "responses",
-                "",
-            )
+            verdadeiro = item.get("label_name")
+            resposta = item.get("responses", "")
 
             if verdadeiro is None:
                 continue
 
-            if not isinstance(resposta, str):
+            if not isinstance(resposta, str) or not resposta.strip():
                 respostas_sem_conteudo += 1
                 continue
 
-            if not resposta.strip():
-                respostas_sem_conteudo += 1
-                continue
-
-            topico_predito = (
-                AvaliadorMetricas
-                ._extrair_topico_valido(
-                    resposta=resposta,
-                    topicos_validos=(
-                        topicos_validos
-                    ),
-                )
+            topico_predito = AvaliadorMetricas._extrair_topico_valido(
+                resposta=resposta,
+                topicos_validos=topicos_validos,
             )
 
             if topico_predito is None:
                 respostas_sem_topico_valido += 1
                 continue
 
-            verdadeiro_limpo = (
-                AvaliadorMetricas
-                ._normalizar_topico(
-                    verdadeiro
-                )
-            )
+            verdadeiro_limpo = AvaliadorMetricas._normalizar_topico(verdadeiro)
 
-            y_true.append(
-                verdadeiro_limpo
-            )
-
-            y_pred.append(
-                topico_predito
-            )
-
-            labels_originais_set.add(
-                verdadeiro_limpo
-            )
-
-            topicos_preditos_set.add(
-                topico_predito
-            )
+            y_true.append(verdadeiro_limpo)
+            y_pred.append(topico_predito)
+            labels_originais_set.add(verdadeiro_limpo)
+            topicos_preditos_set.add(topico_predito)
 
         if not y_true:
             raise ValueError(
-                "Nenhuma observação válida foi encontrada "
-                "para o cálculo das métricas."
+                "Nenhuma observação válida foi encontrada para o cálculo das métricas."
             )
 
-        if (
-            "n/a" in labels_originais_set
-            or len(labels_originais_set) <= 1
-        ):
-            print(
-                " -> Aviso: ground truth válido "
-                "não foi detectado."
-            )
-
+        if "n/a" in labels_originais_set or len(labels_originais_set) <= 1:
+            print(" -> Aviso: ground truth válido não foi detectado.")
             return {
                 "NMI": None,
                 "ARI": None,
@@ -1136,88 +962,32 @@ class AvaliadorMetricas:
                 "Purity": None,
                 "Inverse_Purity": None,
                 "Amostras_Validadas": len(y_true),
-                "Topicos_Disponiveis": len(
-                    topicos_validos
-                ),
-                "Topicos_Utilizados": len(
-                    topicos_preditos_set
-                ),
+                "Topicos_Disponiveis": len(topicos_validos),
+                "Topicos_Utilizados": len(topicos_preditos_set),
                 "Topicos_Ground_Truth": 0,
-                "Respostas_Sem_Topico_Valido": (
-                    respostas_sem_topico_valido
-                ),
-                "Respostas_Sem_Conteudo": (
-                    respostas_sem_conteudo
-                ),
+                "Respostas_Sem_Topico_Valido": respostas_sem_topico_valido,
+                "Respostas_Sem_Conteudo": respostas_sem_conteudo,
             }
 
-        nmi = normalized_mutual_info_score(
-            y_true,
-            y_pred,
+        nmi = normalized_mutual_info_score(y_true, y_pred)
+        ari = adjusted_rand_score(y_true, y_pred)
+        purity = AvaliadorMetricas.calcular_purity(y_true, y_pred)
+        inverse_purity = AvaliadorMetricas.calcular_inverse_purity(y_true, y_pred)
+
+        hmp = 0 if (purity + inverse_purity) == 0 else (
+            2 * purity * inverse_purity / (purity + inverse_purity)
         )
 
-        ari = adjusted_rand_score(
-            y_true,
-            y_pred,
-        )
-
-        purity = (
-            AvaliadorMetricas
-            .calcular_purity(
-                y_true,
-                y_pred,
-            )
-        )
-
-        inverse_purity = (
-            AvaliadorMetricas
-            .calcular_inverse_purity(
-                y_true,
-                y_pred,
-            )
-        )
-
-        if (
-            purity + inverse_purity
-        ) == 0:
-            hmp = 0
-
-        else:
-            hmp = (
-                2
-                * purity
-                * inverse_purity
-                / (
-                    purity
-                    + inverse_purity
-                )
-            )
-
+        print(f"\n--- Resultados da Avaliação: {dataset_name} ---")
+        print(f"NMI: {nmi:.4f} | ARI: {ari:.4f} | HMP: {hmp:.4f}")
         print(
-            f"\n--- Resultados da Avaliação: "
-            f"{dataset_name} ---"
+            f"Tópicos disponíveis: {len(topicos_validos)} | "
+            f"Tópicos efetivamente utilizados: {len(topicos_preditos_set)}"
         )
-
         print(
-            f"NMI: {nmi:.4f} | "
-            f"ARI: {ari:.4f} | "
-            f"HMP: {hmp:.4f}"
-        )
-
-        print(
-            f"Tópicos disponíveis: "
-            f"{len(topicos_validos)} | "
-            f"Tópicos efetivamente utilizados: "
-            f"{len(topicos_preditos_set)}"
-        )
-
-        print(
-            f"Amostras validadas: "
-            f"{len(y_true)} | "
-            f"Respostas sem tópico válido: "
-            f"{respostas_sem_topico_valido} | "
-            f"Respostas vazias: "
-            f"{respostas_sem_conteudo}"
+            f"Amostras validadas: {len(y_true)} | "
+            f"Respostas sem tópico válido: {respostas_sem_topico_valido} | "
+            f"Respostas vazias: {respostas_sem_conteudo}"
         )
 
         return {
@@ -1227,76 +997,109 @@ class AvaliadorMetricas:
             "Purity": purity,
             "Inverse_Purity": inverse_purity,
             "Amostras_Validadas": len(y_true),
-            "Topicos_Disponiveis": len(
-                topicos_validos
-            ),
-            "Topicos_Utilizados": len(
-                topicos_preditos_set
-            ),
-            "Topicos_Ground_Truth": len(
-                labels_originais_set
-            ),
-            "Respostas_Sem_Topico_Valido": (
-                respostas_sem_topico_valido
-            ),
-            "Respostas_Sem_Conteudo": (
-                respostas_sem_conteudo
-            ),
+            "Topicos_Disponiveis": len(topicos_validos),
+            "Topicos_Utilizados": len(topicos_preditos_set),
+            "Topicos_Ground_Truth": len(labels_originais_set),
+            "Respostas_Sem_Topico_Valido": respostas_sem_topico_valido,
+            "Respostas_Sem_Conteudo": respostas_sem_conteudo,
         }
 
-def registrar_log(dataset, metricas, n_gen, n_ass):
+
+def registrar_log(dataset, metricas, n_gen, n_ass, modelo=MODELO_LLM):
     log_file = "experimento_metricas_geral.json"
     registro = {
         "dataset": dataset,
+        "modelo": modelo,
+        "base_url": BASE_URL_PROXY,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "modo_teste": MODO_TESTE,
         "amostra_geracao": n_gen,
         "amostra_atribuicao": n_ass,
         "parametros_llm": HIPERPARAMETROS,
-        "metricas": metricas
+        "metricas": metricas,
     }
-    
+
     historico = []
     if os.path.exists(log_file):
-        with open(log_file, 'r', encoding='utf-8') as f:
+        with open(log_file, "r", encoding="utf-8") as f:
             historico = json.load(f)
-            
+
     historico.append(registro)
-    
-    with open(log_file, 'w', encoding='utf-8') as f:
+
+    with open(log_file, "w", encoding="utf-8") as f:
         json.dump(historico, f, indent=4, ensure_ascii=False)
     print(f"\n[💾] Log salvo com sucesso em '{log_file}' (Fora da pasta resultados).")
+
 
 # ==============================================================================
 # FLUXO DE EXECUÇÃO PRINCIPAL
 # ==============================================================================
 if __name__ == "__main__":
     print(f"=== INICIANDO EXPERIMENTO TOPICGPT {'(MODO TESTE)' if MODO_TESTE else '(MODO COMPLETO)'} ===")
-    
+    print(f"Modelo selecionado: {MODELO_LLM}")
+
     os.makedirs("resultados", exist_ok=True)
-    ConfiguradorOllama.setup_ambiente_topicgpt(host="127.0.0.1", port="11434")
-    pipeline = PipelineMestrado(model_name="gemma2:9b") # Altere o modelo aqui se necessário
+    ConfiguradorUnB.setup_ambiente_topicgpt()
+    ConfiguradorUnB.testar_conexao(model_name=MODELO_LLM)
+
+    pipeline = PipelineMestrado(model_name=MODELO_LLM)
 
     # 1. PROCESSAR BILLS
-    print("\n" + "="*50 + "\nDATASET 1: CONGRESSIONAL BILLS\n" + "="*50)
+    print("\n" + "=" * 50 + "\nDATASET 1: CONGRESSIONAL BILLS\n" + "=" * 50)
     file_bills_gen, file_bills_ass, n_gen_b, n_ass_b = PreparadorDatasets.preparar_bills()
-    
-    qtd_gen_bills = pipeline.gerar_topicos(file_bills_gen, "prompts/generation_1.txt", "prompts/seed_1.md", "resultados/b_geracao.json", "resultados/b_topicos.json")
-    qtd_ref_bills = pipeline.refinar_topicos("prompts/refinement.txt", "resultados/b_geracao.json", "resultados/b_topicos.json", "resultados/b_refinamento.json", "resultados/b_top_refinados.json", "resultados/b_map.json")
-    pipeline.atribuir_topicos(file_bills_ass, "prompts/assignment.txt", "resultados/b_atribuida.json", "resultados/b_top_refinados_limpo.txt")
-    
+
+    qtd_gen_bills = pipeline.gerar_topicos(
+        file_bills_gen,
+        "prompts/generation_1.txt",
+        "prompts/seed_1.md",
+        "resultados/b_geracao.json",
+        "resultados/b_topicos.json",
+    )
+    qtd_ref_bills = pipeline.refinar_topicos(
+        "prompts/refinement.txt",
+        "resultados/b_geracao.json",
+        "resultados/b_topicos.json",
+        "resultados/b_refinamento.json",
+        "resultados/b_top_refinados.json",
+        "resultados/b_map.json",
+    )
+    pipeline.atribuir_topicos(
+        file_bills_ass,
+        "prompts/assignment.txt",
+        "resultados/b_atribuida.json",
+        "resultados/b_top_refinados_limpo.txt",
+    )
+
     metricas_bills = AvaliadorMetricas.avaliar_resultados("resultados/b_atribuida.json", "BILLS")
-    registrar_log("BILLS", metricas_bills, n_gen_b, n_ass_b)
+    registrar_log("BILLS", metricas_bills, n_gen_b, n_ass_b, modelo=MODELO_LLM)
 
     # 2. PROCESSAR WIKITEXT
-    print("\n" + "="*50 + "\nDATASET 2: WIKI\n" + "="*50)
+    print("\n" + "=" * 50 + "\nDATASET 2: WIKI\n" + "=" * 50)
     file_wiki_gen, file_wiki_ass, n_gen_w, n_ass_w = PreparadorDatasets.preparar_wiki()
-    
-    qtd_gen_wiki = pipeline.gerar_topicos(file_wiki_gen, "prompts/generation_1.txt", "prompts/seed_1.md", "resultados/w_geracao.json", "resultados/w_topicos.json")
-    qtd_ref_wiki = pipeline.refinar_topicos("prompts/refinement.txt", "resultados/w_geracao.json", "resultados/w_topicos.json", "resultados/w_refinamento.json", "resultados/w_top_refinados.json", "resultados/w_map.json")
-    pipeline.atribuir_topicos(file_wiki_ass, "prompts/assignment.txt", "resultados/w_atribuida.json", "resultados/w_top_refinados_limpo.txt")
-    
+
+    qtd_gen_wiki = pipeline.gerar_topicos(
+        file_wiki_gen,
+        "prompts/generation_1.txt",
+        "prompts/seed_1.md",
+        "resultados/w_geracao.json",
+        "resultados/w_topicos.json",
+    )
+    qtd_ref_wiki = pipeline.refinar_topicos(
+        "prompts/refinement.txt",
+        "resultados/w_geracao.json",
+        "resultados/w_topicos.json",
+        "resultados/w_refinamento.json",
+        "resultados/w_top_refinados.json",
+        "resultados/w_map.json",
+    )
+    pipeline.atribuir_topicos(
+        file_wiki_ass,
+        "prompts/assignment.txt",
+        "resultados/w_atribuida.json",
+        "resultados/w_top_refinados_limpo.txt",
+    )
+
     metricas_wiki = AvaliadorMetricas.avaliar_resultados("resultados/w_atribuida.json", "WIKI")
-    registrar_log("WIKI", metricas_wiki, n_gen_w, n_ass_w)
-    
+    registrar_log("WIKI", metricas_wiki, n_gen_w, n_ass_w, modelo=MODELO_LLM)
+
     print("\n🎉 === EXPERIMENTO FINALIZADO COM SUCESSO! === 🎉")
