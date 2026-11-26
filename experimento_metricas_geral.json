@@ -143,5 +143,69 @@
             "Respostas_Sem_Topico_Valido": 0,
             "Respostas_Sem_Conteudo": 0
         }
+    },
+    {
+        "dataset": "BILLS",
+        "modelo": "UnB-Qwen/qwen3-8-27b",
+        "base_url": "https://ia-router.unb.br/",
+        "timestamp": "2026-11-25 21:00:52",
+        "modo_teste": false,
+        "amostra_geracao": 1000,
+        "amostra_atribuicao": 15242,
+        "parametros_llm": {
+            "max_tokens": 300,
+            "temperature": 0.0,
+            "top_p": 1.0,
+            "auto_correction_limit": 10,
+            "min_doc_frequency_bills": 10,
+            "min_doc_frequency_wiki": 5,
+            "max_words_per_doc": 250,
+            "estrategia_thinking": "extra_body"
+        },
+        "metricas": {
+            "NMI": 0.4017321645878783,
+            "ARI": 0.29373766248534544,
+            "HMP": 0.5287795838982822,
+            "Purity": 0.5140428922382312,
+            "Inverse_Purity": 0.544386162937388,
+            "Amostras_Validadas": 15061,
+            "Topicos_Disponiveis": 16,
+            "Topicos_Utilizados": 16,
+            "Topicos_Ground_Truth": 21,
+            "Respostas_Sem_Topico_Valido": 181,
+            "Respostas_Sem_Conteudo": 0
+        }
+    },
+    {
+        "dataset": "WIKI",
+        "modelo": "UnB-Qwen/qwen3-8-27b",
+        "base_url": "https://ia-router.unb.br/",
+        "timestamp": "2026-11-26 12:33:43",
+        "modo_teste": false,
+        "amostra_geracao": 1100,
+        "amostra_atribuicao": 8024,
+        "parametros_llm": {
+            "max_tokens": 300,
+            "temperature": 0.0,
+            "top_p": 1.0,
+            "auto_correction_limit": 10,
+            "min_doc_frequency_bills": 10,
+            "min_doc_frequency_wiki": 5,
+            "max_words_per_doc": 250,
+            "estrategia_thinking": "extra_body"
+        },
+        "metricas": {
+            "NMI": 0.6144038792597328,
+            "ARI": 0.2764172080934538,
+            "HMP": 0.5735418121376731,
+            "Purity": 0.43458475540386804,
+            "Inverse_Purity": 0.8431298192390343,
+            "Amostras_Validadas": 7911,
+            "Topicos_Disponiveis": 15,
+            "Topicos_Utilizados": 15,
+            "Topicos_Ground_Truth": 45,
+            "Respostas_Sem_Topico_Valido": 113,
+            "Respostas_Sem_Conteudo": 0
+        }
     }
 ]
